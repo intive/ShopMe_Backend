@@ -1,4 +1,4 @@
-package com.intive.shopme.configuration.model;
+package com.intive.shopme.model;
 
 import io.swagger.annotations.ApiModelProperty;
 
