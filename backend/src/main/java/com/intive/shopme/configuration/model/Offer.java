@@ -30,7 +30,7 @@ public class Offer {
     private Bundle premiumBundle;
     @ApiModelProperty(value = "Represents offer's premium plus bundle")
     private Bundle premiumPlusBundle;
-    @ApiModelProperty(value = "Represents the user who submits an offer", required = true)
+    @ApiModelProperty(value = "Represents the user who submits this offer", required = true)
     private User user;
 
     public Offer(String date, String title, Category category, Bundle basicBundle, Bundle premiumBundle, Bundle premiumPlusBundle, User user) {
