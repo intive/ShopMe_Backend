@@ -4,4 +4,4 @@
 * english
 
 ### Code formatter:
-* default formatter in IntelliJ
+* use default IntelliJ IDEA formatter

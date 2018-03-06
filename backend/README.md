@@ -3,17 +3,16 @@ ShopMe is a Web Application created during Intive Patronage `18 Project.
 This application will allow you to buy, offer and sell widely defined services.
 ### Requirements
 * [JAVA JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
-* [Maven 3.x](https://maven.apache.org/download.cgi)
 ### Build and run
 
 * Build
 ```
-mvn clean install
+mvnw clean install
 ```
 
 * Run
 ```
-mvn spring-boot:run
+mvnw spring-boot:run
 ```
 ### Swagger API documentation
 
