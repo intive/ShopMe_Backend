@@ -1,11 +1,9 @@
 package com.intive.shopme.model;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author Qba Walat
@@ -13,7 +11,7 @@ import javax.persistence.Id;
  */
 
 @Entity
-public class Offer {
+public @Data class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @ApiModelProperty(value = "Represents offer's unique id number", required = true)
@@ -25,90 +23,17 @@ public class Offer {
     @ApiModelProperty(value = "Represents offer's category", required = true)
     private Category category;
     @ApiModelProperty(value = "Represents offer's basic bundle", required = true)
+    @ManyToOne
     private Bundle basicBundle;
-    @ApiModelProperty(value = "Represents offer's premium bundle")
-    private Bundle premiumBundle;
-    @ApiModelProperty(value = "Represents offer's premium plus bundle")
-    private Bundle premiumPlusBundle;
+//    @ApiModelProperty(value = "Represents offer's premium bundle")
+//    private Bundle premiumBundle;
+//    @ApiModelProperty(value = "Represents offer's premium plus bundle")
+//    private Bundle premiumPlusBundle;
     @ApiModelProperty(value = "Represents the user who submits this offer", required = true)
+    @OneToOne
     private User user;
-
-    public Offer(String date, String title, Category category, Bundle basicBundle, Bundle premiumBundle, Bundle premiumPlusBundle, User user) {
-        this.date = date;
-        this.title = title;
-        this.category = category;
-        this.basicBundle = basicBundle;
-        this.premiumBundle = premiumBundle;
-        this.premiumPlusBundle = premiumPlusBundle;
-        this.user = user;
-    }
 
     public enum Category {
         BUDOWA, OGROD
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public Bundle getBasicBundle() {
-        return basicBundle;
-    }
-
-    public void setBasicBundle(Bundle basicBundle) {
-        this.basicBundle = basicBundle;
-    }
-
-    public Bundle getPremiumBundle() {
-        return premiumBundle;
-    }
-
-    public void setPremiumBundle(Bundle premiumBundle) {
-        this.premiumBundle = premiumBundle;
-    }
-
-    public Bundle getPremiumPlusBundle() {
-        return premiumPlusBundle;
-    }
-
-    public void setPremiumPlusBundle(Bundle premiumPlusBundle) {
-        this.premiumPlusBundle = premiumPlusBundle;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
 }
