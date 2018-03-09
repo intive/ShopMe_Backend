@@ -8,7 +8,7 @@ import lombok.Data;
 import javax.persistence.*;
 
 @Entity
-@ApiModel
+@ApiModel(value = "Offer", description = "Represents the offer created by user")
 @Builder
 public @Data
 class Offer {
@@ -25,6 +25,7 @@ class Offer {
     private String title;
 
     @ApiModelProperty(value = "Represents offer's category", required = true)
+    @OneToOne
     private Category category;
 
     @ApiModelProperty(value = "Represents offer's bundle", required = true)

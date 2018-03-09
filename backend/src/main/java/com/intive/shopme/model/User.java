@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@ApiModel
+@ApiModel(value = "Offer's user", description = "Represents offer's owner.")
 @Builder
 public @Data
 class User {
