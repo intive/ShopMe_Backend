@@ -25,7 +25,6 @@ public class SwaggerConfig {
                 .apiInfo(apiInfo());
     }
 
-
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("ShopMe by Intive Patronage `18 team")
