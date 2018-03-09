@@ -9,33 +9,27 @@ import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
  * @author Qba Walat
- * created on 06/03/2018
+ * created on 09/03/2018
  */
 @Entity
 @ApiModel
 @Builder
 public @Data
-class Bundle {
+class Category {
 
-    @ApiModelProperty(value = "Represents bundle's id number")
+    @ApiModelProperty(value = "Represents category's id")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @Getter
     @Setter
     private Long id;
 
-    @ApiModelProperty(value = "Represents bundle's description")
+    @ApiModelProperty(value = "Represents category's name")
     @Getter
     @Setter
-    private String description;
-
-    @ApiModelProperty(value = "Represents bundle's price")
-    @Getter
-    @Setter
-    private String price;
+    private String name;
 }
