@@ -1,6 +1,8 @@
 package com.intive.shopme.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -13,6 +15,8 @@ import javax.persistence.Id;
  * created on 06/03/2018
  */
 @Entity
+@ApiModel
+@Builder
 public @Data class Bundle {
 
     @Id
