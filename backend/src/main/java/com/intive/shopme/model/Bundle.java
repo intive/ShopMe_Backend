@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@ApiModel
+@ApiModel(value = "Offer's Bundle", description = "Represents different bundle types of an offer")
 @Builder
 public @Data
 class Bundle {

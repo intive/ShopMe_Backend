@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@ApiModel
+@ApiModel(value = "Offer's category", description = "Represents different category types of an offer")
 @Builder
 public @Data
 class Category {
