@@ -9,11 +9,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-/**
- * @author Qba Walat
- * created on 06/03/2018
- */
-
 @Entity
 @ApiModel
 @Builder
@@ -37,16 +32,16 @@ class Offer {
     @Setter
     private String title;
 
-    @ApiModelProperty(value = "Represents offer's category", required = true)
-    @Getter
-    @Setter
-    private Category category;
-
+    /* @ApiModelProperty(value = "Represents offer's category", required = true)
+     @Getter
+     @Setter
+     private Category category;
+    */
     @ApiModelProperty(value = "Represents offer's bundle", required = true)
     @ManyToOne
     @Getter
     @Setter
-    private Bundle basicBundle;
+    private Bundle bundle;
 
     @ApiModelProperty(value = "Represents the user who submits this offer", required = true)
     @OneToOne
@@ -54,7 +49,4 @@ class Offer {
     @Setter
     private User user;
 
-    public enum Category {
-        BUDOWA, OGROD
-    }
 }

@@ -11,16 +11,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-/**
- * @author Qba Walat
- * created on 09/03/2018
- */
 @Entity
 @ApiModel
 @Builder
 public @Data
 class Category {
-
+    
     @ApiModelProperty(value = "Represents category's id")
     @Id
     @GeneratedValue

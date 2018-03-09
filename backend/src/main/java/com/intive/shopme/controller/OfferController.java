@@ -5,27 +5,45 @@ import com.intive.shopme.service.OfferService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @Api(value = "offer", description = "Rest API for offers", tags = "Offer API")
 public class OfferController {
 
+
     @Autowired
     private OfferService offerService;
 
     @ApiOperation(value = "Add offer to repository")
-    @RequestMapping(method = RequestMethod.POST, value = "/offers")
-    public void create(@RequestBody Offer offer) {
-        offerService.create(offer);
+    @PostMapping(value = "/offers")
+    public void add(@RequestBody Offer offer) {
+        offerService.add(offer);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/offe")
-    public String get() {
+    @ApiOperation(value = "Display all existing offers")
+    @GetMapping(value = "/offers")
+    public List<Offer> getAllOffers() {
+        return offerService.getAll();
+    }
 
-        return "cos";
+    @ApiOperation(value = "Display offer by id")
+    @GetMapping(value = "/offers/{id}")
+    public Offer get(@PathVariable Long id) {
+        return offerService.get(id);
+    }
+
+    @ApiOperation(value = "Update offer by id ")
+    @PutMapping(value = "/offers/{id}")
+    public void update(@PathVariable Long id, Offer offer) {
+        offerService.update(id, offer);
+    }
+
+    @ApiOperation(value = "Delete offer by id")
+    @DeleteMapping(value = "/offers/{id}")
+    public void delete(@PathVariable Long id) {
+        offerService.delete(id);
     }
 }
