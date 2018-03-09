@@ -12,10 +12,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-/**
- * @author Qba Walat
- * created on 06/03/2018
- */
 @Entity
 @ApiModel
 @Builder
