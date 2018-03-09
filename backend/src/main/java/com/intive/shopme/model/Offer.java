@@ -1,6 +1,8 @@
 package com.intive.shopme.model;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -11,6 +13,8 @@ import javax.persistence.*;
  */
 
 @Entity
+@ApiModel
+@Builder
 public @Data class Offer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
