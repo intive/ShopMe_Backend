@@ -33,5 +33,4 @@ public class OfferService {
     public void delete(UUID id) {
         offerRepository.delete(id);
     }
-
 }

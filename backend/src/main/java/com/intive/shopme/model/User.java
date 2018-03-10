@@ -2,24 +2,32 @@ package com.intive.shopme.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.UUID;
 
 @Entity
 @ApiModel(value = "Offer's user", description = "Represents offer's owner.")
 @Builder
-public @Data
-class User {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class User {
 
     @ApiModelProperty(value = "Represents user's id number")
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     private UUID id;
 
     @ApiModelProperty(value = "Represents user's name", required = true)

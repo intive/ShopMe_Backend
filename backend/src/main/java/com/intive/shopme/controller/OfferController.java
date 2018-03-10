@@ -47,4 +47,5 @@ public class OfferController {
     public void delete(@PathVariable UUID id) {
         offerService.delete(id);
     }
+
 }
