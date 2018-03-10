@@ -36,8 +36,8 @@ public class Offer {
     @ApiModelProperty(value = "Represents offer's date of submitting", required = true)
     private Date date;
 
-    @Size(max = 30, message = "To many characters.")
-    @NotNull(message = "No title selected.")
+    @Size(max = 30, message = "Too many characters.")
+    @NotNull(message = "Title cannot be empty.")
     @ApiModelProperty(value = "Represents offer's title - passed by user", required = true)
     private String title;
 
@@ -48,12 +48,10 @@ public class Offer {
     private Category category;
 
     @Valid
-    @NotNull(message = "No bundle selected.")
     @ApiModelProperty(value = "Represents offer's bundle", required = true)
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Bundle bundle;
 
-    @NotNull(message = "No user selected.")
     @ApiModelProperty(value = "Represents the user who submits this offer", required = true)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
