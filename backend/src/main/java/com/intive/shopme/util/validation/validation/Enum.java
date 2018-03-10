@@ -1,4 +1,4 @@
-package com.intive.shopme.util.validation;
+package com.intive.shopme.util.validation.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

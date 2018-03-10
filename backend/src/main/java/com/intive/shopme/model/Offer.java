@@ -7,13 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
-import com.intive.shopme.util.validation.Enum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Size;
+import javax.persistence.*;
+import javax.validation.Valid;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -33,6 +35,7 @@ public class Offer extends Identifiable {
             example = "Odśnieżanie Niebuszewo")
     private String title;
 
+    @Valid
     @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;

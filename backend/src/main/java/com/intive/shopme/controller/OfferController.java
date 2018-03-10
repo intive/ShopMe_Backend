@@ -9,12 +9,14 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Validated
 @RestController
 @Api(value = "offer", description = "REST API for offers", tags = "Offers")
 public class OfferController {
@@ -24,7 +26,7 @@ public class OfferController {
 
     @ApiOperation(value = "Saves offer")
     @PostMapping(value = "/offers")
-    public void add(@RequestBody Offer offer) {
+    public void add(@RequestBody Offer offer) throws Exception {
         offerService.add(offer);
     }
 
