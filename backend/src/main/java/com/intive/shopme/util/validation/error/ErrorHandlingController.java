@@ -16,11 +16,13 @@ public class ErrorHandlingController {
     public ResponseEntity<ExceptionResponse> handleInvalidInput(ConstraintViolationException ex) {
 
         Set violations = ex.getConstraintViolations();
-        ConstraintViolation v = (ConstraintViolation) violations.toArray()[0];
-
         ExceptionResponse eR = new ExceptionResponse();
         eR.setCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
-        eR.setDescription("błąd danych wejściowych " + "w parametrze: " + v.getPropertyPath() + ". " + v.getMessage());
+
+        for (int i = 0; i < violations.size(); i++) {
+            ConstraintViolation v = (ConstraintViolation) violations.toArray()[i];
+            eR.add(v.getPropertyPath().toString(), v.getMessage());
+        }
 
         return new ResponseEntity(eR, HttpStatus.UNPROCESSABLE_ENTITY);
     }
