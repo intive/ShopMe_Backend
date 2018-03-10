@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -30,7 +31,7 @@ public class Offer {
     private UUID id;
 
     @ApiModelProperty(value = "Represents offer's date of submitting", required = true)
-    private String date;
+    private Date date;
 
     @ApiModelProperty(value = "Represents offer's title - passed by user", required = true)
     private String title;
