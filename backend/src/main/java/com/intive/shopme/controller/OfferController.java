@@ -4,6 +4,8 @@ import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.OfferService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,10 @@ public class OfferController {
     @Autowired
     private OfferService offerService;
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "created"),
+            @ApiResponse(code = 422, message = "input validation error")
+    })
     @ApiOperation(value = "Saves offer")
     @PostMapping(value = "/offers")
     public void add(@RequestBody Offer offer) throws Exception {
