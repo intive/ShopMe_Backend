@@ -7,6 +7,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.validation.annotation.Validated;
@@ -24,6 +26,10 @@ public class OfferController {
     @Autowired
     private OfferService offerService;
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "created"),
+            @ApiResponse(code = 422, message = "input validation error")
+    })
     @ApiOperation(value = "Saves offer")
     @PostMapping(value = "/offers")
     public void add(@RequestBody Offer offer) throws Exception {

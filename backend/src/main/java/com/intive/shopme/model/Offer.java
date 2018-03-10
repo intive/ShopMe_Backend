@@ -3,6 +3,7 @@ package com.intive.shopme.model;
 import com.intive.shopme.base.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.validation.constraints.Size;
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,16 +32,19 @@ public class Offer extends Identifiable {
             example = "1234567890")
     private final Long date = System.currentTimeMillis();
 
+    @NotNull(message = "No title selected.")
     @Size(max = 30, message = "Too many characters. Maximum is 30.")
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
     private String title;
 
     @Valid
+    @NotNull(message = "No category selected.")
     @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;
 
+    @NotNull(message = "No bundle selected.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
@@ -67,9 +72,9 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's extra level price", position = 10, example = "30")
     private float extraPrice;
 
+    @NotNull(message = "No user selected.")
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
-
 
 }
