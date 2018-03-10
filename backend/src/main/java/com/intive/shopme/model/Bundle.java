@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Size;
 import java.util.UUID;
 
 @Entity
@@ -30,6 +31,7 @@ public class Bundle {
     )
     private UUID id;
 
+    @Size(max = 500, message = "To many characters.")
     @ApiModelProperty(value = "Represents bundle's description")
     private String description;
 

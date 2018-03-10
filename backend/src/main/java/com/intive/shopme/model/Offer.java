@@ -11,6 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.UUID;
 
@@ -35,6 +36,7 @@ public class Offer {
     @ApiModelProperty(value = "Represents offer's date of submitting", required = true)
     private Date date;
 
+    @Size(max = 30, message = "To many characters.")
     @NotNull(message = "No title selected.")
     @ApiModelProperty(value = "Represents offer's title - passed by user", required = true)
     private String title;
@@ -45,6 +47,7 @@ public class Offer {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;
 
+    @Valid
     @NotNull(message = "No bundle selected.")
     @ApiModelProperty(value = "Represents offer's bundle", required = true)
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
