@@ -68,4 +68,5 @@ public class Offer extends Identifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User user;
 
+
 }
