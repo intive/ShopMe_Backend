@@ -18,31 +18,31 @@ public class OfferController {
     @Autowired
     private OfferService offerService;
 
-    @ApiOperation(value = "Add offer to repository")
+    @ApiOperation(value = "Saves offer")
     @PostMapping(value = "/offers")
     public void add(@RequestBody Offer offer) {
         offerService.add(offer);
     }
 
-    @ApiOperation(value = "Display all existing offers")
+    @ApiOperation(value = "Returns all existing offers")
     @GetMapping(value = "/offers")
     public List<Offer> getAllOffers() {
         return offerService.getAll();
     }
 
-    @ApiOperation(value = "Display offer by id")
+    @ApiOperation(value = "Returns offer by id")
     @GetMapping(value = "/offers/{id}")
     public Offer get(@PathVariable UUID id) {
         return offerService.get(id);
     }
 
-    @ApiOperation(value = "Update offer by id ")
+    @ApiOperation(value = "Updates offer by id ")
     @PutMapping(value = "/offers/{id}")
     public void update(@PathVariable UUID id, Offer offer) {
         offerService.update(id, offer);
     }
 
-    @ApiOperation(value = "Delete offer by id")
+    @ApiOperation(value = "Removes offer by id")
     @DeleteMapping(value = "/offers/{id}")
     public void delete(@PathVariable UUID id) {
         offerService.delete(id);
