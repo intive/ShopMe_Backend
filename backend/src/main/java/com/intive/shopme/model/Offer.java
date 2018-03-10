@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.UUID;
 
@@ -33,13 +36,18 @@ public class Offer {
     @ApiModelProperty(value = "Represents offer's date of submitting", required = true)
     private Date date;
 
+    @Size(max = 30, message = "Too many characters.")
+    @NotNull(message = "Title cannot be empty.")
     @ApiModelProperty(value = "Represents offer's title - passed by user", required = true)
     private String title;
 
+    @Valid
+    @NotNull(message = "No category selected.")
     @ApiModelProperty(value = "Represents offer's category", required = true)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;
 
+    @Valid
     @ApiModelProperty(value = "Represents offer's bundle", required = true)
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Bundle bundle;
