@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class OfferService {
@@ -17,7 +18,7 @@ public class OfferService {
         return offerRepository.findAll();
     }
 
-    public Offer get(Long id) {
+    public Offer get(UUID id) {
         return offerRepository.findOne(id);
     }
 
@@ -25,11 +26,11 @@ public class OfferService {
         offerRepository.save(offer);
     }
 
-    public void update(Long id, Offer offer) {
+    public void update(UUID id, Offer offer) {
         offerRepository.save(offer);
     }
 
-    public void delete(Long id) {
+    public void delete(UUID id) {
         offerRepository.delete(id);
     }
 

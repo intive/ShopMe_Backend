@@ -8,6 +8,7 @@ import lombok.Data;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.UUID;
 
 @Entity
 @ApiModel(value = "Offer's category", description = "Represents different category types of an offer")
@@ -18,7 +19,7 @@ class Category {
     @ApiModelProperty(value = "Represents category's id")
     @Id
     @GeneratedValue
-    private Long id;
+    private UUID id;
 
     @ApiModelProperty(value = "Represents category's name")
     private String name;

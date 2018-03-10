@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @Api(value = "offer", description = "Rest API for offers", tags = "Offer API")
@@ -31,19 +32,19 @@ public class OfferController {
 
     @ApiOperation(value = "Display offer by id")
     @GetMapping(value = "/offers/{id}")
-    public Offer get(@PathVariable Long id) {
+    public Offer get(@PathVariable UUID id) {
         return offerService.get(id);
     }
 
     @ApiOperation(value = "Update offer by id ")
     @PutMapping(value = "/offers/{id}")
-    public void update(@PathVariable Long id, Offer offer) {
+    public void update(@PathVariable UUID id, Offer offer) {
         offerService.update(id, offer);
     }
 
     @ApiOperation(value = "Delete offer by id")
     @DeleteMapping(value = "/offers/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable UUID id) {
         offerService.delete(id);
     }
 }
