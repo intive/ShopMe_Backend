@@ -33,11 +33,10 @@ public class Offer extends Identifiable {
             example = "1234567890")
     private final Long date = System.currentTimeMillis();
 
-    @Size(max = 30, message = "To many characters.")
-    @NotNull(message = "No title selected.")
-    @Size(max = 30, message = "Too many characters. Maximum is 30.")
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
+    @Size(max = 30, message = "Too many characters.")
+    @NotNull(message = "Title cannot be empty.")
     private String title;
 
     @Valid
