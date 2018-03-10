@@ -3,7 +3,6 @@ package com.intive.shopme.model;
 import com.intive.shopme.base.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +14,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
