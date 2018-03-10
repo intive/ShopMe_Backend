@@ -7,11 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
+import com.intive.shopme.util.validation.Enum;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
+import javax.validation.constraints.Size;
 
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
@@ -25,6 +28,7 @@ public class Offer extends Identifiable {
             example = "1234567890")
     private final Long date = System.currentTimeMillis();
 
+    @Size(max = 30, message = "Too many characters. Maximum is 30.")
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
     private String title;
@@ -36,6 +40,10 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
+    @Size(max = 500, message = "Too many characters. Maximum is 30.")
+    @ApiModelProperty(value = "Represents offer's bundle", required = true)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Bundle bundle;
 
     @ApiModelProperty(value = "Represents offer's base price", required = true, position = 6, example = "10")
     private float basePrice;
