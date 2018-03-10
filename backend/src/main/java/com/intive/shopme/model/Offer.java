@@ -17,6 +17,7 @@ import javax.validation.constraints.Size;
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.UUID;
 
@@ -32,6 +33,7 @@ public class Offer extends Identifiable {
             example = "1234567890")
     private final Long date = System.currentTimeMillis();
 
+    @Size(max = 30, message = "To many characters.")
     @NotNull(message = "No title selected.")
     @Size(max = 30, message = "Too many characters. Maximum is 30.")
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
@@ -44,6 +46,7 @@ public class Offer extends Identifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;
 
+    @Valid
     @NotNull(message = "No bundle selected.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
