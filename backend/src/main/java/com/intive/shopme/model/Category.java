@@ -1,5 +1,7 @@
 package com.intive.shopme.model;
 
+import com.intive.shopme.util.validation.validation.CategoryEnum;
+import com.intive.shopme.util.validation.validation.Enum;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ public class Category {
     )
     private UUID id;
 
+    @Enum(enumClass = CategoryEnum.class, ignoreCase = true, message = "Wrong category.")
     @ApiModelProperty(value = "Represents category's name")
     private String name;
 

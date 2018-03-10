@@ -5,11 +5,13 @@ import com.intive.shopme.service.OfferService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
 
+@Validated
 @RestController
 @Api(value = "offer", description = "Rest API for offers", tags = "Offer API")
 public class OfferController {
@@ -20,7 +22,7 @@ public class OfferController {
 
     @ApiOperation(value = "Saves offer")
     @PostMapping(value = "/offers")
-    public void add(@RequestBody Offer offer) {
+    public void add(@RequestBody Offer offer) throws Exception {
         offerService.add(offer);
     }
 

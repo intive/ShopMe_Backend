@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.Date;
 import java.util.UUID;
 
@@ -36,6 +37,7 @@ public class Offer {
     @ApiModelProperty(value = "Represents offer's title - passed by user", required = true)
     private String title;
 
+    @Valid
     @ApiModelProperty(value = "Represents offer's category", required = true)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;

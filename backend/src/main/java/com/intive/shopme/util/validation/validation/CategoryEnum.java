@@ -1,4 +1,4 @@
-package com.intive.shopme.util.validation;
+package com.intive.shopme.util.validation.validation;
 
 public enum CategoryEnum {
 
