@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.UUID;
 
 @Entity
 @ApiModel(value = "Offer's user", description = "Represents offer's owner.")
@@ -19,7 +20,7 @@ class User {
     @ApiModelProperty(value = "Represents user's id number")
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private UUID id;
 
     @ApiModelProperty(value = "Represents user's name", required = true)
     private String name;
@@ -32,4 +33,5 @@ class User {
 
     @ApiModelProperty(value = "Represents additional information typed by user")
     private String additionalInfo;
+
 }
