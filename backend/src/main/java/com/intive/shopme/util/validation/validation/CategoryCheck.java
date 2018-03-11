@@ -8,14 +8,10 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = {CategoryValidator.class})
-public @interface Enum {
+public @interface CategoryCheck {
     String message() default "invalid";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
-    Class<? extends java.lang.Enum<?>> enumClass();
-
-    public abstract boolean ignoreCase() default false;
 }

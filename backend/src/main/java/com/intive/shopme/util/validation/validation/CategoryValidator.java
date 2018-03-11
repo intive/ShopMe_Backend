@@ -1,35 +1,28 @@
 package com.intive.shopme.util.validation.validation;
 
+import com.intive.shopme.model.Category;
+import com.intive.shopme.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.UUID;
 
-public class CategoryValidator implements ConstraintValidator<Enum, String> {
+@Component
+public class CategoryValidator implements ConstraintValidator<CategoryCheck, Category> {
 
-    private Enum annotation;
     @Autowired
+    CategoryService categoryService;
 
     @Override
-    public void initialize(Enum annotation) {
-        this.annotation = annotation;
+    public void initialize(CategoryCheck constraintAnnotation) {
+        categoryService = ServiceUtil.getCategoryService();
     }
 
     @Override
-    public boolean isValid(String valueToValid, ConstraintValidatorContext constraintValidatorContext) {
-
-        boolean result = false;
-
-        Object[] enumValues = this.annotation.enumClass().getEnumConstants();
-
-        if(enumValues != null) {
-            for(Object en : enumValues) {
-                if(valueToValid.equals(en.toString()) || (this.annotation.ignoreCase() && valueToValid.equalsIgnoreCase(en.toString()))) {
-                    result = true;
-                    break;
-                }
-            }
-        }
-        return result;
+    public boolean isValid(Category value, ConstraintValidatorContext context) {
+        UUID id = value.getId();
+        return categoryService.getCategoryById(id) != null;
     }
 }
