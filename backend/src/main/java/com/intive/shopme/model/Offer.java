@@ -1,5 +1,6 @@
 package com.intive.shopme.model;
 
+import com.intive.shopme.util.validation.validation.CategoryCheck;
 import com.intive.shopme.base.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,7 +20,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
-import java.util.UUID;
 
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
@@ -39,6 +39,7 @@ public class Offer extends Identifiable {
     @NotNull(message = "Title cannot be empty.")
     private String title;
 
+    @CategoryCheck
     @Valid
     @NotNull(message = "No category selected.")
     @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)

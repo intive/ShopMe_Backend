@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CategoryService {
@@ -21,4 +22,7 @@ public class CategoryService {
         categoryRepository.save(category);
     }
 
+    public Category getCategoryById(UUID id) {
+        return categoryRepository.findOne(id);
+    }
 }
