@@ -1,6 +1,6 @@
 package com.intive.shopme.controller;
 
-import com.intive.shopme.model.Offer;
+import com.intive.shopme.model.db.Offer;
 import com.intive.shopme.service.OfferService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

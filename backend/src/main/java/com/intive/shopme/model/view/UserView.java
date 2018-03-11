@@ -1,4 +1,4 @@
-package com.intive.shopme.model;
+package com.intive.shopme.model.view;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,20 +8,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
-@Entity
-@ApiModel(value = "Offer's category", description = "Represents different category types of an offer")
+@ApiModel(value = "Offer's user", description = "Represents offer's owner.")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class UserView {
 
-    @ApiModelProperty(value = "Represents category's id")
+    @ApiModelProperty(value = "Represents user's id number")
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -30,7 +28,16 @@ public class Category {
     )
     private UUID id;
 
-    @ApiModelProperty(value = "Represents category's name")
+    @ApiModelProperty(value = "Represents user's name", required = true)
     private String name;
+
+    @ApiModelProperty(value = "Represents user's email", required = true)
+    private String email;
+
+    @ApiModelProperty(value = "Represents user's phone number", required = true)
+    private String phoneNumber;
+
+    @ApiModelProperty(value = "Represents additional information typed by user")
+    private String additionalInfo;
 
 }

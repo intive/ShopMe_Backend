@@ -1,4 +1,4 @@
-package com.intive.shopme.model;
+package com.intive.shopme.model.view;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,18 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
-@Entity
 @ApiModel(value = "Offer's Bundle", description = "Represents different bundle types of offer")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Bundle {
+public class BundleView {
 
     @ApiModelProperty(value = "Represents bundle's id number")
     @Id
