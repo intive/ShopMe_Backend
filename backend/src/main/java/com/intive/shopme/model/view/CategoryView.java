@@ -2,7 +2,10 @@ package com.intive.shopme.model.view;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.GeneratedValue;
@@ -11,6 +14,9 @@ import java.util.UUID;
 
 @ApiModel(value = "Offer's category", description = "Represents different category types of an offer")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CategoryView {
 
     @ApiModelProperty(value = "Represents category's id")
