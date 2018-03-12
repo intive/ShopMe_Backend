@@ -1,7 +1,7 @@
 package com.intive.shopme.controller;
 
 
-import com.intive.shopme.model.Category;
+import com.intive.shopme.model.db.Category;
 import com.intive.shopme.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
