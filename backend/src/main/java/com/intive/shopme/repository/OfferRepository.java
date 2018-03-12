@@ -1,6 +1,6 @@
 package com.intive.shopme.repository;
 
-import com.intive.shopme.model.Offer;
+import com.intive.shopme.model.db.Offer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

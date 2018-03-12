@@ -1,6 +1,6 @@
 package com.intive.shopme.service;
 
-import com.intive.shopme.model.Offer;
+import com.intive.shopme.model.db.Offer;
 import com.intive.shopme.repository.OfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

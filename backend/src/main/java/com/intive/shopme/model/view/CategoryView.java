@@ -1,4 +1,4 @@
-package com.intive.shopme.model;
+package com.intive.shopme.model.view;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,20 +8,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.UUID;
 
-@Entity
-@ApiModel(value = "Offer's Bundle", description = "Represents different bundle types of offer")
-@Builder
+@ApiModel(value = "Offer's category", description = "Represents different category types of an offer")
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class Bundle {
+@AllArgsConstructor
+public class CategoryView {
 
-    @ApiModelProperty(value = "Represents bundle's id number")
+    @ApiModelProperty(value = "Represents category's id")
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
@@ -30,10 +28,7 @@ public class Bundle {
     )
     private UUID id;
 
-    @ApiModelProperty(value = "Represents bundle's description")
-    private String description;
-
-    @ApiModelProperty(value = "Represents bundle's price")
-    private String price;
+    @ApiModelProperty(value = "Represents category's name")
+    private String name;
 
 }

@@ -1,5 +1,8 @@
-package com.intive.shopme.model;
+package com.intive.shopme.model.view;
 
+import com.intive.shopme.model.db.Bundle;
+import com.intive.shopme.model.db.Category;
+import com.intive.shopme.model.db.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -12,13 +15,12 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.UUID;
 
-@Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Offer {
+public class OfferView {
 
     @Id
     @GeneratedValue(generator = "UUID")

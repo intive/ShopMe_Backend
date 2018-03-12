@@ -1,7 +1,7 @@
 package com.intive.shopme.service;
 
 
-import com.intive.shopme.model.Category;
+import com.intive.shopme.model.db.Category;
 import com.intive.shopme.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
