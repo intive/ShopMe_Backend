@@ -3,6 +3,7 @@ package com.intive.shopme.service;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.repository.OfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +13,10 @@ import java.util.UUID;
 public class OfferService {
 
     @Autowired
-    OfferRepository offerRepository;
+    private OfferRepository offerRepository;
 
-    public List<Offer> getAll() {
-        return offerRepository.findAll();
+    public List<Offer> getAll(Specification<Offer> filter) {
+        return offerRepository.findAll(filter);
     }
 
     public Offer get(UUID id) {

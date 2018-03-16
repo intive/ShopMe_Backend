@@ -27,9 +27,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("ShopMe by Intive Patronage `18 team")
-                .description("Shop Me is a Web Application created during Intive Patronage `18 Project")
-                .version("1.0")
+                .title("ShopMe by intive Patronage `18 team")
+                .description("ShopMe is a Web Application created during intive Patronage `18 Project")
+                .version("1.1")
                 .build();
     }
 }

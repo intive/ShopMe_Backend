@@ -2,8 +2,8 @@ package com.intive.shopme.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import lombok.Data;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,16 +15,16 @@ import java.util.UUID;
 @Data
 public class Category {
 
-    @ApiModelProperty(value = "Represents category's id")
     @Id
     @GeneratedValue(generator = "UUID")
     @GenericGenerator(
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @ApiModelProperty(value = "Represents category's id", position = 1, example = "22222222-2222-2222-2222-222222222222")
     private UUID id;
 
-    @ApiModelProperty(value = "Represents category's name")
+    @ApiModelProperty(value = "Represents category's name", required = true, example = "Inne", position = 2)
     private String name;
 
 }

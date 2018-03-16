@@ -18,6 +18,7 @@ mvnw spring-boot:run
 
 * http://localhost:8080/swagger-ui.html
 * http://localhost:8080/v2/api-docs
+* [swagger.json](doc/swagger.json)
 
 ### More information:
 * [CodeStyle](https://github.com/blstream/ShopMe_Backend/blob/master/backend/doc/CodeStyle.md)
