@@ -1,6 +1,5 @@
 package com.intive.shopme.controller;
 
-
 import com.intive.shopme.model.Category;
 import com.intive.shopme.service.CategoryService;
 import io.swagger.annotations.Api;
@@ -11,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/offers/categories")
-@Api(value = "category", description = "Rest API for categories operations", tags = "Categories API")
+@RequestMapping(value = "/categories")
+@Api(value = "category", description = "REST API for categories operations", tags = "Categories")
 public class CategoryController {
 
     @Autowired
