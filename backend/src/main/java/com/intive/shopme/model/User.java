@@ -31,12 +31,10 @@ public class User {
             example = "44444444-4444-4444-4444-444444444444")
     private UUID id;
 
-    @ApiModelProperty(value = "Represents user's name", required = true, position = 2,
-            example = "Jan Kowalski")
+    @ApiModelProperty(value = "Represents user's name", required = true, position = 2, example = "Jan Kowalski")
     private String name;
 
-    @ApiModelProperty(value = "Represents user's email", required = true, position = 3,
-            example = "unknown@gmail.com")
+    @ApiModelProperty(value = "Represents user's email", required = true, position = 3, example = "unknown@gmail.com")
     private String email;
 
     @ApiModelProperty(value = "Represents user's phone number", required = true, position = 4,

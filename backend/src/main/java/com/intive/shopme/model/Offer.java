@@ -38,22 +38,27 @@ public class Offer {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;
 
-    @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5)
+    @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
+            example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
 
-    @ApiModelProperty(value = "Represents offer's base price", required = true, position = 6)
+    @ApiModelProperty(value = "Represents offer's base price", required = true, position = 6, example = "10")
     private float basePrice;
 
-    @ApiModelProperty(value = "Represents offer's extended level description", position = 7)
+    @ApiModelProperty(value = "Represents offer's extended level description", position = 7,
+            example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
+                    "wysoka jakość wykonania usługi oraz dogodne terminy.")
     private String extendedDescription;
 
-    @ApiModelProperty(value = "Represents offer's extended level price", position = 8)
+    @ApiModelProperty(value = "Represents offer's extended level price", position = 8, example = "20")
     private float extendedPrice;
 
-    @ApiModelProperty(value = "Represents offer's extra level description", position = 9)
+    @ApiModelProperty(value = "Represents offer's extra level description", position = 9,
+            example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
+                    "wysoka jakość wykonania usługi oraz dogodne terminy. W lato wysokie rabaty;)")
     private String extraDescription;
 
-    @ApiModelProperty(value = "Represents offer's extra level price", position = 10)
+    @ApiModelProperty(value = "Represents offer's extra level price", position = 10, example = "30")
     private float extraPrice;
 
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
