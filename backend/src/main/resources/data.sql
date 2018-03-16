@@ -15,4 +15,3 @@ INSERT INTO category VALUES (UUID(), 'prace domowe');
 INSERT INTO category VALUES (UUID(), 'korepetycje');
 INSERT INTO category VALUES (UUID(), 'zespoły i muzyka');
 INSERT INTO category VALUES (UUID(), 'inne');
-
