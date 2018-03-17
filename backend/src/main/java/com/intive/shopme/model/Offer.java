@@ -32,7 +32,6 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's date of submitting", position = 2,
             example = "1234567890")
     private final Long date = System.currentTimeMillis();
-
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
     @Size(max = 30, message = "Too many characters.")
@@ -75,6 +74,7 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's extra level price", position = 10, example = "30")
     private float extraPrice;
 
+    @Valid
     @NotNull(message = "No user selected.")
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
