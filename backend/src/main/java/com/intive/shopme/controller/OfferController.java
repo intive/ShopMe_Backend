@@ -51,6 +51,7 @@ public class OfferController {
         if (title.isPresent()) {
             String[] titleKeywords = title.get()
                     .substring(0, title.get().length() > 30 ? 30 : title.get().length())
+                    .replaceAll("[^ąĄćĆęĘłŁńŃóÓśŚżŻźŹa-zA-z0-9 ]", "")
                     .toLowerCase().split(" ");
             for (String titleKeyword : titleKeywords) {
                 boolean compliant = !titleKeyword.matches("^.$") &&
