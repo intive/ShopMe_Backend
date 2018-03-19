@@ -8,18 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.Size;
-import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.Date;
 
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
@@ -45,19 +41,16 @@ public class Offer extends Identifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Category category;
 
-    @Valid
-    @NotNull(message = "No bundle selected.")
+    @NotNull(message = "Base description cannot be empty.")
+    @Size(max = 500, message = "Too many characters. Maximum is 30.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
-    @Size(max = 500, message = "Too many characters. Maximum is 30.")
-    @ApiModelProperty(value = "Represents offer's bundle", required = true)
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Bundle bundle;
 
     @ApiModelProperty(value = "Represents offer's base price", required = true, position = 6, example = "10")
     private float basePrice;
 
+    @Size(max = 500, message = "Too many characters. Maximum is 30.")
     @ApiModelProperty(value = "Represents offer's extended level description", position = 7,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy.")
@@ -66,6 +59,7 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's extended level price", position = 8, example = "20")
     private float extendedPrice;
 
+    @Size(max = 500, message = "Too many characters. Maximum is 30.")
     @ApiModelProperty(value = "Represents offer's extra level description", position = 9,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy. W lato wysokie rabaty;)")
