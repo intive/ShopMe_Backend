@@ -25,23 +25,23 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class User extends Identifiable {
 
+    @NotNull(message = "Name cannot be empty.")
     @Length(min = 3, max = 20)
     @Pattern(regexp = "[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ ]*", message = "Name has invalid characters.")
-    @NotNull(message = "Name cannot be empty.")
     @ApiModelProperty(value = "Represents user's name", required = true, position = 2, example = "Jan Kowalski")
     private String name;
 
-    @Email
+    @Email(message = "User's email has wrong format")
     @ApiModelProperty(value = "Represents user's email", required = true, position = 3, example = "unknown@gmail.com")
     private String email;
 
-    @Size(min = 9, max = 10, message = "The number has the wrong amount of digits.")
-    @Pattern(regexp = "[0-9]+", message = "The phone number should contain only digits.")
+    @Size(min = 9, max = 10, message = "The user's number has the wrong amount of digits.")
+    @Pattern(regexp = "[0-9]+", message = "The user's phone number should contain only digits.")
     @ApiModelProperty(value = "Represents user's phone number", required = true, position = 4,
             example = "0234567890")
     private String phoneNumber;
 
-    @Size(max = 800, message = "Too many characters.")
+    @Size(max = 800, message = "The additional user's information has too many characters.")
     @ApiModelProperty(value = "Represents additional information typed by user", position = 5,
             example = "Dodatkowe info")
     private String additionalInfo;

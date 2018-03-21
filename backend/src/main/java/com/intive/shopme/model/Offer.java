@@ -28,9 +28,10 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's date of submitting", position = 2,
             example = "1234567890")
     private final Long date = System.currentTimeMillis();
+
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
-    @Size(max = 30, message = "Too many characters.")
+    @Size(max = 30, message = "Offer's title has too many characters.")
     @NotNull(message = "Title cannot be empty.")
     private String title;
 
@@ -42,7 +43,7 @@ public class Offer extends Identifiable {
     private Category category;
 
     @NotNull(message = "Base description cannot be empty.")
-    @Size(max = 500, message = "Too many characters. Maximum is 30.")
+    @Size(max = 500, message = "Offer's base description has too many characters. Maximum is 500.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
@@ -50,7 +51,7 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's base price", required = true, position = 6, example = "10")
     private float basePrice;
 
-    @Size(max = 500, message = "Too many characters. Maximum is 30.")
+    @Size(max = 500, message = "Offer's extended level description has too many characters. Maximum is 500.")
     @ApiModelProperty(value = "Represents offer's extended level description", position = 7,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy.")
@@ -59,7 +60,7 @@ public class Offer extends Identifiable {
     @ApiModelProperty(value = "Represents offer's extended level price", position = 8, example = "20")
     private float extendedPrice;
 
-    @Size(max = 500, message = "Too many characters. Maximum is 30.")
+    @Size(max = 500, message = "Offer's extra level description has too many characters. Maximum is 500.")
     @ApiModelProperty(value = "Represents offer's extra level description", position = 9,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy. W lato wysokie rabaty;)")

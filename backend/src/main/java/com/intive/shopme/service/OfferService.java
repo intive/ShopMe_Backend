@@ -28,7 +28,7 @@ public class OfferService {
         return offerRepository.findOne(id);
     }
 
-    public void add(Offer offer) throws Exception {
+    public void add(Offer offer) throws ConstraintViolationException {
 
         ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
         Validator validator = validatorFactory.getValidator();

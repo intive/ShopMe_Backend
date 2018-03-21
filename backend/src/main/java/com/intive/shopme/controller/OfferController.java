@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class OfferController {
     })
     @ApiOperation(value = "Saves offer")
     @PostMapping(value = "/offers")
-    public void add(@RequestBody Offer offer) throws Exception {
+    public void add(@RequestBody Offer offer) throws ConstraintViolationException {
         offerService.add(offer);
     }
 
