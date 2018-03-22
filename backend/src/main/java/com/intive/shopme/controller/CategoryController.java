@@ -5,12 +5,18 @@ import com.intive.shopme.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+import static com.intive.shopme.config.AppConfig.CATEGORIES_PATH;
+
 @RestController
-@RequestMapping(value = "/categories")
+@RequestMapping(value = CATEGORIES_PATH)
 @Api(value = "category", description = "REST API for categories operations", tags = "Categories")
 public class CategoryController {
 

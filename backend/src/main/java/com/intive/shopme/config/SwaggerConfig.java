@@ -1,4 +1,4 @@
-package com.intive.shopme.configuration;
+package com.intive.shopme.config;
 
 import com.google.common.base.Predicates;
 import org.springframework.beans.factory.annotation.Autowired;

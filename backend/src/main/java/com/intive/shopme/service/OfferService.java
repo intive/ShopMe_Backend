@@ -1,6 +1,5 @@
 package com.intive.shopme.service;
 
-import com.intive.shopme.model.Category;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.repository.OfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import javax.validation.*;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -21,7 +22,9 @@ public class OfferService {
     private OfferRepository offerRepository;
 
     public List<Offer> getAll(Specification<Offer> filter) {
-        return offerRepository.findAll(filter);
+        return offerRepository.findAll(filter).stream()
+                .sorted(Comparator.comparing(Offer::getDate))
+                .collect(Collectors.toList());
     }
 
     public Offer get(UUID id) {

@@ -12,7 +12,7 @@ import javax.persistence.Entity;
 @Data
 public class Category extends Identifiable {
 
-    @ApiModelProperty(value = "Represents category's name", required = true, example = "Inne", position = 2)
+    @ApiModelProperty(value = "Represents category's name", required = true, example = "nowa kategoria", position = 2)
     private String name;
 
 }
