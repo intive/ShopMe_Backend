@@ -7,14 +7,19 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+@Validated
 @RestController
 @Api(value = "offer", description = "REST API for offers", tags = "Offers")
 public class OfferController {
@@ -22,9 +27,13 @@ public class OfferController {
     @Autowired
     private OfferService offerService;
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "created"),
+            @ApiResponse(code = 422, message = "input validation error")
+    })
     @ApiOperation(value = "Saves offer")
     @PostMapping(value = "/offers")
-    public void add(@RequestBody Offer offer) {
+    public void add(@RequestBody Offer offer) throws ConstraintViolationException {
         offerService.add(offer);
     }
 
