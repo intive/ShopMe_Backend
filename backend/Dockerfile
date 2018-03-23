@@ -1,12 +1,13 @@
-FROM openjdk:8-jdk-alpine
+FROM maven:alpine
 MAINTAINER Maciej Łotysz <maciej.lotysz@intive.com>
-RUN mkdir build
-ADD pom.xml mvnw build/
-# copy directory never been easier
-ADD .mvn build/.mvn/
-WORKDIR build
+
 ENV JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap"
-RUN chmod 0700 mvnw && ./mvnw verify || true
-# copy directory never been easier 2
-ADD src/ ../build/src/
-RUN ./mvnw package
+COPY pom.xml /tmp/pom.xml
+RUN mvn -B -f /tmp/pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:resolve
+
+RUN mkdir /build
+WORKDIR /build
+COPY . .
+RUN mvn -s /usr/share/maven/ref/settings-docker.xml package
+
+VOLUME /build
