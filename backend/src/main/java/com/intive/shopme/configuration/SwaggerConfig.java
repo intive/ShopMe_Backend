@@ -11,6 +11,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import static com.intive.shopme.configuration.SwaggerApiConstants.apiInfo;
+
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -24,12 +26,18 @@ public class SwaggerConfig {
                 .build()
                 .apiInfo(apiInfo());
     }
+}
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title("ShopMe by intive Patronage `18 team")
-                .description("ShopMe is a Web Application created during intive Patronage `18 Project")
-                .version("1.1")
-                .build();
+final class SwaggerApiConstants {
+
+    private static final String TITLE = "ShopMe by intive Patronage `18 team";
+    private static final String DESC = "ShopMe is a Web Application created during intive Patronage `18 Project";
+    private static final String VERSION = "1.1";
+
+    private SwaggerApiConstants() {
+    }
+
+    static ApiInfo apiInfo() {
+        return new ApiInfoBuilder().title(TITLE).description(DESC).version(VERSION).build();
     }
 }
