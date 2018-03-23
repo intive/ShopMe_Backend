@@ -19,7 +19,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.ServletContext;
 
-import static com.intive.shopme.configuration.SwaggerApiConstants.apiInfo;
+import static com.intive.shopme.config.SwaggerApiConstants.apiInfo;
 
 @Configuration
 @EnableSwagger2
@@ -79,7 +79,7 @@ public class SwaggerConfig {
 final class SwaggerApiConstants {
 
     private static final String TITLE = "ShopMe by intive Patronage `18 team";
-    private static final String DESC = "ShopMe is a Web Application created during Intive Patronage `18 Project";
+    private static final String DESC = "ShopMe is a Web Application created during intive Patronage `18 Project";
     private static final String VERSION = "1.1";
 
     private SwaggerApiConstants() {
@@ -89,3 +89,4 @@ final class SwaggerApiConstants {
         return new ApiInfoBuilder().title(TITLE).description(DESC).version(VERSION).build();
     }
 }
+
