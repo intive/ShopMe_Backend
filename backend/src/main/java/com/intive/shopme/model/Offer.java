@@ -1,7 +1,7 @@
 package com.intive.shopme.model;
 
-import com.intive.shopme.util.validation.validation.CategoryCheck;
 import com.intive.shopme.base.Identifiable;
+import com.intive.shopme.util.validation.validation.CategoryCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -9,13 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-import javax.validation.constraints.Size;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
@@ -39,7 +36,10 @@ public class Offer extends Identifiable {
     @Valid
     @NotNull(message = "No category selected.")
     @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinTable(name = "offer_category",
+            joinColumns = @JoinColumn(name = "offer_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Category category;
 
     @NotNull(message = "Base description cannot be empty.")
