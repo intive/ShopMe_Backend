@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.intive.shopme.config.AppConfig.OFFERS_PATH;
+import static com.intive.shopme.config.ApiUrl.OFFERS_PATH;
 import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 
 @Validated
@@ -74,7 +74,7 @@ public class OfferController {
             String[] titleKeywords = title.get()
                     .substring(0, title.get().length() > OFFER_TITLE_MAX_LENGTH ?
                             OFFER_TITLE_MAX_LENGTH : title.get().length())
-                    .replaceAll("[^ąĄćĆęĘłŁńŃóÓśŚżŻźŹa-zA-z0-9 ]", "")
+                    .replaceAll("[^a-zA-Z0-9ąĄćĆęĘłŁńŃóÓśŚżŻźŹ ]", "")
                     .toLowerCase().split(" ");
             for (String titleKeyword : titleKeywords) {
                 boolean compliant = !titleKeyword.matches("^.$") &&
@@ -84,10 +84,10 @@ public class OfferController {
                 }
             }
         }
-        dateMin.ifPresent(aLong -> builder.with("date", ">", aLong));
-        dateMax.ifPresent(aLong -> builder.with("date", "<", aLong));
-        priceMin.ifPresent(aFloat -> builder.with("basePrice", ">", aFloat));
-        priceMax.ifPresent(aFloat -> builder.with("basePrice", "<", aFloat));
+        dateMin.ifPresent(aLong -> builder.with("date", "≥", aLong));
+        dateMax.ifPresent(aLong -> builder.with("date", "≤", aLong));
+        priceMin.ifPresent(aFloat -> builder.with("basePrice", "≥", aFloat));
+        priceMax.ifPresent(aFloat -> builder.with("basePrice", "≤", aFloat));
 
         Specification<Offer> filter = builder.build();
         return offerService.getAll(filter);

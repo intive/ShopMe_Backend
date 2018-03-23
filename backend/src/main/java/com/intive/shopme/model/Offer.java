@@ -48,7 +48,8 @@ public class Offer extends Identifiable {
     private Category category;
 
     @NotNull(message = "Base description cannot be empty.")
-    @Size(max = OFFER_DESCRIPTION_MAX_LENGTH, message = "Offer's base description has too many characters. Maximum is 500.")
+    @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
+            message = "Offer's base description has too many characters (max " + OFFER_DESCRIPTION_MAX_LENGTH + ").")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
@@ -57,7 +58,8 @@ public class Offer extends Identifiable {
     private Float basePrice;
 
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
-            message = "Offer's extended level description has too many characters. Maximum is " + OFFER_DESCRIPTION_MAX_LENGTH + ".")
+            message = "Offer's extended level description has too many characters (max " +
+            OFFER_DESCRIPTION_MAX_LENGTH + ").")
     @ApiModelProperty(value = "Represents offer's extended level description", position = 7,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy.")
@@ -67,7 +69,8 @@ public class Offer extends Identifiable {
     private Float extendedPrice;
 
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
-            message = "Offer's extra level description has too many characters. Maximum is 500.")
+            message = "Offer's extra level description has too many characters (max " +
+                    OFFER_DESCRIPTION_MAX_LENGTH + ").")
     @ApiModelProperty(value = "Represents offer's extra level description", position = 9,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy. W lato wysokie rabaty;)")

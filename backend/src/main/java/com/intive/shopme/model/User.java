@@ -29,7 +29,7 @@ public class User extends Identifiable {
 
     @NotNull(message = "User's name cannot be empty.")
     @Length(min = USER_NAME_MIN_LENGTH, max = USER_NAME_MAX_LENGTH)
-    @Pattern(regexp = "[A-Za-zżźćńółęąśŻŹĆĄŚĘŁÓŃ ]*", message = "Name has invalid characters.")
+    @Pattern(regexp = "[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ ]*", message = "Name has invalid characters.")
     @ApiModelProperty(value = "Represents user's name", required = true, position = 2, example = "Jan Kowalski")
     private String name;
 
