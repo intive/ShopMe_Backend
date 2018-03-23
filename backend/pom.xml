@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>ShopMe</name>
-    <description>Shop Me is a Web Application created during Intive Patronage 18 Project</description>
+    <description>ShopMe is a Web Application created during intive Patronage 18 Project</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
