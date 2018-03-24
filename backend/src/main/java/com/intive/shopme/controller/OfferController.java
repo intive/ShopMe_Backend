@@ -1,8 +1,8 @@
 package com.intive.shopme.controller;
 
+import com.intive.shopme.controller.filter.OfferSpecificationsBuilder;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.OfferService;
-import com.intive.shopme.controller.filter.OfferSpecificationsBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -15,14 +15,13 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,8 +35,12 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 @Api(value = "offer", description = "REST API for offers", tags = "Offers")
 public class OfferController {
 
+    private final OfferService service;
+
     @Autowired
-    private OfferService offerService;
+    public OfferController(OfferService service) {
+        this.service = service;
+    }
 
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New offer successfully created"),
@@ -45,22 +48,22 @@ public class OfferController {
     })
     @ApiOperation(value = "Saves offer")
     @PostMapping
-    public void add(@RequestBody Offer offer) throws ConstraintViolationException {
+    public void add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());
-        offerService.add(offer);
+        service.add(offer);
     }
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "title", value = "filter query for offers titles (optional)",
-                    required = false, dataType = "String", paramType = "query"),
+                    dataType = "String", paramType = "query"),
             @ApiImplicitParam(name = "priceMin", value = "minimum price (optional)",
-                    required = false, dataType = "Float", paramType = "query"),
+                    dataType = "Float", paramType = "query"),
             @ApiImplicitParam(name = "priceMax", value = "maximum price (optional)",
-                    required = false, dataType = "Float", paramType = "query"),
+                    dataType = "Float", paramType = "query"),
             @ApiImplicitParam(name = "dateMin", value = "offer not older than (optional)",
-                    required = false, dataType = "Long", paramType = "query"),
+                    dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "dateMax", value = "offer not newer than (optional)",
-                    required = false, dataType = "Long", paramType = "query")
+                    dataType = "Long", paramType = "query")
     })
     @ApiOperation(value = "Returns all existing offers (with optional filter criteria)")
     @GetMapping
@@ -69,7 +72,7 @@ public class OfferController {
                                     @RequestParam(required = false) Optional<Float> priceMax,
                                     @RequestParam(required = false) Optional<Long> dateMin,
                                     @RequestParam(required = false) Optional<Long> dateMax) {
-        OfferSpecificationsBuilder builder = new OfferSpecificationsBuilder();
+        final OfferSpecificationsBuilder builder = new OfferSpecificationsBuilder();
         if (title.isPresent()) {
             String[] titleKeywords = title.get()
                     .substring(0, title.get().length() > OFFER_TITLE_MAX_LENGTH ?
@@ -90,25 +93,25 @@ public class OfferController {
         priceMax.ifPresent(aFloat -> builder.with("basePrice", "≤", aFloat));
 
         Specification<Offer> filter = builder.build();
-        return offerService.getAll(filter);
+        return service.getAll(filter);
     }
 
     @ApiOperation(value = "Returns offer by id")
     @GetMapping(value = "/{id}")
     public Offer get(@PathVariable UUID id) {
-        return offerService.get(id);
+        return service.get(id);
     }
 
     @ApiOperation(value = "Updates offer by id")
     @PutMapping(value = "/{id}")
-    public void update(@PathVariable UUID id, Offer offer) {
-        offerService.update(id, offer);
+    public void update(Offer offer) {
+        service.update(offer);
     }
 
     @ApiOperation(value = "Removes offer by id")
     @DeleteMapping(value = "/{id}")
     public void delete(@PathVariable UUID id) {
-        offerService.delete(id);
+        service.delete(id);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.intive.shopme.config;
 
-public class AppConfig {
+public final class AppConfig {
     public static final int USER_NAME_MIN_LENGTH = 3;
     public static final int USER_NAME_MAX_LENGTH = 20;
 

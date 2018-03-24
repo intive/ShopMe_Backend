@@ -25,7 +25,7 @@ import static com.intive.shopme.config.AppConfig.USER_NAME_MIN_LENGTH;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User extends Identifiable {
+class User extends Identifiable {
 
     @NotNull(message = "User's name cannot be empty.")
     @Length(min = USER_NAME_MIN_LENGTH, max = USER_NAME_MAX_LENGTH)
