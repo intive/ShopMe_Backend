@@ -5,67 +5,68 @@ import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.CategoryService;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.util.Set;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CategoryValidatorTest {
+
+    @Mock
+    private CategoryService categoryService;
+
+    @InjectMocks
+    private ServiceUtil serviceUtil;
 
     private static Validator validator;
 
-    @Mock
-    CategoryService categoryService;
-
-    @InjectMocks
-    ServiceUtil serviceUtil;
+    private final static UUID ID = UUID.randomUUID();
+    private final static Category CATEGORY = createCategory(ID);
+    private final static Offer OFFER = createOffer(CATEGORY);
 
     @Before
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
         this.serviceUtil.fillInstance();
-        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-        validator = factory.getValidator();
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @Test
     public void testCategoryValidatorAccept() {
-        Category category = new Category();
-        UUID uuid1 = UUID.randomUUID();
-        category.setId(uuid1);
-        category.setName("budowa");
+        when(categoryService.getCategoryById(ID)).thenReturn(CATEGORY);
 
-        Offer testOffer = new Offer();
-        testOffer.setCategory(category);
-
-        when(categoryService.getCategoryById(uuid1)).thenReturn(category);
-
-        Set<ConstraintViolation<Offer>> constraintValidations = validator.validateProperty(testOffer, "category");
-        assertEquals(0, constraintValidations.size());
+        Set<ConstraintViolation<Offer>> constraintValidations = validator.validateProperty(OFFER, "category");
+        assertThat(constraintValidations).isEmpty();
     }
 
     @Test
     public void testCategoryValidatorReject() {
-        Category category2 = new Category();
-        UUID uuid2 = UUID.randomUUID();
-        category2.setId(uuid2);
-        category2.setName("wrong category");
+        when(categoryService.getCategoryById(anyObject())).thenReturn(null);
 
-        Offer testOffer = new Offer();
-        testOffer.setCategory(category2);
+        Set<ConstraintViolation<Offer>> constraintValidations = validator.validateProperty(OFFER, "category");
+        assertThat(constraintValidations).hasSize(1);
+    }
 
-        when(categoryService.getCategoryById(uuid2)).thenReturn(null);
+    private static Offer createOffer(Category category) {
+        final Offer sampleOffer = new Offer();
+        sampleOffer.setCategory(category);
+        return sampleOffer;
+    }
 
-        Set<ConstraintViolation<Offer>> constraintValidations = validator.validateProperty(testOffer, "category");
-        assertEquals(1, constraintValidations.size());
+    private static Category createCategory(UUID id) {
+        final Category category = new Category();
+        category.setId(id);
+        category.setName("foo");
+        return category;
     }
 }

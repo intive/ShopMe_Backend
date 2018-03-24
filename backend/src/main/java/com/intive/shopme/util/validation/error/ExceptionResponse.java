@@ -6,8 +6,9 @@ import java.util.HashMap;
 
 @Setter
 public class ExceptionResponse {
+
     private int code;
-    private HashMap errors = new HashMap<String, String>();
+    private HashMap<String, String> errors = new HashMap<>();
 
     public void add(String field, String msg) {
         errors.put(field, msg);

@@ -9,11 +9,7 @@ import java.util.List;
 
 public class OfferSpecificationsBuilder {
 
-    private final List<SearchCriteria> params;
-
-    public OfferSpecificationsBuilder() {
-        params = new ArrayList<>();
-    }
+    private final List<SearchCriteria> params = new ArrayList<>();
 
     public OfferSpecificationsBuilder with(String key, String operation, Object value) {
         params.add(new SearchCriteria(key, operation, value));
@@ -34,6 +30,7 @@ public class OfferSpecificationsBuilder {
         for (int i = 1; i < specs.size(); i++) {
             result = Specifications.where(result).and(specs.get(i));
         }
+
         return result;
     }
 }

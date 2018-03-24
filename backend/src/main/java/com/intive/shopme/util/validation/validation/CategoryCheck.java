@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Documented
 @Constraint(validatedBy = {CategoryValidator.class})
 public @interface CategoryCheck {
-    String message() default "invalid";
+    String message() default "Invalid category id";
 
     Class<?>[] groups() default {};
 

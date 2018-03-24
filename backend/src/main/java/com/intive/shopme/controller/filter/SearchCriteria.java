@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 @Data
 @AllArgsConstructor
 public class SearchCriteria {
-    private String key;
-    private String operation;
-    private Object value;
+    private final String key;
+    private final String operation;
+    private final Object value;
 }
