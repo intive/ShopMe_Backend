@@ -24,6 +24,6 @@ public class ErrorHandlingController {
             eR.add(v.getPropertyPath().toString(), v.getMessage());
         }
 
-        return new ResponseEntity(eR, HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(eR, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 }

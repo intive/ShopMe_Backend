@@ -1,7 +1,8 @@
 package com.intive.shopme.model;
 
-import com.intive.shopme.util.validation.validation.CategoryCheck;
+
 import com.intive.shopme.base.Identifiable;
+import com.intive.shopme.util.validation.validation.CategoryCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -13,9 +14,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
-import javax.validation.constraints.Size;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
