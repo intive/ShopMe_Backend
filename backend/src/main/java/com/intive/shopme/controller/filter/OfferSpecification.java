@@ -12,26 +12,29 @@ import javax.persistence.criteria.Root;
 @AllArgsConstructor
 public class OfferSpecification implements Specification<Offer> {
 
-    private SearchCriteria criteria;
+    private final SearchCriteria criteria;
 
     @Override
     public Predicate toPredicate(Root<Offer> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
-        if (criteria.getOperation().equalsIgnoreCase(">")) {
-            return builder.greaterThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
-        } else {
-            if (criteria.getOperation().equalsIgnoreCase("<")) {
-                return builder.lessThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
-            } else {
-                if (criteria.getOperation().equalsIgnoreCase(":")) {
-                    if (root.get(criteria.getKey()).getJavaType() == String.class) {
-                        return builder.like(builder.lower(root.<String>get(criteria.getKey())), "%" + criteria.getValue() + "%");
-                    } else {
-                        return builder.equal(root.get(criteria.getKey()), criteria.getValue());
-                    }
+        Predicate result = null;
+        switch (criteria.getOperation()) {
+            case "≥":
+                result = builder.greaterThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                break;
+            case "≤":
+                result = builder.lessThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                break;
+            case ":":
+                if (root.get(criteria.getKey()).getJavaType() == String.class) {
+                    result = builder.like(builder.lower(root.<String>get(criteria.getKey())),
+                            "%" + criteria.getValue() + "%");
+                } else {
+                    result = builder.equal(root.get(criteria.getKey()), criteria.getValue());
                 }
-            }
+                break;
         }
-        return null;
+
+        return result;
     }
 }

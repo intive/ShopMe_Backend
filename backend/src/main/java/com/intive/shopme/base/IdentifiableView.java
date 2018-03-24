@@ -1,6 +1,5 @@
 package com.intive.shopme.base;
 
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

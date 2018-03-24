@@ -22,7 +22,7 @@ public abstract class Identifiable {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     @ApiModelProperty(value = "Represents unique id number", position = 1,
-            example = "aaa2e1cd-6319-4fa3-b05f-d47f4aec7dac")
+            example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
     private UUID id;
 
 }
