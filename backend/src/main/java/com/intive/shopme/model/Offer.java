@@ -13,7 +13,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -44,7 +48,10 @@ public class Offer extends Identifiable {
     @Valid
     @NotNull(message = "No category selected.")
     @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
+    @JoinTable(name = "offer_category",
+            joinColumns = @JoinColumn(name = "offer_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Category category;
 
     @NotNull(message = "Base description cannot be empty.")
@@ -59,7 +66,7 @@ public class Offer extends Identifiable {
 
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's extended level description has too many characters (max " +
-            OFFER_DESCRIPTION_MAX_LENGTH + ").")
+                    OFFER_DESCRIPTION_MAX_LENGTH + ").")
     @ApiModelProperty(value = "Represents offer's extended level description", position = 7,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy.")
