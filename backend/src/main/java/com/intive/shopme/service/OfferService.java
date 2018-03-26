@@ -32,7 +32,7 @@ public class OfferService {
 
     public List<Offer> getAll(Specification<Offer> filter) {
         return repository.findAll(filter).stream()
-                .sorted(Comparator.comparing(Offer::getDate))
+                .sorted(Comparator.comparing(Offer::getDate).reversed())
                 .collect(Collectors.toList());
     }
 
