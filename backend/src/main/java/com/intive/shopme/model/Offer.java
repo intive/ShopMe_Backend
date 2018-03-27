@@ -1,6 +1,5 @@
 package com.intive.shopme.model;
 
-
 import com.intive.shopme.base.Identifiable;
 import com.intive.shopme.util.validation.validation.CategoryCheck;
 import io.swagger.annotations.ApiModel;
@@ -61,6 +60,7 @@ public class Offer extends Identifiable {
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
 
+    @NotNull(message = "Base price cannot be empty.")
     @ApiModelProperty(value = "Represents offer's base price", required = true, position = 6, example = "12.34")
     private Float basePrice;
 
