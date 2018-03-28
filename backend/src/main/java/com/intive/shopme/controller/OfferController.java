@@ -32,7 +32,7 @@ import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.intive.shopme.config.ApiUrl.OFFERS_PATH;
+import static com.intive.shopme.config.ApiUrl.OFFERS;
 import static com.intive.shopme.config.AppConfig.ACCEPTABLE_TITLE_SEARCH_CHARS;
 import static com.intive.shopme.config.AppConfig.DEFAULT_PAGE;
 import static com.intive.shopme.config.AppConfig.DEFAULT_PAGE_SIZE;
@@ -44,7 +44,7 @@ import static com.intive.shopme.config.AppConfig.PAGE_SIZE_MAX;
 
 @Validated
 @RestController
-@RequestMapping(value = OFFERS_PATH)
+@RequestMapping(value = OFFERS)
 @Api(value = "offer", description = "REST API for offers", tags = "Offers")
 public class OfferController {
 

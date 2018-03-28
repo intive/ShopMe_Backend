@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-import static com.intive.shopme.config.ApiUrl.CATEGORIES_PATH;
+import static com.intive.shopme.config.ApiUrl.CATEGORIES;
 
 @RestController
-@RequestMapping(value = CATEGORIES_PATH)
+@RequestMapping(value = CATEGORIES)
 @Api(value = "category", description = "REST API for categories operations", tags = "Categories")
 public class CategoryController {
 
