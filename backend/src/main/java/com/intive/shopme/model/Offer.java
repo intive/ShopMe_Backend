@@ -3,6 +3,7 @@ package com.intive.shopme.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intive.shopme.base.Identifiable;
 import com.intive.shopme.util.validation.validation.CategoryCheck;
+import com.intive.shopme.util.validation.validation.LinkInTextCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -53,10 +54,10 @@ public class Offer extends Identifiable {
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Category category;
 
+    @LinkInTextCheck
     @NotNull(message = "Base description cannot be empty.")
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's base description has too many characters (max " + OFFER_DESCRIPTION_MAX_LENGTH + ").")
-    @Pattern(regexp = "^((?!http://|https://).)*$", message = "Offer's base level description shouldn't contain http/https links.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
@@ -68,7 +69,6 @@ public class Offer extends Identifiable {
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's extended level description has too many characters (max " +
                     OFFER_DESCRIPTION_MAX_LENGTH + ").")
-    @Pattern(regexp = "^((?!http://|https://).)*$", message = "Offer's extended level description shouldn't contain http/https links.")
     @ApiModelProperty(value = "Represents offer's extended level description", position = 7,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy.")
@@ -80,7 +80,6 @@ public class Offer extends Identifiable {
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's extra level description has too many characters (max " +
                     OFFER_DESCRIPTION_MAX_LENGTH + ").")
-    @Pattern(regexp = "^((?!http://|https://).)*$", message = "Offer's extra level description shouldn't contain http/https links.")
     @ApiModelProperty(value = "Represents offer's extra level description", position = 9,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy. W lato wysokie rabaty;)")
