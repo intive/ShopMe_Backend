@@ -15,5 +15,4 @@ final class SwaggerApiInfoConfigurer {
     static ApiInfo createApiInfo() {
         return new ApiInfoBuilder().title(TITLE).description(DESC).version(VERSION).build();
     }
-
 }

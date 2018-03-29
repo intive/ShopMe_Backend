@@ -15,4 +15,4 @@ FROM openjdk:10-jre-slim
 COPY --from=0 /usr/src/app/target/be.jar app.jar
 EXPOSE 8080
 VOLUME /app.conf
-ENTRYPOINT exec java -Djava.security.egd=file:/dev/./urandom -jar /app.jar
+ENTRYPOINT exec java --add-modules java.xml.bind -Djava.security.egd=file:/dev/./urandom -jar /app.jar
