@@ -1,4 +1,4 @@
-package com.intive.shopme.util.validation.validation;
+package com.intive.shopme.validation;
 
 import com.intive.shopme.model.Category;
 import com.intive.shopme.model.Offer;

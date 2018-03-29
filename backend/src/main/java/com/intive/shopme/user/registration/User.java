@@ -1,22 +1,20 @@
-package com.intive.shopme.UserRegistration;
+package com.intive.shopme.user.registration;
 
-import com.intive.shopme.base.Identifiable;
+import com.intive.shopme.model.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "USERS") // Note: USER is SQL reserved keyword
 @ApiModel(value = "Users", description = "Represents the user")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ValidInvoiceIfInvoiceRequested
-class Users extends Identifiable {
+class User extends Identifiable {
 
     @ApiModelProperty(value = "Represents user's name",
             required = true, position = 2, example = "Jan")
@@ -55,8 +53,10 @@ class Users extends Identifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Invoice invoice;
 
-    protected Users hidePassword() {
-        Users result = this;
+    // FIXME
+    @Deprecated
+    User hidePassword() {
+        User result = this;
         result.setPassword("");
         return result;
     }

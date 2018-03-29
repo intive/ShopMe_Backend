@@ -1,4 +1,4 @@
-package com.intive.shopme.util.validation.validation;
+package com.intive.shopme.validation;
 
 import com.intive.shopme.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
