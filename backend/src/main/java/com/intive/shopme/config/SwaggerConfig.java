@@ -8,10 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -73,20 +71,6 @@ public class SwaggerConfig {
                 return serverContext;
             }
         };
-    }
-}
-
-final class SwaggerApiInfoConfigurer {
-
-    private static final String TITLE = "ShopMe by Intive Patronage `18 team";
-    private static final String DESC = "ShopMe is a Web Application created during Intive Patronage `18 Project";
-    private static final String VERSION = "1.1";
-
-    private SwaggerApiInfoConfigurer() {
-    }
-
-    static ApiInfo createApiInfo() {
-        return new ApiInfoBuilder().title(TITLE).description(DESC).version(VERSION).build();
     }
 }
 
