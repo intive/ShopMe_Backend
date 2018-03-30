@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {LinkInTextValidator.class})
 public @interface LinkInTextCheck {
 
-    String message() default "description can't contain any links.";
+    String message() default "description can't contain any urls/links.";
 
     Class<?>[] groups() default {};
 
