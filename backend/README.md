@@ -18,7 +18,7 @@ mvnw spring-boot:run
 *Run with specific profile (dev is default)
 Available profiles are: dev, stage, production
 ```
-mvnw spring-boot:run -Drun.profiles={profile name}
+$ java -jar -Dspring.profiles.active={profile name} {JAR name}.jar
 ```
 
 ### Swagger API documentation
