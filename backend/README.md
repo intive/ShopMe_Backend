@@ -14,6 +14,13 @@ mvnw clean install
 ```
 mvnw spring-boot:run
 ```
+
+*Run with specific profile (dev is default)
+Available profiles are: dev, stage, production
+```
+$ java -jar -Dspring.profiles.active={profile name} {JAR name}.jar
+```
+
 ### Swagger API documentation
 
 * http://localhost:8080/swagger-ui.html
