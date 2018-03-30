@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class OfferService {
 
     private static final ValidatorFactory VALIDATOR_FACTORY = Validation.buildDefaultValidatorFactory();
+
     private final OfferRepository repository;
 
     @Autowired
@@ -37,7 +38,7 @@ public class OfferService {
     }
 
     public Offer get(UUID id) {
-        return repository.findOne(id);
+        return repository.getOne(id);
     }
 
     public void add(Offer offer) {
@@ -50,7 +51,7 @@ public class OfferService {
     }
 
     public void delete(UUID id) {
-        repository.delete(id);
+        repository.deleteById(id);
     }
 
     private void validate(Offer offer) {

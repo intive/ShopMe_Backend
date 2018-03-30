@@ -11,22 +11,22 @@ import java.util.UUID;
 @Service
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryRepository repository;
 
     @Autowired
-    public CategoryService(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryService(CategoryRepository repository) {
+        this.repository = repository;
     }
 
     public List<Category> getAll() {
-        return categoryRepository.findAll();
+        return repository.findAll();
     }
 
     public void add(Category category) {
-        categoryRepository.save(category);
+        repository.save(category);
     }
 
     public Category getCategoryById(UUID id) {
-        return categoryRepository.findOne(id);
+        return repository.getOne(id);
     }
 }

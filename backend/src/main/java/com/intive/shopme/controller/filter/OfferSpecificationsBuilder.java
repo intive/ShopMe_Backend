@@ -2,7 +2,6 @@ package com.intive.shopme.controller.filter;
 
 import com.intive.shopme.model.Offer;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.domain.Specifications;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +16,7 @@ public class OfferSpecificationsBuilder {
     }
 
     public Specification<Offer> build() {
-        if (params.size() == 0) {
+        if (params.isEmpty()) {
             return null;
         }
 
@@ -28,7 +27,7 @@ public class OfferSpecificationsBuilder {
 
         Specification<Offer> result = specs.get(0);
         for (int i = 1; i < specs.size(); i++) {
-            result = Specifications.where(result).and(specs.get(i));
+            result = Specification.where(result).and(specs.get(i));
         }
 
         return result;

@@ -3,12 +3,12 @@ package com.intive.shopme.util.validation.validation;
 import com.intive.shopme.model.Category;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.CategoryService;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import junit5.workaround.MockitoExtension;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -17,11 +17,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.anyObject;
+import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CategoryValidatorTest {
+@ExtendWith(MockitoExtension.class)
+class CategoryValidatorTest {
 
     @Mock
     private CategoryService categoryService;
@@ -35,14 +35,14 @@ public class CategoryValidatorTest {
     private final static Category CATEGORY = createCategory(ID);
     private final static Offer OFFER = createOffer(CATEGORY);
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         this.serviceUtil.fillInstance();
         validator = Validation.buildDefaultValidatorFactory().getValidator();
     }
 
     @Test
-    public void testCategoryValidatorAccept() {
+    void testCategoryValidatorAccept() {
         when(categoryService.getCategoryById(ID)).thenReturn(CATEGORY);
 
         Set<ConstraintViolation<Offer>> constraintValidations = validator.validateProperty(OFFER, "category");
@@ -50,7 +50,7 @@ public class CategoryValidatorTest {
     }
 
     @Test
-    public void testCategoryValidatorReject() {
+    void testCategoryValidatorReject() {
         when(categoryService.getCategoryById(anyObject())).thenReturn(null);
 
         Set<ConstraintViolation<Offer>> constraintValidations = validator.validateProperty(OFFER, "category");
