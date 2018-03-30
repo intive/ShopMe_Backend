@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/blstream/ShopMe_Backend.svg?branch=master)](https://travis-ci.org/blstream/ShopMe_Backend)
+
 # ShopMe by Intive Patronage '18
 
 ShopMe is a Web Application created during Intive Patronage `18 Project.
