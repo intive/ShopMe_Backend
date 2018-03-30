@@ -1,4 +1,4 @@
-FROM maven:alpine
+FROM maven:3-jdk-9-slim
 MAINTAINER Maciej Łotysz <maciej.lotysz@intive.com>
 
 WORKDIR /usr/src/app
@@ -12,7 +12,7 @@ COPY . .
 # TODO surefile plugin is not downloaded, fix and add -o
 RUN mvn -B -e -T 1C verify
 
-FROM openjdk:8-jre-alpine
+FROM openjdk:9-jre-slim
 MAINTAINER Maciej Łotysz <maciej.lotysz@intive.com>
 COPY --from=0 /usr/src/app/target/be.jar app.jar
 EXPOSE 8080
