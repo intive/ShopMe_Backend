@@ -2,8 +2,8 @@ package com.intive.shopme.service;
 
 import com.intive.shopme.model.Category;
 import com.intive.shopme.repository.CategoryRepository;
+import com.intive.shopme.util.validation.error.AlreadyExistException;
 import com.intive.shopme.util.validation.error.NotFoundException;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +25,16 @@ public class CategoryService {
     }
 
     public void add(Category category) {
+        if (repository.existsByName(category.getName())) {
+            throw new AlreadyExistException("Category with this name exist");
+        }
         repository.save(category);
     }
 
     public Category getCategoryById(UUID id) {
-        if(!repository.existsById(id)) throw new NotFoundException("Category");
+        if (!repository.existsById(id)) {
+            throw new NotFoundException("Category not found");
+        }
         return repository.getOne(id);
     }
 

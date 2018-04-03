@@ -45,12 +45,16 @@ public class OfferService {
     }
 
     public void update(Offer offer) {
-        if(!repository.existsById(offer.getId())) throw new NotFoundException("Offer");
+        if (!repository.existsById(offer.getId())) {
+            throw new NotFoundException("Offer not found");
+        }
         repository.save(offer);
     }
 
     public void delete(UUID id) {
-        if(!repository.existsById(id)) throw new NotFoundException("Offer");
+        if (!repository.existsById(id)) {
+            throw new NotFoundException("Offer not found");
+        }
         repository.deleteById(id);
     }
 
