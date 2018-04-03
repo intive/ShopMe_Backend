@@ -29,4 +29,5 @@ public class CategoryService {
     public Category getCategoryById(UUID id) {
         return repository.getOne(id);
     }
+
 }

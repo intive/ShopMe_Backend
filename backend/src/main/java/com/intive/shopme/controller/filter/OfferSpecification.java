@@ -10,7 +10,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 @AllArgsConstructor
-public class OfferSpecification implements Specification<Offer> {
+class OfferSpecification implements Specification<Offer> {
 
     private final SearchCriteria criteria;
 
@@ -20,14 +20,14 @@ public class OfferSpecification implements Specification<Offer> {
         Predicate result = null;
         switch (criteria.getOperation()) {
             case "≥":
-                result = builder.greaterThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                result = builder.greaterThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
                 break;
             case "≤":
-                result = builder.lessThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                result = builder.lessThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
                 break;
             case ":":
                 if (root.get(criteria.getKey()).getJavaType() == String.class) {
-                    result = builder.like(builder.lower(root.<String>get(criteria.getKey())),
+                    result = builder.like(builder.lower(root.get(criteria.getKey())),
                             "%" + criteria.getValue() + "%");
                 } else {
                     result = builder.equal(root.get(criteria.getKey()), criteria.getValue());
@@ -37,4 +37,5 @@ public class OfferSpecification implements Specification<Offer> {
 
         return result;
     }
+
 }

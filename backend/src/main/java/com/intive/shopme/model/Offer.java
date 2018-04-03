@@ -21,6 +21,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.time.Instant;
 
 import static com.intive.shopme.config.AppConfig.OFFER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
@@ -33,9 +34,9 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 @NoArgsConstructor
 public class Offer extends Identifiable {
 
-    @ApiModelProperty(value = "Represents offer's date of submitting", position = 2,
-            example = "1234567890")
-    private final Long date = System.currentTimeMillis();
+    @ApiModelProperty(value = "Represents offer's date of submitting (EPOCH time in milliseconds)", position = 2,
+            example = "1520031600000")
+    private Long date = Instant.now().toEpochMilli();
 
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")

@@ -32,4 +32,5 @@ public class OfferSpecificationsBuilder {
 
         return result;
     }
+
 }

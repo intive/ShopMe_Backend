@@ -3,6 +3,8 @@ package com.intive.shopme.service;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.repository.OfferRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +14,8 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -31,14 +30,12 @@ public class OfferService {
         this.repository = repository;
     }
 
-    public List<Offer> getAll(Specification<Offer> filter) {
-        return repository.findAll(filter).stream()
-                .sorted(Comparator.comparing(Offer::getDate).reversed())
-                .collect(Collectors.toList());
+    public Page<Offer> getAll(Pageable pageable, Specification<Offer> filter) {
+        return repository.findAll(filter, pageable);
     }
 
     public Offer get(UUID id) {
-        return repository.getOne(id);
+        return repository.findById(id).orElse(null);
     }
 
     public void add(Offer offer) {
@@ -61,4 +58,5 @@ public class OfferService {
             throw new ConstraintViolationException(violations);
         }
     }
+
 }
