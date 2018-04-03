@@ -23,11 +23,11 @@ class OfferSpecification implements Specification<Offer> {
                 result = builder.greaterThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
                 break;
             case "≤":
-                result = builder.lessThanOrEqualTo(root.<String>get(criteria.getKey()), criteria.getValue().toString());
+                result = builder.lessThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
                 break;
             case ":":
                 if (root.get(criteria.getKey()).getJavaType() == String.class) {
-                    result = builder.like(builder.lower(root.<String>get(criteria.getKey())),
+                    result = builder.like(builder.lower(root.get(criteria.getKey())),
                             "%" + criteria.getValue() + "%");
                 } else {
                     result = builder.equal(root.get(criteria.getKey()), criteria.getValue());

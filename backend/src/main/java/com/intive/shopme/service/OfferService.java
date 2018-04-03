@@ -14,7 +14,6 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -35,8 +34,8 @@ public class OfferService {
         return repository.findAll(filter, pageable);
     }
 
-    public Optional<Offer> get(UUID id) {
-        return repository.findById(id);
+    public Offer get(UUID id) {
+        return repository.findById(id).orElse(null);
     }
 
     public void add(Offer offer) {

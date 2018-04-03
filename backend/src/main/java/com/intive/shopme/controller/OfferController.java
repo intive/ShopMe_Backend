@@ -69,11 +69,12 @@ public class OfferController {
 
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "requested page number (optional, counting from " + FIRST_PAGE +
-                    ", default = " + DEFAULT_PAGE + ")",
-                    defaultValue = DEFAULT_PAGE, dataType = "Long", paramType = "query"),
+                    ", default = " + DEFAULT_PAGE + ")", defaultValue = DEFAULT_PAGE,
+                    dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "number of offers per page (optional, default = " +
-                    DEFAULT_PAGE_SIZE + ", max " + PAGE_SIZE_MAX + ")", allowableValues = "range[1, 5]",
-                    defaultValue = DEFAULT_PAGE_SIZE, dataType = "Long", paramType = "query"),
+                    DEFAULT_PAGE_SIZE + ", max " + PAGE_SIZE_MAX + ")",
+                    allowableValues = "range[1, " + PAGE_SIZE_MAX + "]", defaultValue = DEFAULT_PAGE_SIZE,
+                    dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "sort", value = "the properties to sort by (optional, date | basePrice | title, default = " +
                     DEFAULT_SORT_FIELD + ")",
                     allowableValues = "date, basePrice, title", defaultValue = DEFAULT_SORT_FIELD,
@@ -126,7 +127,7 @@ public class OfferController {
         final String sortField = sort.orElse(DEFAULT_SORT_FIELD);
         final String sortOrder = order.orElse(DEFAULT_SORT_DIRECTION);
 
-        Pageable pageable = PageRequest.of(pageNumber - FIRST_PAGE, pageSizeNumber,
+        final Pageable pageable = PageRequest.of(pageNumber - FIRST_PAGE, pageSizeNumber,
                 Direction.fromString(sortOrder), sortField);
 
         final OfferSpecificationsBuilder builder = new OfferSpecificationsBuilder();
@@ -152,7 +153,7 @@ public class OfferController {
 
     @ApiOperation(value = "Returns offer by id")
     @GetMapping(value = "{id}")
-    public Optional<Offer> get(@PathVariable UUID id) {
+    public Offer get(@PathVariable UUID id) {
         return service.get(id);
     }
 
