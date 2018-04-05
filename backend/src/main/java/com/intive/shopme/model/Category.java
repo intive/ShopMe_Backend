@@ -17,7 +17,7 @@ public class Category extends Identifiable {
     @Column(unique = true)
     private String name;
 
-    @ApiModelProperty(value = "Represents key for translate operation", required = true,position = 3,example = "others")
+    @ApiModelProperty(value = "Represents key for translate operation", required = true, position = 3, example = "others")
     @Column(unique = true)
     private String translateKey;
 }
