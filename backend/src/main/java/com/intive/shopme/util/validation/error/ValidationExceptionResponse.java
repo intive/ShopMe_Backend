@@ -5,7 +5,7 @@ import lombok.Setter;
 import java.util.HashMap;
 
 @Setter
-public class ExceptionResponse {
+public class ValidationExceptionResponse {
 
     private int code;
     private HashMap<String, String> errors = new HashMap<>();

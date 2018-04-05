@@ -15,10 +15,10 @@ import java.util.Set;
 public class ErrorHandlingController {
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
-    public ResponseEntity<ExceptionResponse> handleInvalidInput(ConstraintViolationException ex) {
+    public ResponseEntity<ValidationExceptionResponse> handleInvalidInput(ConstraintViolationException ex) {
 
         Set violations = ex.getConstraintViolations();
-        ExceptionResponse eR = new ExceptionResponse();
+        ValidationExceptionResponse eR = new ValidationExceptionResponse();
         eR.setCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
 
         for (int i = 0; i < violations.size(); i++) {
