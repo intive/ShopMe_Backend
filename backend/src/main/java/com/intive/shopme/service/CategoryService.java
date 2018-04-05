@@ -26,7 +26,10 @@ public class CategoryService {
 
     public void add(Category category) {
         if (repository.existsByName(category.getName())) {
-            throw new AlreadyExistException("Category with this name exist");
+            throw new AlreadyExistException("Category with this name already exist");
+        }
+        if(repository.existsByTranslateKey(category.getTranslateKey())){
+            throw new AlreadyExistException("Category with this translateKey already exist");
         }
         repository.save(category);
     }
