@@ -15,7 +15,7 @@ import static com.intive.shopme.config.ApiUrl.USERS;
 @RestController
 @RequestMapping(value = USERS)
 @Api(value = "users", description = "REST API for users operation", tags = "Users")
-public class UserController {
+class UserController {
 
     private final UserService userService;
 
@@ -26,8 +26,8 @@ public class UserController {
 
     @PostMapping
     @ApiOperation("Saves new users")
-    public void add(@RequestBody User user) {
-        user.setId(UUID.randomUUID());
-        userService.add(user);
+    public void add(@RequestBody Users users) {
+        users.setId(UUID.randomUUID());
+        userService.add(users);
     }
 }

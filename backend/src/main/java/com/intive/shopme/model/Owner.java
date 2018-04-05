@@ -3,10 +3,8 @@ package com.intive.shopme.model;
 import com.intive.shopme.base.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
@@ -22,10 +20,8 @@ import static com.intive.shopme.config.AppConfig.USER_NAME_MIN_LENGTH;
 @Entity
 @ApiModel(value = "Offer's user", description = "Represents offer's owner")
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-class User extends Identifiable {
+@EqualsAndHashCode(callSuper = true)
+class Owner extends Identifiable {
 
     @NotNull(message = "User's name cannot be empty.")
     @Length(min = USER_NAME_MIN_LENGTH, max = USER_NAME_MAX_LENGTH)

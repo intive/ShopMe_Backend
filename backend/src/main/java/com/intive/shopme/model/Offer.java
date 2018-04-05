@@ -1,13 +1,12 @@
 package com.intive.shopme.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intive.shopme.base.Identifiable;
 import com.intive.shopme.util.validation.validation.CategoryCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,12 +15,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import java.time.Instant;
+import java.util.Date;
 
 import static com.intive.shopme.config.AppConfig.OFFER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
@@ -29,14 +28,13 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 public class Offer extends Identifiable {
 
     @ApiModelProperty(value = "Represents offer's date of submitting (EPOCH time in milliseconds)", position = 2,
             example = "1520031600000")
-    private Long date = Instant.now().toEpochMilli();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
@@ -91,6 +89,6 @@ public class Offer extends Identifiable {
     @NotNull(message = "No user selected.")
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private User user;
-
+    @JsonProperty("user")
+    private Owner owner;
 }

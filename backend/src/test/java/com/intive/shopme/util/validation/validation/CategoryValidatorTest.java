@@ -17,7 +17,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.anyObject;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,7 +51,7 @@ class CategoryValidatorTest {
 
     @Test
     void testCategoryValidatorReject() {
-        when(categoryService.getCategoryById(anyObject())).thenReturn(null);
+        when(categoryService.getCategoryById(any(UUID.class))).thenReturn(null);
 
         Set<ConstraintViolation<Offer>> constraintValidations = validator.validateProperty(OFFER, "category");
         assertThat(constraintValidations).hasSize(1);

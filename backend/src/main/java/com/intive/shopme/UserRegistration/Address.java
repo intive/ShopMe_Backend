@@ -3,20 +3,16 @@ package com.intive.shopme.UserRegistration;
 import com.intive.shopme.base.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 
 @Entity
 @ApiModel(value = "Adress data", description = "Represents data for adress")
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class Address extends Identifiable {
+@EqualsAndHashCode(callSuper = true)
+class Address extends Identifiable {
 
     @ApiModelProperty(value = "Represents street name",
             required = true, position = 2, example = "Niepodległości")
@@ -34,3 +30,4 @@ public class Address extends Identifiable {
             required = true, position = 5, example = "70-125")
     private String zipCode;
 }
+

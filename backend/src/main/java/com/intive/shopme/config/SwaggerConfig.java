@@ -20,7 +20,7 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.createApiInfo;
 
 @Configuration
 @EnableSwagger2
-public class SwaggerConfig {
+class SwaggerConfig {
 
     private final ServletContext servletContext;
 

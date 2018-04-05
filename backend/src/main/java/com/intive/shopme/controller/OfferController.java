@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.Instant;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -63,7 +63,7 @@ public class OfferController {
     @PostMapping
     public void add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());
-        offer.setDate(Instant.now().toEpochMilli());
+        offer.setDate(new Date());
         service.add(offer);
     }
 

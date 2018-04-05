@@ -3,10 +3,8 @@ package com.intive.shopme.UserRegistration;
 import com.intive.shopme.base.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,9 +14,7 @@ import javax.persistence.OneToOne;
 @Entity
 @ApiModel(value = "Invoice data", description = "Represents data for invoice")
 @Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 class Invoice extends Identifiable {
 
     @ApiModelProperty(value = "Represents user's company name",

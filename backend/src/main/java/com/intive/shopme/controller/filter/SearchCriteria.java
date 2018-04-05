@@ -1,7 +1,7 @@
 package com.intive.shopme.controller.filter;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor
