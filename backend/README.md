@@ -6,7 +6,7 @@ ShopMe is a Web Application created during Intive Patronage `18 Project.
 This application will allow you to buy, offer and sell widely defined services.
 
 ## Requirements
-* [Java JDK 9](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
+* [Java JDK 10](http://www.oracle.com/technetwork/java/javase/downloads/index.html)
 
 ## Build and run
 
