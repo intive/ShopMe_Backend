@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+import static com.intive.shopme.config.AppConfig.CATEGORY_NOT_FOUND;
+
 @Service
 public class CategoryService {
 
@@ -28,7 +30,7 @@ public class CategoryService {
         if (repository.existsByName(category.getName())) {
             throw new AlreadyExistException("Category with this name already exist");
         }
-        if(repository.existsByTranslateKey(category.getTranslateKey())){
+        if (repository.existsByTranslateKey(category.getTranslateKey())) {
             throw new AlreadyExistException("Category with this translateKey already exist");
         }
         repository.save(category);
@@ -36,7 +38,7 @@ public class CategoryService {
 
     public Category getCategoryById(UUID id) {
         if (!repository.existsById(id)) {
-            throw new NotFoundException("Category not found");
+            throw new NotFoundException(CATEGORY_NOT_FOUND);
         }
         return repository.getOne(id);
     }

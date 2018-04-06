@@ -15,31 +15,31 @@ import java.util.Set;
 public class ErrorHandlingController {
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
-    public ResponseEntity<ValidationExceptionResponse> handleInvalidInput(ConstraintViolationException ex) {
+    public ResponseEntity<ValidationExceptionResponse> handleInvalidInput(ConstraintViolationException exception) {
 
-        Set violations = ex.getConstraintViolations();
-        ValidationExceptionResponse eR = new ValidationExceptionResponse();
-        eR.setCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
+        Set violations = exception.getConstraintViolations();
+        ValidationExceptionResponse exceptionResponse = new ValidationExceptionResponse();
+        exceptionResponse.setCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
 
         for (int i = 0; i < violations.size(); i++) {
-            ConstraintViolation v = (ConstraintViolation) violations.toArray()[i];
-            eR.add(v.getPropertyPath().toString(), v.getMessage());
+            ConstraintViolation violation = (ConstraintViolation) violations.toArray()[i];
+            exceptionResponse.add(violation.getPropertyPath().toString(), violation.getMessage());
         }
 
-        return new ResponseEntity<>(eR, HttpStatus.UNPROCESSABLE_ENTITY);
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
     @ExceptionHandler(value = {NotFoundException.class})
     @ResponseStatus(value = HttpStatus.NOT_FOUND)
     @ResponseBody
-    public ErrorResponse handleNotFoundException(NotFoundException ex) {
-        return new ErrorResponse(HttpStatus.NOT_FOUND, ex.getName());
+    public ErrorResponse handleNotFoundException(NotFoundException exception) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND, exception.getName());
     }
 
     @ExceptionHandler(value = {AlreadyExistException.class})
     @ResponseStatus(value = HttpStatus.CONFLICT)
     @ResponseBody
-    public ErrorResponse handleAlreadyExistException(AlreadyExistException ex) {
-        return new ErrorResponse(HttpStatus.CONFLICT, ex.getName());
+    public ErrorResponse handleAlreadyExistException(AlreadyExistException exception) {
+        return new ErrorResponse(HttpStatus.CONFLICT, exception.getName());
     }
 }

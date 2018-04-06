@@ -18,6 +18,8 @@ import javax.validation.ValidatorFactory;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.intive.shopme.config.AppConfig.OFFER_NOT_FOUND;
+
 @Service
 @Transactional
 public class OfferService {
@@ -36,7 +38,7 @@ public class OfferService {
     }
 
     public Offer get(UUID id) {
-        return repository.findById(id).orElseThrow(()->new NotFoundException("Offer not found"));
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(OFFER_NOT_FOUND));
     }
 
     public void add(Offer offer) {
@@ -46,14 +48,14 @@ public class OfferService {
 
     public void update(Offer offer) {
         if (!repository.existsById(offer.getId())) {
-            throw new NotFoundException("Offer not found");
+            throw new NotFoundException(OFFER_NOT_FOUND);
         }
         repository.save(offer);
     }
 
     public void delete(UUID id) {
         if (!repository.existsById(id)) {
-            throw new NotFoundException("Offer not found");
+            throw new NotFoundException(OFFER_NOT_FOUND);
         }
         repository.deleteById(id);
     }
