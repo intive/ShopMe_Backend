@@ -13,29 +13,36 @@ public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck,
 
     private UrlValidator urlValidator;
 
-    private static final String HTTP = "http";
-    private static final String HTTPS = "https";
-    private static final String FTP = "ftp";
-    private static final String FILE = "file";
-
     private static final String URL_REGEX = "((https?|ftp|file)://)?(www\\.)?[-a-zA-Z0-9+&@#/%?=~_|!:,.;]" +
             "*[-a-zA-Z0-9+&@#/%=~_|]\\.(pl|com|eu|de|uk|info|mail|biz|org|edu|net|pro|tk)";
     private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
 
+    private String[] schemas = {UrlType.http.name(), UrlType.https.name(),
+            UrlType.ftp.name(), UrlType.file.name()};
+
     @Override
     public void initialize(LinkInTextCheck constraintAnnotation) {
-        String[] schemas = {HTTP, HTTPS, FTP, FILE};
         urlValidator = new UrlValidator(schemas);
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Matcher m = URL_PATTERN.matcher(value);
+        Matcher matcher = URL_PATTERN.matcher(value);
 
-        if(m.find()) {
-            String urlToValid = (m.group().substring(0, 4).contains("www.")) ? HTTP + "://" + m.group() : m.group();
-            System.out.println(urlValidator.isValid(urlToValid));
+        if(matcher.find()) {
+            String urlToValid;
+            if (matcher.group().substring(0, 4).contains("www.")) {
+                urlToValid = UrlType.http.name() + "://" + matcher.group();
+            } else {
+                urlToValid = matcher.group();
+            }
             return urlValidator.isValid(urlToValid);
-        } else return true;
+        } else {
+            return true;
+        }
+    }
+
+    private enum UrlType {
+        http, https, ftp, file
     }
 }
