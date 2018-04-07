@@ -2,6 +2,7 @@ package com.intive.shopme.service;
 
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.repository.OfferRepository;
+import com.intive.shopme.util.RepositoryVerifier;
 import com.intive.shopme.util.validation.error.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -47,16 +48,12 @@ public class OfferService {
     }
 
     public void update(Offer offer) {
-        if (!repository.existsById(offer.getId())) {
-            throw new NotFoundException(OFFER_NOT_FOUND);
-        }
+        RepositoryVerifier.throwNotFoundExceptionIfEntityNotFound(offer.getId(), repository, OFFER_NOT_FOUND);
         repository.save(offer);
     }
 
     public void delete(UUID id) {
-        if (!repository.existsById(id)) {
-            throw new NotFoundException(OFFER_NOT_FOUND);
-        }
+        RepositoryVerifier.throwNotFoundExceptionIfEntityNotFound(id, repository, OFFER_NOT_FOUND);
         repository.deleteById(id);
     }
 
@@ -67,5 +64,4 @@ public class OfferService {
             throw new ConstraintViolationException(violations);
         }
     }
-
 }

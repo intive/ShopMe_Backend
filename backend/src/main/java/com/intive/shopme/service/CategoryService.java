@@ -2,8 +2,8 @@ package com.intive.shopme.service;
 
 import com.intive.shopme.model.Category;
 import com.intive.shopme.repository.CategoryRepository;
+import com.intive.shopme.util.RepositoryVerifier;
 import com.intive.shopme.util.validation.error.AlreadyExistException;
-import com.intive.shopme.util.validation.error.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,10 +37,7 @@ public class CategoryService {
     }
 
     public Category getCategoryById(UUID id) {
-        if (!repository.existsById(id)) {
-            throw new NotFoundException(CATEGORY_NOT_FOUND);
-        }
+        RepositoryVerifier.throwNotFoundExceptionIfEntityNotFound(id, repository, CATEGORY_NOT_FOUND);
         return repository.getOne(id);
     }
-
 }
