@@ -15,7 +15,7 @@ public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck,
 
     private static final String URL_REGEX = "((https?|ftp|file)://)?(www\\.)?[-a-zA-Z0-9+&@#/%?=~_|!:,.;]" +
             "*[-a-zA-Z0-9+&@#/%=~_|]\\.(pl|com|eu|de|uk|info|mail|biz|org|edu|net|pro|tk)";
-    private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
+    public static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
 
     private String[] schemas = {UrlType.http.name(), UrlType.https.name(),
             UrlType.ftp.name(), UrlType.file.name()};
@@ -28,18 +28,20 @@ public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck,
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         Matcher matcher = URL_PATTERN.matcher(value);
-
-        if(matcher.find()) {
-            String urlToValid;
-            if (matcher.group().substring(0, 4).contains("www.")) {
-                urlToValid = UrlType.http.name() + "://" + matcher.group();
-            } else {
-                urlToValid = matcher.group();
-            }
-            return urlValidator.isValid(urlToValid);
+        if(checkMatcherResult(matcher)) {
+            return urlValidator.isValid(prepareStringUrlToValidate(matcher));
         } else {
             return true;
         }
+    }
+
+    public Boolean checkMatcherResult(Matcher matcher) {
+        return matcher.find();
+    }
+
+    private String prepareStringUrlToValidate(Matcher matcher) {
+        return matcher.group().substring(0, 4).contains("www.") ?
+                UrlType.http.name() + "://" + matcher.group() : matcher.group();
     }
 
     private enum UrlType {
