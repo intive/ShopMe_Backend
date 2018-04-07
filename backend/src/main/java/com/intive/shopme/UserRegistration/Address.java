@@ -29,5 +29,6 @@ class Address extends Identifiable {
     @ApiModelProperty(value = "Represents ZIP code",
             required = true, position = 5, example = "70-125")
     private String zipCode;
+
 }
 
