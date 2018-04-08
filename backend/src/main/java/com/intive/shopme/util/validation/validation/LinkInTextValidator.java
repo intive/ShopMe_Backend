@@ -9,15 +9,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
-public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck, String>{
+public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck, String> {
 
     private UrlValidator urlValidator;
 
-    private static final String URL_REGEX = "((https?|ftp|file)://)?(www\\.)?[-a-zA-Z0-9+&@#/%?=~_|!:,.;]" +
-            "*[-a-zA-Z0-9+&@#/%=~_|]\\.(pl|com|eu|de|uk|info|mail|biz|org|edu|net|pro|tk)";
+    private static final String URL_REGEX =
+            "((((https?|ftp|file)://)|(www\\.))|(((https?)://)(www\\.)?))" +
+                    "[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]" +
+                    "\\.(pl|com|eu|de|uk|info|mail|biz|org|edu|net|pro|tk)";
     public static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
 
-    private String[] schemas = {UrlType.http.name(), UrlType.https.name(),
+    public static String[] schemas = {UrlType.http.name(), UrlType.https.name(),
             UrlType.ftp.name(), UrlType.file.name()};
 
     @Override
@@ -28,14 +30,18 @@ public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck,
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         Matcher matcher = URL_PATTERN.matcher(value);
-        if(checkMatcherResult(matcher)) {
-            return urlValidator.isValid(prepareStringUrlToValidate(matcher));
+        if (checkMatcherResult(matcher)) {
+            return !checkIsUrlByValidator(matcher);
         } else {
             return true;
         }
     }
 
-    public Boolean checkMatcherResult(Matcher matcher) {
+    public boolean checkIsUrlByValidator(Matcher matcher) {
+        return urlValidator.isValid(prepareStringUrlToValidate(matcher));
+    }
+
+    public boolean checkMatcherResult(Matcher matcher) {
         return matcher.find();
     }
 
