@@ -20,6 +20,7 @@ public final class AppConfig {
     public static final String DEFAULT_SORT_DIRECTION = "DESC";
 
     public static final String OFFER_NOT_FOUND = "Offer not found";
+    public static final String OFFER_SWAGGER_NOT_FOUND = "Offer with this ID has not found";
     public static final String CATEGORY_NOT_FOUND = "Category not found";
 
     private AppConfig() {

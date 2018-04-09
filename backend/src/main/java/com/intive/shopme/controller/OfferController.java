@@ -33,14 +33,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.OFFERS;
-import static com.intive.shopme.config.AppConfig.ACCEPTABLE_TITLE_SEARCH_CHARS;
-import static com.intive.shopme.config.AppConfig.DEFAULT_PAGE;
-import static com.intive.shopme.config.AppConfig.DEFAULT_PAGE_SIZE;
-import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_DIRECTION;
-import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_FIELD;
-import static com.intive.shopme.config.AppConfig.FIRST_PAGE;
-import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
-import static com.intive.shopme.config.AppConfig.PAGE_SIZE_MAX;
+import static com.intive.shopme.config.AppConfig.*;
 
 @Validated
 @RestController
@@ -58,6 +51,7 @@ public class OfferController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New offer successfully created"),
             @ApiResponse(code = 422, message = "New offer data validation error")
+
     })
     @ApiOperation(value = "Saves new offer")
     @PostMapping
@@ -151,18 +145,27 @@ public class OfferController {
         return service.getAll(pageable, filter);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = OFFER_SWAGGER_NOT_FOUND)
+    })
     @ApiOperation(value = "Returns offer by id")
     @GetMapping(value = "{id}")
     public Offer get(@PathVariable UUID id) {
         return service.get(id);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = OFFER_SWAGGER_NOT_FOUND)
+    })
     @ApiOperation(value = "Updates offer by id")
     @PutMapping(value = "{id}")
     public void update(Offer offer) {
         service.update(offer);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = OFFER_SWAGGER_NOT_FOUND)
+    })
     @ApiOperation(value = "Removes offer by id")
     @DeleteMapping(value = "{id}")
     public void delete(@PathVariable UUID id) {

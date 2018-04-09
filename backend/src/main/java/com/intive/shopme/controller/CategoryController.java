@@ -4,6 +4,8 @@ import com.intive.shopme.model.Category;
 import com.intive.shopme.service.CategoryService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,6 +35,10 @@ public class CategoryController {
         return service.getAll();
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 404, message = "Category with this ID has not found"),
+            @ApiResponse(code = 409, message = "Category already exist")
+    })
     @PostMapping
     @ApiOperation(value = "Saves new category")
     public void add(@RequestBody Category category) {
