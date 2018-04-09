@@ -26,14 +26,14 @@ public class CategoryService {
         return repository.findAll();
     }
 
-    public void add(Category category) {
+    public Category add(Category category) {
         if (repository.existsByName(category.getName())) {
             throw new AlreadyExistException("Category with this name already exist");
         }
         if (repository.existsByTranslateKey(category.getTranslateKey())) {
             throw new AlreadyExistException("Category with this translateKey already exist");
         }
-        repository.save(category);
+        return repository.save(category);
     }
 
     public Category getCategoryById(UUID id) {

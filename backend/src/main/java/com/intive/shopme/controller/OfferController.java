@@ -55,10 +55,10 @@ public class OfferController {
     })
     @ApiOperation(value = "Saves new offer")
     @PostMapping
-    public void add(@RequestBody Offer offer) {
+    public Offer add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());
         offer.setDate(new Date());
-        service.add(offer);
+        return service.add(offer);
     }
 
     @ApiImplicitParams({
@@ -159,8 +159,8 @@ public class OfferController {
     })
     @ApiOperation(value = "Updates offer by id")
     @PutMapping(value = "{id}")
-    public void update(Offer offer) {
-        service.update(offer);
+    public Offer update(Offer offer) {
+        return service.update(offer);
     }
 
     @ApiResponses(value = {

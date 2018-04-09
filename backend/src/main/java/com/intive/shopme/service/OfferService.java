@@ -42,14 +42,14 @@ public class OfferService {
         return repository.findById(id).orElseThrow(() -> new NotFoundException(OFFER_NOT_FOUND));
     }
 
-    public void add(Offer offer) {
+    public Offer add(Offer offer) {
         validate(offer);
-        repository.save(offer);
+        return repository.save(offer);
     }
 
-    public void update(Offer offer) {
+    public Offer update(Offer offer) {
         RepositoryVerifier.throwNotFoundExceptionIfEntityNotFound(offer.getId(), repository, OFFER_NOT_FOUND);
-        repository.save(offer);
+        return repository.save(offer);
     }
 
     public void delete(UUID id) {
