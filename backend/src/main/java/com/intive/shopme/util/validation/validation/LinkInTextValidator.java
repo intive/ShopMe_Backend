@@ -7,20 +7,18 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 @Component
 public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck, String> {
 
-    private UrlValidator urlValidator;
-
+    public static final String[] schemas = Stream.of(UrlType.values()).map(UrlType::name).toArray(String[]::new);
     private static final String URL_REGEX =
             "((((https?|ftp|file)://)|(www\\.))|(((https?)://)(www\\.)?))" +
                     "[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]" +
                     "\\.(pl|com|eu|de|uk|info|mail|biz|org|edu|net|pro|tk)";
     public static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
-
-    public static String[] schemas = {UrlType.http.name(), UrlType.https.name(),
-            UrlType.ftp.name(), UrlType.file.name()};
+    private UrlValidator urlValidator;
 
     @Override
     public void initialize(LinkInTextCheck constraintAnnotation) {
@@ -47,10 +45,10 @@ public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck,
 
     private String prepareStringUrlToValidate(Matcher matcher) {
         return matcher.group().substring(0, 4).contains("www.") ?
-                UrlType.http.name() + "://" + matcher.group() : matcher.group();
+                UrlType.HTTP.name() + "://" + matcher.group() : matcher.group();
     }
 
     private enum UrlType {
-        http, https, ftp, file
+        HTTP, HTTPS, FTP, FILE
     }
 }
