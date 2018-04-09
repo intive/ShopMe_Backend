@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -30,4 +31,7 @@ class Invoice extends Identifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address invoiceAddress;
 
+    protected boolean hasCompanyDetails() {
+        return !StringUtils.isEmpty(companyName) && !StringUtils.isEmpty(nip);
+    }
 }

@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.Entity;
 
@@ -29,5 +30,12 @@ class Address extends Identifiable {
     @ApiModelProperty(value = "Represents ZIP code",
             required = true, position = 5, example = "70-125")
     private String zipCode;
+
+    protected boolean isFilled() {
+        return !StringUtils.isEmpty(street) &&
+                !StringUtils.isEmpty(number) &&
+                !StringUtils.isEmpty(city) &&
+                !StringUtils.isEmpty(zipCode);
+    }
 }
 
