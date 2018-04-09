@@ -15,15 +15,16 @@ public class ValidInvoiceIfInvoiceRequestedValidator implements
 
     @Override
     public boolean isValid(Users value, ConstraintValidatorContext context) {
+        boolean result = true;
         if (value.getInvoiceRequest()) {
             Invoice invoice = value.getInvoice();
-            boolean result = (invoice != null) && invoice.hasCompanyDetails();
+            result = (invoice != null) && invoice.hasCompanyDetails();
 
-            Address invoiceAddress = invoice.getInvoiceAddress();
-            result &= (invoiceAddress != null) && invoiceAddress.isFilled();
-            return result;
-        } else {
-            return true;
+            if (result) {
+                Address invoiceAddress = invoice.getInvoiceAddress();
+                result &= (invoiceAddress != null) && invoiceAddress.isFilled();
+            }
         }
+        return result;
     }
 }
