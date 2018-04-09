@@ -41,8 +41,8 @@ public class CategoryController {
     })
     @PostMapping
     @ApiOperation(value = "Saves new category")
-    public void add(@RequestBody Category category) {
-        service.add(category);
+    public Category add(@RequestBody Category category) {
+        return service.add(category);
     }
 
 }
