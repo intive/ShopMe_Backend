@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,7 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LinkInTextValidatorTest {
 
-    static LinkInTextValidator linkInTextValidator;
+    private static LinkInTextValidator linkInTextValidator;
+
+    private static final String[] SCHEMES = Stream.of(UrlType.values()).map(UrlType::name).toArray(String[]::new);
+    private static final String URL_REGEX =
+            "((((https?|ftp|file)://)|(www\\.))|(((https?)://)(www\\.)?))" +
+                    "[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]" +
+                    "\\.(pl|com|eu|de|uk|info|mail|biz|org|edu|net|pro|tk)";
+    private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
 
     @BeforeAll
     static void initAll() {
@@ -25,14 +33,14 @@ class LinkInTextValidatorTest {
     @ParameterizedTest
     @MethodSource(value = "createListOfUrlsInsideText")
     public void checkMatcherResult(String url) {
-        Matcher matcher = linkInTextValidator.URL_PATTERN.matcher(url);
+        Matcher matcher = URL_PATTERN.matcher(url);
         assertTrue(linkInTextValidator.checkMatcherResult(matcher));
     }
 
     @ParameterizedTest
     @ValueSource(strings = {"www.google.pl"})
     public void checkApacheValidator(String url) {
-        UrlValidator urlValidator = new UrlValidator(LinkInTextValidator.schemas);
+        UrlValidator urlValidator = new UrlValidator(SCHEMES);
         assertFalse(urlValidator.isValid(url));
     }
 
@@ -84,5 +92,9 @@ class LinkInTextValidatorTest {
                 "http://invalid.com/perl.cgi?key= | http://web-site.com/cgi-bin/perl.cgi?key1=value1&key2",
                 "http://www.site.com:8008"
         );
+    }
+
+    private enum UrlType {
+        HTTP, HTTPS, FTP, FILE
     }
 }
