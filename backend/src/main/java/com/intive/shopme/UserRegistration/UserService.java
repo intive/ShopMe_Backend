@@ -27,6 +27,9 @@ class UserService {
 
     public Users add(Users user) {
         validate(user);
+        if (!user.getInvoiceRequest()) {
+            user.setInvoice(null);
+        }
         return repository.save(user);
     }
 

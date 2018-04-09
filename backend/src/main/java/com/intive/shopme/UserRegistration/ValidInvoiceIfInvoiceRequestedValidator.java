@@ -16,7 +16,7 @@ public class ValidInvoiceIfInvoiceRequestedValidator implements
 
     @Override
     public boolean isValid(Users value, ConstraintValidatorContext context) {
-        if (value.getInvoiceRequest().booleanValue()) {
+        if (value.getInvoiceRequest()) {
             Invoice invoice = value.getInvoice();
             boolean result = (invoice != null) &&
                     !StringUtils.isEmpty(invoice.getCompanyName()) &&

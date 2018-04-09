@@ -33,7 +33,7 @@ class UserController {
         return service.add(user);
     }
 
-    @ApiOperation(value = "Returns user by id")
+    @ApiOperation(value = "Returns user by id (temporary endpoint, please confirm in next REST API specification before production use)")
     @GetMapping(value = "{id}")
     public Users get(@PathVariable UUID id) {
         Users result = service.get(id);
