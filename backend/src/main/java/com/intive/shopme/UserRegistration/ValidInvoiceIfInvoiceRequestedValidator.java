@@ -18,20 +18,13 @@ public class ValidInvoiceIfInvoiceRequestedValidator implements
     public boolean isValid(Users value, ConstraintValidatorContext context) {
         if (value.getInvoiceRequest()) {
             Invoice invoice = value.getInvoice();
-            boolean result = (invoice != null) &&
-                    !StringUtils.isEmpty(invoice.getCompanyName()) &&
-                    !StringUtils.isEmpty(invoice.getNip());
+            boolean result = (invoice != null) && invoice.hasCompanyDetails();
 
             Address invoiceAddress = invoice.getInvoiceAddress();
-            result &= (invoiceAddress != null) &&
-                    !StringUtils.isEmpty(invoiceAddress.getStreet()) &&
-                    !StringUtils.isEmpty(invoiceAddress.getNumber()) &&
-                    !StringUtils.isEmpty(invoiceAddress.getCity()) &&
-                    !StringUtils.isEmpty(invoiceAddress.getZipCode());
+            result &= (invoiceAddress != null) && invoiceAddress.isFilled();
             return result;
         } else {
             return true;
         }
     }
-
 }

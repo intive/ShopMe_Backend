@@ -55,7 +55,7 @@ class Users extends Identifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Invoice invoice;
 
-    public Users hidePassword() {
+    protected Users hidePassword() {
         Users result = this;
         result.setPassword("");
         return result;
