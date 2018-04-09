@@ -1,5 +1,7 @@
 package com.intive.shopme.util.validation.error;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,9 +12,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Set;
+import java.util.UUID;
 
 @ControllerAdvice
 public class ErrorHandlingController {
+
+    private final static Logger logger = LoggerFactory.getLogger(ErrorHandlingController.class);
+
 
     @ExceptionHandler(value = {ConstraintViolationException.class})
     public ResponseEntity<ValidationExceptionResponse> handleInvalidInput(ConstraintViolationException exception) {
@@ -42,4 +48,14 @@ public class ErrorHandlingController {
     public ErrorResponse handleAlreadyExistException(AlreadyExistException exception) {
         return new ErrorResponse(HttpStatus.CONFLICT, exception.getName());
     }
+
+    @ExceptionHandler(value = {RuntimeException.class})
+    @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorResponse handleRuntimeException(RuntimeException exception) {
+        String errorLog = "An error occurred! Error log ID: " + UUID.randomUUID();
+        logger.error(errorLog, exception);
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, errorLog);
+    }
 }
+
