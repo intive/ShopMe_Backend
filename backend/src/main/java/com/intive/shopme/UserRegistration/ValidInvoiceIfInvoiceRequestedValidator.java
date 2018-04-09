@@ -30,7 +30,6 @@ public class ValidInvoiceIfInvoiceRequestedValidator implements
                     !StringUtils.isEmpty(invoiceAddress.getZipCode());
             return result;
         } else {
-            value.setInvoice(null);
             return true;
         }
     }
