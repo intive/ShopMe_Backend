@@ -18,8 +18,7 @@ import java.util.UUID;
 public class ErrorHandlingController {
 
     private final static Logger logger = LoggerFactory.getLogger(ErrorHandlingController.class);
-
-
+    
     @ExceptionHandler(value = {ConstraintViolationException.class})
     public ResponseEntity<ValidationExceptionResponse> handleInvalidInput(ConstraintViolationException exception) {
 
