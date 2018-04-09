@@ -2,6 +2,8 @@ package com.intive.shopme.service;
 
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.repository.OfferRepository;
+import com.intive.shopme.util.RepositoryVerifier;
+import com.intive.shopme.util.validation.error.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,8 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 import java.util.UUID;
+
+import static com.intive.shopme.config.AppConfig.OFFER_NOT_FOUND;
 
 @Service
 @Transactional
@@ -35,7 +39,7 @@ public class OfferService {
     }
 
     public Offer get(UUID id) {
-        return repository.findById(id).orElse(null);
+        return repository.findById(id).orElseThrow(() -> new NotFoundException(OFFER_NOT_FOUND));
     }
 
     public void add(Offer offer) {
@@ -44,10 +48,12 @@ public class OfferService {
     }
 
     public void update(Offer offer) {
+        RepositoryVerifier.throwNotFoundExceptionIfEntityNotFound(offer.getId(), repository, OFFER_NOT_FOUND);
         repository.save(offer);
     }
 
     public void delete(UUID id) {
+        RepositoryVerifier.throwNotFoundExceptionIfEntityNotFound(id, repository, OFFER_NOT_FOUND);
         repository.deleteById(id);
     }
 
@@ -58,5 +64,4 @@ public class OfferService {
             throw new ConstraintViolationException(violations);
         }
     }
-
 }
