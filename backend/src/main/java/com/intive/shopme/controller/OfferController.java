@@ -45,7 +45,7 @@ import static com.intive.shopme.config.AppConfig.PAGE_SIZE_MAX;
 @Validated
 @RestController
 @RequestMapping(value = OFFERS)
-@Api(value = "offer", description = "REST API for offers operations", tags = "Offers")
+@Api(value = "offer", description = "REST API for offers", tags = "Offers")
 public class OfferController {
 
     private final OfferService service;
@@ -59,7 +59,7 @@ public class OfferController {
             @ApiResponse(code = 201, message = "New offer successfully created"),
             @ApiResponse(code = 422, message = "New offer data validation error")
     })
-    @ApiOperation(value = "Saves new offer")
+    @ApiOperation(value = "Saves offer")
     @PostMapping
     public void add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());

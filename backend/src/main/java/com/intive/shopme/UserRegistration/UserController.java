@@ -3,8 +3,6 @@ package com.intive.shopme.UserRegistration;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,32 +14,20 @@ import static com.intive.shopme.config.ApiUrl.USERS;
 
 @RestController
 @RequestMapping(value = USERS)
-@Api(value = "user", description = "REST API for users operations", tags = "Users")
+@Api(value = "users", description = "REST API for users operation", tags = "Users")
 class UserController {
 
-    private final UserService service;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserService service) {
-        this.service = service;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @PostMapping
-    @ApiOperation("Saves new user")
-    public Users add(@RequestBody Users user) {
-        user.setId(UUID.randomUUID());
-        return service.add(user);
+    @ApiOperation("Saves new users")
+    public void add(@RequestBody Users users) {
+        users.setId(UUID.randomUUID());
+        userService.add(users);
     }
-
-    @ApiOperation(value = "Returns user by id")
-    @GetMapping(value = "{id}")
-    public Users get(@PathVariable UUID id) {
-        Users result = service.get(id);
-        if (result != null) {
-            return result.hidePassword();
-        } else {
-            return null;
-        }
-    }
-
 }

@@ -12,10 +12,9 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 
 @Entity
-@ApiModel(value = "Users", description = "Represents the user")
+@ApiModel(value = "users", description = "Represents the user")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ValidInvoiceIfInvoiceRequested
 class Users extends Identifiable {
 
     @ApiModelProperty(value = "Represents user's name",
@@ -48,17 +47,10 @@ class Users extends Identifiable {
     private Address address;
 
     @ApiModelProperty(value = "Represents request user`s for invoice",
-            required = true, position = 9, example = "true")
+            required = true, position = 9, example = "YES")
     private Boolean invoiceRequest;
 
     @ApiModelProperty(value = "Represents invoice data for user`s", position = 10)
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Invoice invoice;
-
-    public Users hidePassword() {
-        Users result = this;
-        result.setPassword("");
-        return result;
-    }
-
 }
