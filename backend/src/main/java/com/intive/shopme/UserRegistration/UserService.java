@@ -44,5 +44,4 @@ class UserService {
             throw new ConstraintViolationException(violations);
         }
     }
-
 }

@@ -1,6 +1,5 @@
 package com.intive.shopme.UserRegistration;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;

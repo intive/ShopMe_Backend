@@ -34,5 +34,4 @@ class Invoice extends Identifiable {
     protected boolean hasCompanyDetails() {
         return !StringUtils.isEmpty(companyName) && !StringUtils.isEmpty(nip);
     }
-
 }

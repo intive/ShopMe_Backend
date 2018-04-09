@@ -60,5 +60,4 @@ class Users extends Identifiable {
         result.setPassword("");
         return result;
     }
-
 }
