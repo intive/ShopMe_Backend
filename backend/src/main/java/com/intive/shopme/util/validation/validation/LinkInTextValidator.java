@@ -12,22 +12,22 @@ import java.util.stream.Stream;
 @Component
 public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck, String> {
 
-    public static final String[] schemas = Stream.of(UrlType.values()).map(UrlType::name).toArray(String[]::new);
+    private static final String[] SCHEMES = Stream.of(UrlType.values()).map(UrlType::name).toArray(String[]::new);
     private static final String URL_REGEX =
             "((((https?|ftp|file)://)|(www\\.))|(((https?)://)(www\\.)?))" +
                     "[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]" +
                     "\\.(pl|com|eu|de|uk|info|mail|biz|org|edu|net|pro|tk)";
-    public static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
+    private static final Pattern URL_PATTERN = Pattern.compile(URL_REGEX, Pattern.CASE_INSENSITIVE);
     private UrlValidator urlValidator;
 
     @Override
     public void initialize(LinkInTextCheck constraintAnnotation) {
-        urlValidator = new UrlValidator(schemas);
+        urlValidator = new UrlValidator(SCHEMES);
     }
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Matcher matcher = URL_PATTERN.matcher(value);
+        Matcher matcher = URL_PATTERN.matcher(value.toLowerCase());
         if (checkMatcherResult(matcher)) {
             return !checkIsUrlByValidator(matcher);
         } else {
