@@ -51,6 +51,6 @@ public class CategoryController {
     @DeleteMapping(value = "{id}")
     //TODO delete it after manual testing
     public void delete(@PathVariable UUID id) {
-        throw new RuntimeException();
+        throw new RuntimeException("testing");
     }
 }

@@ -54,7 +54,7 @@ public class ErrorHandlingController {
     @ExceptionHandler(value = {RuntimeException.class})
     @ResponseBody
     public ResponseEntity handleRuntimeException(RuntimeException exception) {
-        UUID id = UUID.randomUUID(); //TODO change UUID -> var
+       final UUID id = UUID.randomUUID(); //TODO change UUID -> var
         LOGGER.error("ID: {}", id, exception);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(createErrorResponseBody(id.toString(), exception.getMessage()));
