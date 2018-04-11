@@ -1,5 +1,6 @@
 package com.intive.shopme.util.validation.validation;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -41,6 +42,11 @@ class LinkInTextValidatorTest {
     @MethodSource(value = "createListOfUrlsInsideText")
     void isUrlInsideTextShouldBeInvalid(String url) {
         assertThat(validator.isValid(url, null)).isFalse();
+    }
+
+    @Test
+    void nullIsValid() {
+        assertThat(validator.isValid(null, null)).isTrue();
     }
 
     private static Stream<String> createListOfUrlsInsideText() {
