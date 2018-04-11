@@ -1,57 +1,52 @@
 package com.intive.shopme.util.validation.validation;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import javax.validation.ConstraintValidator;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class LinkInTextValidatorTest {
 
-    private static LinkInTextValidator linkInTextValidator;
+    private static ConstraintValidator<?, String> validator = new LinkInTextValidator();
 
-    @BeforeAll
-    static void initAll() {
-        linkInTextValidator = new LinkInTextValidator();
-        linkInTextValidator.initialize(null);
+    @ParameterizedTest
+    @ValueSource(strings = {
+            "test",
+            "1.1.1.1",
+            "a.b.c.d",
+            "test .dot .com",
+            "httx://hidden.url.com",
+            "https:xxa.pl zmień xx na //",
+            "www. dalej.jest.zielono",
+            "http://s.234.34.56",
+            "http://127.0.0.1",
+            "http://127.127.0.0",
+            "ftp://0.127.0.0",
+    })
+    void not_url_should_be_valid(String url) {
+        assertThat(validator.isValid(url, null)).isTrue();
     }
 
     @ParameterizedTest
     @MethodSource(value = "createListOfUrls")
-    public void isUrlShouldBeInvalid(String url) {
-        assertFalse(linkInTextValidator.isValid(url, null));
+    void isUrlShouldBeInvalid(String url) {
+        assertThat(validator.isValid(url, null)).isFalse();
     }
 
     @ParameterizedTest
     @MethodSource(value = "createListOfUrlsInsideText")
-    public void isUrlInsideTextShouldBeInvalid(String url) {
-        assertFalse(linkInTextValidator.isValid(url, null));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "www.google.pl Oferuje odsnieżnie powierzchni płaskich",
-            "a.www.example.com.."
-    })
-    public void notFoundWWWInsideText(String url) {
-        assertTrue(linkInTextValidator.isValid(url, null));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "www.google.pl",
-            "www.example.com",
-    })
-    public void notFoundWWW(String url) {
-        assertTrue(linkInTextValidator.isValid(url, null));
+    void isUrlInsideTextShouldBeInvalid(String url) {
+        assertThat(validator.isValid(url, null)).isFalse();
     }
 
     private static Stream<String> createListOfUrlsInsideText() {
         return Stream.of(
+                "www.google.pl",
+                "www.example.com",
                 "http://123.234.34.56",
                 "http://123.234.34.56/",
                 "aahttps://www.example.comaa",
@@ -73,6 +68,8 @@ class LinkInTextValidatorTest {
 
     private static Stream<String> createListOfUrls() {
         return Stream.of(
+                "www.google.pl Oferuje odsnieżnie powierzchni płaskich",
+                "a.www.example.com..",
                 "http://www.google.pl",
                 "https://www.example.com",
                 "http://www.example.com",
