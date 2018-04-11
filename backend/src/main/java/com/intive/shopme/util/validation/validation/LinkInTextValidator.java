@@ -22,7 +22,7 @@ public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck,
 
     @Override
     public boolean isValid(String text, ConstraintValidatorContext context) {
-        return (text != null) ? Stream.of(URL_DETECTORS)
-                .noneMatch(pattern -> pattern.matcher(text).find()) : true;
+        return text == null || Stream.of(URL_DETECTORS)
+                .noneMatch(pattern -> pattern.matcher(text).find());
     }
 }

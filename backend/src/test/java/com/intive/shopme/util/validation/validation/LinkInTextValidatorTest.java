@@ -14,11 +14,6 @@ class LinkInTextValidatorTest {
 
     private static ConstraintValidator<?, String> validator = new LinkInTextValidator();
 
-    @Test
-    void nullIsValid() {
-        assertThat(validator.isValid(null, null)).isTrue();
-    }
-
     @ParameterizedTest
     @ValueSource(strings = {
             "test",
@@ -47,6 +42,11 @@ class LinkInTextValidatorTest {
     @MethodSource(value = "createListOfUrlsInsideText")
     void isUrlInsideTextShouldBeInvalid(String url) {
         assertThat(validator.isValid(url, null)).isFalse();
+    }
+
+    @Test
+    void nullIsValid() {
+        assertThat(validator.isValid(null, null)).isTrue();
     }
 
     private static Stream<String> createListOfUrlsInsideText() {
