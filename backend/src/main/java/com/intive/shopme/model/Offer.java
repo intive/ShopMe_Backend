@@ -1,31 +1,21 @@
 package com.intive.shopme.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.intive.shopme.base.Identifiable;
-import com.intive.shopme.util.validation.validation.CategoryCheck;
-import com.intive.shopme.util.validation.validation.LinkInTextCheck;
+import com.intive.shopme.validation.CategoryCheck;
+import com.intive.shopme.validation.LinkInTextCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
-import static com.intive.shopme.config.AppConfig.OFFER_DESCRIPTION_MAX_LENGTH;
-import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
+import static com.intive.shopme.config.AppConfiguration.OFFER_DESCRIPTION_MAX_LENGTH;
+import static com.intive.shopme.config.AppConfiguration.OFFER_TITLE_MAX_LENGTH;
 
 @Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")

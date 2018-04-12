@@ -3,13 +3,7 @@ package com.intive.shopme.controller;
 import com.intive.shopme.controller.filter.OfferSpecificationsBuilder;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.OfferService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,23 +11,14 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.OFFERS;
-import static com.intive.shopme.config.AppConfig.*;
+import static com.intive.shopme.config.AppConfiguration.*;
 
 @Validated
 @RestController
@@ -43,7 +28,6 @@ public class OfferController {
 
     private final OfferService service;
 
-    @Autowired
     public OfferController(OfferService service) {
         this.service = service;
     }
@@ -58,7 +42,7 @@ public class OfferController {
     public Offer add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());
         offer.setDate(new Date());
-        return service.add(offer);
+        return service.createOrUpdate(offer);
     }
 
     @ApiImplicitParams({
@@ -146,7 +130,8 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(code = 404, message = OFFER_SWAGGER_NOT_FOUND)
+            @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
+
     })
     @ApiOperation(value = "Returns offer by id")
     @GetMapping(value = "{id}")
@@ -155,21 +140,20 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(code = 404, message = OFFER_SWAGGER_NOT_FOUND)
+            @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
     @PutMapping(value = "{id}")
     public Offer update(Offer offer) {
-        return service.update(offer);
+        return service.createOrUpdate(offer);
     }
 
     @ApiResponses(value = {
-            @ApiResponse(code = 404, message = OFFER_SWAGGER_NOT_FOUND)
+            @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
     @DeleteMapping(value = "{id}")
     public void delete(@PathVariable UUID id) {
         service.delete(id);
     }
-
 }

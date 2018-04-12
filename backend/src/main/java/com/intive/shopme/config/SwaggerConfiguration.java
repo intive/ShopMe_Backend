@@ -1,7 +1,6 @@
 package com.intive.shopme.config;
 
 import com.google.common.base.Predicates;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +19,7 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.createApiInfo;
 
 @Configuration
 @EnableSwagger2
-class SwaggerConfig {
+class SwaggerConfiguration {
 
     private final ServletContext servletContext;
 
@@ -30,8 +29,7 @@ class SwaggerConfig {
     @Value("${server.external.url.context}")
     private String serverContext;
 
-    @Autowired
-    public SwaggerConfig(ServletContext servletContext) {
+    public SwaggerConfiguration(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
@@ -71,5 +69,4 @@ class SwaggerConfig {
             }
         };
     }
-
 }

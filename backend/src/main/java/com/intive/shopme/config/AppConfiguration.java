@@ -1,6 +1,6 @@
 package com.intive.shopme.config;
 
-public final class AppConfig {
+public final class AppConfiguration {
 
     public static final String ACCEPTABLE_TITLE_SEARCH_CHARS = "a-zA-Z0-9ąĄćĆęĘłŁńŃóÓśŚżŻźŹ ";
 
@@ -19,11 +19,8 @@ public final class AppConfig {
     public static final String DEFAULT_SORT_FIELD = "date";
     public static final String DEFAULT_SORT_DIRECTION = "DESC";
 
-    public static final String OFFER_NOT_FOUND = "Offer not found";
-    public static final String OFFER_SWAGGER_NOT_FOUND = "Offer with this ID has not found";
-    public static final String CATEGORY_NOT_FOUND = "Category not found";
+    public static final String SWAGGER_NOT_FOUND = "Resource with ID was not found";
 
-    private AppConfig() {
+    private AppConfiguration() {
     }
-
 }

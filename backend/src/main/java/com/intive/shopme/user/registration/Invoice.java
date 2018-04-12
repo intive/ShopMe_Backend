@@ -1,6 +1,7 @@
-package com.intive.shopme.UserRegistration;
+package com.intive.shopme.user.registration;
 
-import com.intive.shopme.base.Identifiable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.intive.shopme.model.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,7 +32,8 @@ class Invoice extends Identifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address invoiceAddress;
 
-    protected boolean hasCompanyDetails() {
+    @JsonIgnore
+    boolean hasCompanyDetails() {
         return !StringUtils.isEmpty(companyName) && !StringUtils.isEmpty(nip);
     }
 }

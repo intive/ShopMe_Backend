@@ -1,4 +1,4 @@
-package com.intive.shopme.UserRegistration;
+package com.intive.shopme.user.registration;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

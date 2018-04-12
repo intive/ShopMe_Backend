@@ -1,6 +1,7 @@
-package com.intive.shopme.UserRegistration;
+package com.intive.shopme.user.registration;
 
-import com.intive.shopme.base.Identifiable;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.intive.shopme.model.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -31,7 +32,8 @@ class Address extends Identifiable {
             required = true, position = 5, example = "70-125")
     private String zipCode;
 
-    protected boolean isFilled() {
+    @JsonIgnore
+    boolean isFilled() {
         return !StringUtils.isEmpty(street) &&
                 !StringUtils.isEmpty(number) &&
                 !StringUtils.isEmpty(city) &&
