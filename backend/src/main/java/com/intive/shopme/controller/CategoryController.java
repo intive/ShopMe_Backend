@@ -46,10 +46,4 @@ public class CategoryController {
     public Category add(@RequestBody Category category) {
         return service.create(category);
     }
-
-    @DeleteMapping(value = "{id}")
-    //TODO delete it after manual testing
-    public void delete(@PathVariable UUID id) {
-        throw new RuntimeException("testing");
-    }
 }
