@@ -6,10 +6,10 @@ WORKDIR /usr/src/app
 COPY pom.xml .
 COPY ext/ ext/
 # latest maven goal + ignore errors (cache deps)
-RUN mvn -B -e -C verify || true
+RUN mvn -B -e -C -P docker verify || true
 
 COPY . .
-RUN mvn -B -e -C package|| true
+RUN mvn -B -e -C -P docker package
 
 FROM openjdk:10-jre-slim
 COPY --from=0 /usr/src/app/target/be.jar app.jar
