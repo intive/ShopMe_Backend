@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,13 +28,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.OFFERS;
 import static com.intive.shopme.config.AppConfiguration.ACCEPTABLE_TITLE_SEARCH_CHARS;
-import static com.intive.shopme.config.AppConfiguration.DEFAULT_PAGE;
 import static com.intive.shopme.config.AppConfiguration.DEFAULT_PAGE_SIZE;
 import static com.intive.shopme.config.AppConfiguration.DEFAULT_SORT_DIRECTION;
 import static com.intive.shopme.config.AppConfiguration.DEFAULT_SORT_FIELD;
@@ -75,7 +75,7 @@ public class OfferController {
     @GetMapping
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "requested page number (optional, counting from " + FIRST_PAGE +
-                    ", default = " + DEFAULT_PAGE + ")", defaultValue = DEFAULT_PAGE,
+                    ", default = " + FIRST_PAGE + ")", defaultValue = FIRST_PAGE,
                     dataType = "Long", paramType = "query"),
             @ApiImplicitParam(name = "pageSize", value = "number of offers per page (optional, default = " +
                     DEFAULT_PAGE_SIZE + ", max " + PAGE_SIZE_MAX + ")",
@@ -104,53 +104,37 @@ public class OfferController {
             @ApiResponse(code = 200, message = SUCCESS),
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    public Page<Offer> searchOffers(@RequestParam(name = "page", required = false) Optional<Integer> page,
-                                    @RequestParam(name = "pageSize", required = false) Optional<Integer> pageSize,
-                                    @RequestParam(name = "sort", required = false) Optional<String> sort,
-                                    @RequestParam(name = "order", required = false) Optional<String> order,
-                                    @RequestParam(name = "title", required = false) Optional<String> title,
-                                    @RequestParam(name = "priceMin", required = false) Optional<Float> priceMin,
-                                    @RequestParam(name = "priceMax", required = false) Optional<Float> priceMax,
-                                    @RequestParam(name = "dateMin", required = false) Optional<Long> dateMin,
-                                    @RequestParam(name = "dateMax", required = false) Optional<Long> dateMax) {
+    public Page<Offer> searchOffers(
+            @RequestParam(name = "page", required = false, defaultValue = FIRST_PAGE) int page,
+            @RequestParam(name = "pageSize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
+            @RequestParam(name = "sort", required = false, defaultValue = DEFAULT_SORT_FIELD) String sortField,
+            @RequestParam(name = "order", required = false, defaultValue = DEFAULT_SORT_DIRECTION) String sortDirection,
+            @RequestParam(name = "title", required = false, defaultValue = "") String title,
+            @RequestParam(name = "priceMin", required = false, defaultValue = "0") float priceMin,
+            @RequestParam(name = "priceMax", required = false, defaultValue = "0") float priceMax,
+            @RequestParam(name = "dateMin", required = false, defaultValue = "0") long dateMin,
+            @RequestParam(name = "dateMax", required = false, defaultValue = "0") long dateMax) {
 
-        final int pageNumber;
-        if (page.isPresent()) {
-            pageNumber = page.get() < FIRST_PAGE ? Integer.valueOf(DEFAULT_PAGE) : page.get();
-        } else {
-            pageNumber = Integer.valueOf(DEFAULT_PAGE);
-        }
+        page = Math.max(page, Integer.valueOf(FIRST_PAGE));
+        pageSize = Math.min(pageSize, PAGE_SIZE_MAX);
 
-        final int pageSizeNumber;
-        if (pageSize.isPresent()) {
-            pageSizeNumber = pageSize.get() < PAGE_SIZE_MAX ? pageSize.get() : PAGE_SIZE_MAX;
-        } else {
-            pageSizeNumber = Integer.valueOf(DEFAULT_PAGE_SIZE);
-        }
-
-        final String sortField = sort.orElse(DEFAULT_SORT_FIELD);
-        final String sortOrder = order.orElse(DEFAULT_SORT_DIRECTION);
-
-        final Pageable pageable = PageRequest.of(pageNumber - FIRST_PAGE, pageSizeNumber,
-                Direction.fromString(sortOrder), sortField);
+        final Pageable pageable = PageRequest.of(page - Integer.valueOf(FIRST_PAGE), pageSize,
+                Direction.fromString(sortDirection), sortField);
 
         final OfferSpecificationsBuilder builder = new OfferSpecificationsBuilder();
-        if (title.isPresent() && (title.get().length() > 1) && !title.get().matches("^[0-9]{2,}$")) {
-            String[] titleKeywords = title.get()
-                    .substring(0, title.get().length() > OFFER_TITLE_MAX_LENGTH ?
-                            OFFER_TITLE_MAX_LENGTH : title.get().length())
+        if (StringUtils.isNotEmpty(title) && (title.length() > 1) && !StringUtils.isNumeric(title)) {
+            var titleKeywords = StringUtils.left(title, OFFER_TITLE_MAX_LENGTH)
                     .replaceAll("[^" + ACCEPTABLE_TITLE_SEARCH_CHARS + "]", "")
+                    .replaceAll("  ", " ")
                     .toLowerCase().split(" ");
-            for (String titleKeyword : titleKeywords) {
-                builder.with("title", ":", titleKeyword);
-            }
+            Arrays.stream(titleKeywords).forEach(titleKeyword -> builder.with("title", ":", titleKeyword));
         }
         final Specification<Offer> filter = builder.build();
-
-        dateMin.ifPresent(aLong -> builder.with("date", "≥", aLong));
-        dateMax.ifPresent(aLong -> builder.with("date", "≤", aLong));
-        priceMin.ifPresent(aFloat -> builder.with("basePrice", "≥", aFloat));
-        priceMax.ifPresent(aFloat -> builder.with("basePrice", "≤", aFloat));
+        
+        if (dateMin != 0) builder.with("date", "≥", dateMin);
+        if (dateMax != 0) builder.with("date", "≤", dateMax);
+        if (priceMin != 0) builder.with("basePrice", "≥", priceMin);
+        if (priceMax != 0) builder.with("basePrice", "≤", priceMax);
 
         return service.getAll(pageable, filter);
     }

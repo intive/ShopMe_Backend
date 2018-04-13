@@ -11,8 +11,7 @@ public final class AppConfiguration {
     public static final int OFFER_DESCRIPTION_MAX_LENGTH = 500;
     public static final int USER_DESCRIPTION_MAX_LENGTH = 800;
 
-    public static final int FIRST_PAGE = 1;
-    public static final String DEFAULT_PAGE = "1";
+    public static final String FIRST_PAGE = "1";
     public static final String DEFAULT_PAGE_SIZE = "10";
     public static final int PAGE_SIZE_MAX = 100;
 
