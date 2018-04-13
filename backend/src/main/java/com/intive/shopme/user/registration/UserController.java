@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.USERS;
+import static com.intive.shopme.config.AppConfiguration.SWAGGER_CREATED;
 import static com.intive.shopme.config.AppConfiguration.SWAGGER_NOT_FOUND;
+import static com.intive.shopme.config.AppConfiguration.SWAGGER_SUCCESS;
 
 @RestController
 @RequestMapping(value = USERS)
@@ -24,7 +26,7 @@ class UserController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New user successfully created"),
+            @ApiResponse(code = 201, message = SWAGGER_CREATED),
     })
     @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
@@ -35,7 +37,7 @@ class UserController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved user"),
+            @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Returns user by id (temporary endpoint, please confirm in next REST API specification before production use)")
