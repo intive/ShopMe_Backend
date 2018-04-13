@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import static com.intive.shopme.config.ApiUrl.CATEGORIES;
-import static com.intive.shopme.config.AppConfiguration.SWAGGER_CREATED;
-import static com.intive.shopme.config.AppConfiguration.SWAGGER_EXISTS;
-import static com.intive.shopme.config.AppConfiguration.SWAGGER_SUCCESS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.EXISTS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 
 @Validated
 @RestController
@@ -34,22 +34,22 @@ public class CategoryController {
         this.service = service;
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
-    })
     @GetMapping
     @ApiOperation(value = "Returns all available categories")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS)
+    })
     public List<Category> getAllCategories() {
         return service.getAll();
     }
 
-    @ApiResponses(value = {
-            @ApiResponse(code = 201, message = SWAGGER_CREATED),
-            @ApiResponse(code = 409, message = SWAGGER_EXISTS)
-    })
-    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
     @ApiOperation(value = "Saves new category")
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = CREATED),
+            @ApiResponse(code = 409, message = EXISTS)
+    })
     public Category add(@RequestBody Category category) {
         return service.create(category);
     }

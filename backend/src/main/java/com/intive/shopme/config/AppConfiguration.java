@@ -19,13 +19,6 @@ public final class AppConfiguration {
     public static final String DEFAULT_SORT_FIELD = "date";
     public static final String DEFAULT_SORT_DIRECTION = "DESC";
 
-    public static final String SWAGGER_NOT_FOUND = "Resource with ID was not found";
-    public static final String SWAGGER_CREATED = "New resource successfully created";
-    public static final String SWAGGER_UPDATED = "Resource successfully updated";
-    public static final String SWAGGER_DELETED = "Resource successfully deleted";
-    public static final String SWAGGER_SUCCESS = "Successfully retrieved resource";
-    public static final String SWAGGER_EXISTS = "Resource already exists";
-
     private AppConfiguration() {
     }
 }

@@ -12,7 +12,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import static com.intive.shopme.config.AppConfiguration.*;
+import static com.intive.shopme.config.AppConfiguration.USER_DESCRIPTION_MAX_LENGTH;
+import static com.intive.shopme.config.AppConfiguration.USER_NAME_MAX_LENGTH;
+import static com.intive.shopme.config.AppConfiguration.USER_NAME_MIN_LENGTH;
 
 @Entity
 @ApiModel(value = "Offer's user", description = "Represents offer's owner")
