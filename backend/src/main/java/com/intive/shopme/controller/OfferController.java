@@ -1,6 +1,5 @@
 package com.intive.shopme.controller;
 
-import com.intive.shopme.config.SwaggerApiInfoConfigurer;
 import com.intive.shopme.controller.filter.OfferSpecificationsBuilder;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.OfferService;
@@ -46,6 +45,7 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELET
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UPDATED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
 
 @Validated
 @RestController
@@ -63,7 +63,7 @@ public class OfferController {
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = CREATED),
-            @ApiResponse(code = 422, message = SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR)
+            @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new offer")
     public Offer add(@RequestBody Offer offer) {
