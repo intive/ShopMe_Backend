@@ -6,19 +6,21 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.CATEGORIES;
+import static com.intive.shopme.config.AppConfiguration.SWAGGER_CREATED;
+import static com.intive.shopme.config.AppConfiguration.SWAGGER_EXISTS;
+import static com.intive.shopme.config.AppConfiguration.SWAGGER_SUCCESS;
 
 @Validated
 @RestController
@@ -32,6 +34,9 @@ public class CategoryController {
         this.service = service;
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
+    })
     @GetMapping
     @ApiOperation(value = "Returns all available categories")
     public List<Category> getAllCategories() {
@@ -39,8 +44,10 @@ public class CategoryController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(code = 409, message = "Category already exist")
+            @ApiResponse(code = 201, message = SWAGGER_CREATED),
+            @ApiResponse(code = 409, message = SWAGGER_EXISTS)
     })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
     @ApiOperation(value = "Saves new category")
     public Category add(@RequestBody Category category) {

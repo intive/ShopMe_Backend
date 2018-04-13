@@ -3,7 +3,12 @@ package com.intive.shopme.controller;
 import com.intive.shopme.controller.filter.OfferSpecificationsBuilder;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.OfferService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +16,16 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.Optional;
@@ -33,11 +47,11 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New offer successfully created"),
+            @ApiResponse(code = 201, message = SWAGGER_CREATED),
             @ApiResponse(code = 422, message = "New offer data validation error")
-
     })
     @ApiOperation(value = "Saves new offer")
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
     public Offer add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());
@@ -73,7 +87,7 @@ public class OfferController {
                     dataType = "Long", paramType = "query")
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully retrieved offer(s)"),
+            @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
     @ResponseStatus(value = HttpStatus.OK)
@@ -130,8 +144,8 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
-
     })
     @ApiOperation(value = "Returns offer by id")
     @GetMapping(value = "{id}")
@@ -140,6 +154,7 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SWAGGER_UPDATED),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
@@ -149,6 +164,7 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SWAGGER_DELETED),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
