@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -25,6 +26,7 @@ class UserController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New user successfully created"),
     })
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
     @ApiOperation("Saves new user")
     public User add(@RequestBody User user) {
