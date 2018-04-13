@@ -5,7 +5,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
@@ -25,23 +31,23 @@ class UserController {
         this.service = service;
     }
 
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = SWAGGER_CREATED),
     })
-    @ResponseStatus(value = HttpStatus.CREATED)
-    @PostMapping
     @ApiOperation("Saves new user")
     public User add(@RequestBody User user) {
         user.setId(UUID.randomUUID());
         return service.createOrUpdate(user);
     }
 
+    @GetMapping(value = "{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Returns user by id (temporary endpoint, please confirm in next REST API specification before production use)")
-    @GetMapping(value = "{id}")
     public User get(@PathVariable UUID id) {
         return service.get(id).hidePassword();
     }

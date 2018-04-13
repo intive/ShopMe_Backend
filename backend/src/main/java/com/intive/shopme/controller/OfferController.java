@@ -1,5 +1,6 @@
 package com.intive.shopme.controller;
 
+import com.intive.shopme.config.SwaggerApiInfoConfigurer;
 import com.intive.shopme.controller.filter.OfferSpecificationsBuilder;
 import com.intive.shopme.model.Offer;
 import com.intive.shopme.service.OfferService;
@@ -46,19 +47,20 @@ public class OfferController {
         this.service = service;
     }
 
+    @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = SWAGGER_CREATED),
             @ApiResponse(code = 422, message = "New offer data validation error")
     })
     @ApiOperation(value = "Saves new offer")
-    @ResponseStatus(value = HttpStatus.CREATED)
-    @PostMapping
     public Offer add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());
         offer.setDate(new Date());
         return service.createOrUpdate(offer);
     }
 
+    @GetMapping
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", value = "requested page number (optional, counting from " + FIRST_PAGE +
                     ", default = " + DEFAULT_PAGE + ")", defaultValue = DEFAULT_PAGE,
@@ -90,8 +92,6 @@ public class OfferController {
             @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    @ResponseStatus(value = HttpStatus.OK)
-    @GetMapping
     public Page<Offer> searchOffers(@RequestParam(name = "page", required = false) Optional<Integer> page,
                                     @RequestParam(name = "pageSize", required = false) Optional<Integer> pageSize,
                                     @RequestParam(name = "sort", required = false) Optional<String> sort,
@@ -143,32 +143,32 @@ public class OfferController {
         return service.getAll(pageable, filter);
     }
 
+    @GetMapping(value = "{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Returns offer by id")
-    @GetMapping(value = "{id}")
     public Offer get(@PathVariable UUID id) {
         return service.get(id);
     }
 
+    @PutMapping(value = "{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SWAGGER_UPDATED),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
-    @PutMapping(value = "{id}")
     public Offer update(Offer offer) {
         return service.createOrUpdate(offer);
     }
 
+    @DeleteMapping(value = "{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SWAGGER_DELETED),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
-    @DeleteMapping(value = "{id}")
     public void delete(@PathVariable UUID id) {
         service.delete(id);
     }
