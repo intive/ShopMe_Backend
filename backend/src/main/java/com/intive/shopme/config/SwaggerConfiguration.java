@@ -37,6 +37,7 @@ class SwaggerConfiguration {
     Docket api() {
         return handleReverseProxyMapping(
                 new Docket(DocumentationType.SWAGGER_2)
+                        .useDefaultResponseMessages(false)
                         .select()
                         .apis(RequestHandlerSelectors.any())
                         .paths(Predicates.not(PathSelectors.regex("/error|/actuator.*")))
