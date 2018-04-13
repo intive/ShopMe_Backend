@@ -33,7 +33,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.OFFERS;
-import static com.intive.shopme.config.AppConfiguration.*;
+import static com.intive.shopme.config.AppConfiguration.ACCEPTABLE_TITLE_SEARCH_CHARS;
+import static com.intive.shopme.config.AppConfiguration.DEFAULT_PAGE;
+import static com.intive.shopme.config.AppConfiguration.DEFAULT_PAGE_SIZE;
+import static com.intive.shopme.config.AppConfiguration.DEFAULT_SORT_DIRECTION;
+import static com.intive.shopme.config.AppConfiguration.DEFAULT_SORT_FIELD;
+import static com.intive.shopme.config.AppConfiguration.FIRST_PAGE;
+import static com.intive.shopme.config.AppConfiguration.OFFER_TITLE_MAX_LENGTH;
+import static com.intive.shopme.config.AppConfiguration.PAGE_SIZE_MAX;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UPDATED;
 
 @Validated
 @RestController
@@ -50,8 +62,8 @@ public class OfferController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = SWAGGER_CREATED),
-            @ApiResponse(code = 422, message = "New offer data validation error")
+            @ApiResponse(code = 201, message = CREATED),
+            @ApiResponse(code = 422, message = SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new offer")
     public Offer add(@RequestBody Offer offer) {
@@ -89,7 +101,7 @@ public class OfferController {
                     dataType = "Long", paramType = "query")
     })
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
+            @ApiResponse(code = 200, message = SUCCESS),
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
     public Page<Offer> searchOffers(@RequestParam(name = "page", required = false) Optional<Integer> page,
@@ -145,8 +157,8 @@ public class OfferController {
 
     @GetMapping(value = "{id}")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = SWAGGER_SUCCESS),
-            @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
+            @ApiResponse(code = 200, message = SUCCESS),
+            @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Returns offer by id")
     public Offer get(@PathVariable UUID id) {
@@ -155,8 +167,8 @@ public class OfferController {
 
     @PutMapping(value = "{id}")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = SWAGGER_UPDATED),
-            @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
+            @ApiResponse(code = 200, message = UPDATED),
+            @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
     public Offer update(Offer offer) {
@@ -165,8 +177,8 @@ public class OfferController {
 
     @DeleteMapping(value = "{id}")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = SWAGGER_DELETED),
-            @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
+            @ApiResponse(code = 200, message = DELETED),
+            @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
     public void delete(@PathVariable UUID id) {
