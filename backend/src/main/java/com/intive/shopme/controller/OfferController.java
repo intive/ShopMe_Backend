@@ -35,9 +35,9 @@ public class OfferController {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "New offer successfully created"),
             @ApiResponse(code = 422, message = "New offer data validation error")
-
     })
     @ApiOperation(value = "Saves new offer")
+    @ResponseStatus(value = HttpStatus.CREATED)
     @PostMapping
     public Offer add(@RequestBody Offer offer) {
         offer.setId(UUID.randomUUID());
@@ -130,8 +130,8 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully retrieved offer"),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
-
     })
     @ApiOperation(value = "Returns offer by id")
     @GetMapping(value = "{id}")
@@ -140,6 +140,7 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully updated offer"),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
@@ -149,6 +150,7 @@ public class OfferController {
     }
 
     @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully deleted offer"),
             @ApiResponse(code = 404, message = SWAGGER_NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
