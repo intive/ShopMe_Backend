@@ -1,6 +1,6 @@
 package com.intive.shopme.user.registration;
 
-import com.intive.shopme.service.Validated;
+import com.intive.shopme.validator.Validated;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

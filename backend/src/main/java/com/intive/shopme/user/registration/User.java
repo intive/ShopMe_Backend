@@ -1,6 +1,7 @@
 package com.intive.shopme.user.registration;
 
-import com.intive.shopme.model.Identifiable;
+import com.intive.shopme.identifiable.Identifiable;
+import com.intive.shopme.user.registration.validation.ValidInvoiceIfInvoiceRequested;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -18,7 +19,7 @@ import javax.persistence.Table;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ValidInvoiceIfInvoiceRequested
-class User extends Identifiable {
+public class User extends Identifiable {
 
     @ApiModelProperty(value = "Represents user's name",
             required = true, position = 2, example = "Jan")

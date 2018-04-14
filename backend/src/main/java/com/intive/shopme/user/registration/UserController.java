@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.UUID;
 
-import static com.intive.shopme.config.ApiUrl.USERS;
-import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
-import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
-import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
+import static com.intive.shopme.configuration.api.ApiUrl.USERS;
+import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.CREATED;
+import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
+import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 
 @RestController
 @RequestMapping(value = USERS)

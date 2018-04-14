@@ -1,7 +1,7 @@
 package com.intive.shopme.user.registration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.intive.shopme.model.Identifiable;
+import com.intive.shopme.identifiable.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -17,7 +17,7 @@ import javax.persistence.OneToOne;
 @ApiModel(value = "Invoice data", description = "Represents data for invoice")
 @Data
 @EqualsAndHashCode(callSuper = true)
-class Invoice extends Identifiable {
+public class Invoice extends Identifiable {
 
     @ApiModelProperty(value = "Represents user's company name",
             required = true, position = 2, example = "Januszex Sp.z.o.")
@@ -33,7 +33,7 @@ class Invoice extends Identifiable {
     private Address invoiceAddress;
 
     @JsonIgnore
-    boolean hasCompanyDetails() {
+    public boolean hasCompanyDetails() {
         return !StringUtils.isEmpty(companyName) && !StringUtils.isEmpty(nip);
     }
 }
