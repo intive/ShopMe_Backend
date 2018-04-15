@@ -1,3 +1,14 @@
+create table VOIVODESHIP
+(
+	ID UUID not null primary key,
+	NAME VARCHAR(255) not null
+)
+;
+
+create unique index IDX_VOIVODESHIP_NAME
+	on VOIVODESHIP (NAME)
+;
+
 create table ADDRESS
 (
 	ID UUID not null primary key,
