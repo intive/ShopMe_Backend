@@ -30,4 +30,8 @@ class UserService extends Validated<User> {
         return repository.findById(id)
                 .orElseThrow(() -> new DataRetrievalFailureException("User with id: " + id + " not found"));
     }
+
+    boolean findIfUserExist(String email) {
+        return (repository.findUserByEmail(email) != null);
+    }
 }
