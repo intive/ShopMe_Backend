@@ -1,12 +1,10 @@
 package com.intive.shopme.user.registration.model.view;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intive.shopme.base.model.IdentifiableView;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang3.StringUtils;
 
 @ApiModel(value = "Adress data", description = "Represents data for adress")
 @Data
@@ -29,12 +27,5 @@ public class AddressView extends IdentifiableView {
             required = true, position = 5, example = "70-125")
     private String zipCode;
 
-    @JsonIgnore
-    public boolean isFilled() {
-        return !StringUtils.isEmpty(street) &&
-                !StringUtils.isEmpty(number) &&
-                !StringUtils.isEmpty(city) &&
-                !StringUtils.isEmpty(zipCode);
-    }
 }
 

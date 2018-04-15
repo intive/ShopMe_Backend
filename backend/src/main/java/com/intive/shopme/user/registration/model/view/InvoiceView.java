@@ -1,13 +1,10 @@
 package com.intive.shopme.user.registration.model.view;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intive.shopme.base.model.IdentifiableView;
-import com.intive.shopme.user.registration.model.db.Address;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang3.StringUtils;
 
 @ApiModel(value = "Invoice data", description = "Represents data for invoice")
 @Data
@@ -26,8 +23,4 @@ public class InvoiceView extends IdentifiableView {
             required = true, position = 4)
     private AddressView invoiceAddress;
 
-    @JsonIgnore
-    public boolean hasCompanyDetails() {
-        return !StringUtils.isEmpty(companyName) && !StringUtils.isEmpty(nip);
-    }
 }
