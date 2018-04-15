@@ -1,5 +1,6 @@
 package com.intive.shopme.voivodeship;
 
+import com.intive.shopme.model.db.DbVoivodeship;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +14,7 @@ class VoivodeshipService {
         this.repository = repository;
     }
 
-    public List<Voivodeship> getAll() {
+    public List<DbVoivodeship> getAll() {
         return repository.findAll();
     }
 }

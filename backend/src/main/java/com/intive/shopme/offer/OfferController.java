@@ -1,6 +1,15 @@
 package com.intive.shopme.offer;
 
-import com.intive.shopme.offer.filter.OfferSpecificationsBuilder;
+import com.intive.shopme.category.CategoryValidator;
+import com.intive.shopme.common.ConvertibleController;
+import com.intive.shopme.model.db.DbCategory;
+import com.intive.shopme.model.db.DbOffer;
+import com.intive.shopme.model.db.DbOwner;
+import com.intive.shopme.model.db.DbVoivodeship;
+import com.intive.shopme.model.rest.Category;
+import com.intive.shopme.model.rest.Offer;
+import com.intive.shopme.model.rest.Owner;
+import com.intive.shopme.model.rest.Voivodeship;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -9,12 +18,14 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+import org.springframework.validation.Validator;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,36 +37,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
+import static com.intive.shopme.config.ApiUrl.OFFERS;
+import static com.intive.shopme.config.AppConfig.ACCEPTABLE_TITLE_SEARCH_CHARS;
+import static com.intive.shopme.config.AppConfig.DEFAULT_PAGE_SIZE;
+import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_DIRECTION;
+import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_FIELD;
+import static com.intive.shopme.config.AppConfig.FIRST_PAGE;
+import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
+import static com.intive.shopme.config.AppConfig.PAGE_SIZE_MAX;
+import static com.intive.shopme.config.ErrorHandlingConfig.CONSTRAINTS_JSON_KEY;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UPDATED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
 
-import static com.intive.shopme.configuration.api.ApiUrl.OFFERS;
-import static com.intive.shopme.configuration.api.AppConfiguration.ACCEPTABLE_TITLE_SEARCH_CHARS;
-import static com.intive.shopme.configuration.api.AppConfiguration.DEFAULT_PAGE_SIZE;
-import static com.intive.shopme.configuration.api.AppConfiguration.DEFAULT_SORT_DIRECTION;
-import static com.intive.shopme.configuration.api.AppConfiguration.DEFAULT_SORT_FIELD;
-import static com.intive.shopme.configuration.api.AppConfiguration.FIRST_PAGE;
-import static com.intive.shopme.configuration.api.AppConfiguration.OFFER_TITLE_MAX_LENGTH;
-import static com.intive.shopme.configuration.api.AppConfiguration.PAGE_SIZE_MAX;
-import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.CREATED;
-import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.DELETED;
-import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
-import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.SUCCESS;
-import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.UPDATED;
-import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
-
-@Validated
 @RestController
 @RequestMapping(value = OFFERS)
 @Api(value = "offer", description = "REST API for offers operations", tags = "Offers")
-public class OfferController {
+public class OfferController extends ConvertibleController<DbOffer, Offer> {
 
     private final OfferService service;
+    private final Validator categoryValidator;
 
-    public OfferController(OfferService service) {
+    OfferController(OfferService service, CategoryValidator validator) {
+        super(DbOffer.class, Offer.class);
         this.service = service;
+        this.categoryValidator = validator;
     }
 
     @PostMapping
@@ -64,11 +80,23 @@ public class OfferController {
             @ApiResponse(code = 201, message = CREATED),
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
-    @ApiOperation(value = "Saves new offer")
-    public Offer add(@RequestBody Offer offer) {
-        offer.setId(UUID.randomUUID());
-        offer.setDate(new Date());
-        return service.createOrUpdate(offer);
+    @ApiOperation(value = "Saves new offer", response = Offer.class)
+    public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors) {
+        categoryValidator.validate(offer, errors);
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.BAD_REQUEST);
+        }
+
+        final var dbOffer = convertToDbModel(offer);
+        dbOffer.setId(UUID.randomUUID());
+        dbOffer.setDate(new Date());
+        return ResponseEntity.ok(convertToView(service.createOrUpdate(dbOffer)));
+    }
+
+    private static String createErrorString(Errors errors) {
+        return errors.getAllErrors().stream()
+                .map(ObjectError::toString)
+                .collect(Collectors.joining(","));
     }
 
     @GetMapping
@@ -103,7 +131,7 @@ public class OfferController {
             @ApiResponse(code = 200, message = SUCCESS),
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    public Page<Offer> searchOffers(
+    Page<Offer> searchOffers(
             @RequestParam(name = "page", required = false, defaultValue = FIRST_PAGE) int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
             @RequestParam(name = "sort", required = false, defaultValue = DEFAULT_SORT_FIELD) String sortField,
@@ -117,10 +145,10 @@ public class OfferController {
         page = Math.max(page, Integer.valueOf(FIRST_PAGE));
         pageSize = Math.min(pageSize, PAGE_SIZE_MAX);
 
-        final Pageable pageable = PageRequest.of(page - Integer.valueOf(FIRST_PAGE), pageSize,
+        final var pageable = PageRequest.of(page - Integer.valueOf(FIRST_PAGE), pageSize,
                 Direction.fromString(sortDirection), sortField);
 
-        final OfferSpecificationsBuilder builder = new OfferSpecificationsBuilder();
+        final var builder = new OfferSpecificationsBuilder();
         if (StringUtils.isNotEmpty(title) && (title.length() > 1) && !StringUtils.isNumeric(title)) {
             var titleKeywords = StringUtils.left(title, OFFER_TITLE_MAX_LENGTH)
                     .replaceAll("[^" + ACCEPTABLE_TITLE_SEARCH_CHARS + "]", "")
@@ -128,14 +156,15 @@ public class OfferController {
                     .toLowerCase().split(" ");
             Arrays.stream(titleKeywords).forEach(titleKeyword -> builder.with("title", ":", titleKeyword));
         }
-        final Specification<Offer> filter = builder.build();
+        final var filter = builder.build();
 
         if (dateMin != 0) builder.with("date", "≥", dateMin);
         if (dateMax != 0) builder.with("date", "≤", dateMax);
         if (priceMin != 0) builder.with("basePrice", "≥", priceMin);
         if (priceMax != 0) builder.with("basePrice", "≤", priceMax);
 
-        return service.getAll(pageable, filter);
+        final var offers = service.getAll(pageable, filter);
+        return new PageImpl<>(convertToView(offers.getContent()), pageable, offers.getTotalElements());
     }
 
     @GetMapping(value = "{id}")
@@ -144,8 +173,8 @@ public class OfferController {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Returns offer by id")
-    public Offer get(@PathVariable UUID id) {
-        return service.get(id);
+    Offer get(@PathVariable UUID id) {
+        return convertToView(service.get(id));
     }
 
     @PutMapping(value = "{id}")
@@ -154,8 +183,9 @@ public class OfferController {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
-    public Offer update(Offer offer) {
-        return service.createOrUpdate(offer);
+    Offer update(Offer offer) {
+        final var dbOffer = convertToDbModel(offer);
+        return convertToView(service.createOrUpdate(dbOffer));
     }
 
     @DeleteMapping(value = "{id}")
@@ -164,7 +194,55 @@ public class OfferController {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
-    public void delete(@PathVariable UUID id) {
+    void delete(@PathVariable UUID id) {
         service.delete(id);
+    }
+
+    @Override
+    protected Offer convertToView(DbOffer dbOffer) {
+        final var result = new Offer();
+        result.setId(dbOffer.getId());
+        result.setDate(dbOffer.getDate());
+        result.setTitle(dbOffer.getTitle());
+        result.setBasePrice(dbOffer.getBasePrice());
+        result.setBaseDescription(dbOffer.getBaseDescription());
+        result.setExtendedPrice(dbOffer.getExtendedPrice());
+        result.setExtendedDescription(dbOffer.getExtendedDescription());
+        result.setExtraPrice(dbOffer.getExtraPrice());
+        result.setExtraDescription(dbOffer.getExtraDescription());
+        if (dbOffer.getOwner() != null) {
+            result.setOwner(genericConvert(dbOffer.getOwner(), Owner.class));
+            if (dbOffer.getOwner().getVoivodeship() != null) {
+                result.getOwner().setVoivodeship(genericConvert(dbOffer.getOwner().getVoivodeship(), Voivodeship.class));
+            }
+        }
+        if (dbOffer.getCategory() != null) {
+            result.setCategory(genericConvert(dbOffer.getCategory(), Category.class));
+        }
+        return result;
+    }
+
+    @Override
+    protected DbOffer convertToDbModel(Offer offerView) {
+        final var result = new DbOffer();
+        result.setId(offerView.getId());
+        result.setDate(offerView.getDate());
+        result.setTitle(offerView.getTitle());
+        result.setBasePrice(offerView.getBasePrice());
+        result.setBaseDescription(offerView.getBaseDescription());
+        result.setExtendedPrice(offerView.getExtendedPrice());
+        result.setExtendedDescription(offerView.getExtendedDescription());
+        result.setExtraPrice(offerView.getExtraPrice());
+        result.setExtraDescription(offerView.getExtraDescription());
+        if (offerView.getOwner() != null) {
+            result.setOwner(genericConvert(offerView.getOwner(), DbOwner.class));
+            if (offerView.getOwner().getVoivodeship() != null) {
+                result.getOwner().setVoivodeship(genericConvert(offerView.getOwner().getVoivodeship(), DbVoivodeship.class));
+            }
+        }
+        if (offerView.getCategory() != null) {
+            result.setCategory(genericConvert(offerView.getCategory(), DbCategory.class));
+        }
+        return result;
     }
 }

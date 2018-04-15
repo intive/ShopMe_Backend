@@ -1,5 +1,6 @@
 package com.intive.shopme.offer;
 
+import com.intive.shopme.model.db.DbOffer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface OfferRepository extends JpaRepository<Offer, UUID> {
+interface OfferRepository extends JpaRepository<DbOffer, UUID> {
 
-    Page<Offer> findAll(Specification<Offer> filter, Pageable pageable);
+    Page<DbOffer> findAll(Specification<DbOffer> filter, Pageable pageable);
 }
