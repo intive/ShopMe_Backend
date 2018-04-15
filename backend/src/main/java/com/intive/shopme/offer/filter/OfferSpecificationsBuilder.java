@@ -1,6 +1,6 @@
 package com.intive.shopme.offer.filter;
 
-import com.intive.shopme.offer.Offer;
+import com.intive.shopme.offer.model.db.Offer;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;

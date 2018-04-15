@@ -9,7 +9,7 @@ import lombok.ToString;
 
 import javax.validation.constraints.NotEmpty;
 
-@ApiModel(value = "Offer's category", description = "Represents different category types of an offer")
+@ApiModel(value = "OfferView's category", description = "Represents different category types of an offer")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)

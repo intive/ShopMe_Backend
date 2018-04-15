@@ -1,5 +1,6 @@
 package com.intive.shopme.offer;
 
+import com.intive.shopme.offer.model.db.Offer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;

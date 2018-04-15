@@ -1,6 +1,7 @@
 package com.intive.shopme.offer.filter;
 
-import com.intive.shopme.offer.Offer;
+import com.intive.shopme.offer.model.db.Offer;
+import com.intive.shopme.offer.model.view.OfferView;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
