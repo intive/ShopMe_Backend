@@ -65,8 +65,7 @@ public class CategoryController {
     }
 
     private CategoryView convertToView(final Category category) {
-        CategoryView categoryViews = modelMapper.map(category, CategoryView.class);
-        return categoryViews;
+        return modelMapper.map(category, CategoryView.class);
     }
 
     private List<CategoryView> convertToView(final Collection<Category> category) {
@@ -78,7 +77,6 @@ public class CategoryController {
     }
 
     private Category convertToModel(final CategoryView categoryView) {
-        Category category = modelMapper.map(categoryView, Category.class);
-        return category;
+        return modelMapper.map(categoryView, Category.class);
     }
 }

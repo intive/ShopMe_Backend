@@ -1,5 +1,6 @@
 package com.intive.shopme.user.registration;
 
+import com.intive.shopme.user.registration.model.db.User;
 import com.intive.shopme.validator.Validated;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
