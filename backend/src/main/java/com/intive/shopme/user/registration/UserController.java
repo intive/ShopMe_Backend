@@ -52,7 +52,7 @@ class UserController {
         return service.get(id).hidePassword();
     }
 
-    // TODO temporary solution, need to be change
+    // TODO temporary solution, need to be change/discuss - public method to check if email exist in database should not be avalible
     @GetMapping(value = "/email={email}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SUCCESS),
