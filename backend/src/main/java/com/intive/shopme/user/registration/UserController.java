@@ -51,4 +51,15 @@ class UserController {
     public User get(@PathVariable UUID id) {
         return service.get(id).hidePassword();
     }
+
+    // TODO temporary solution, need to be change
+    @GetMapping(value = "/email={email}")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = SUCCESS),
+            @ApiResponse(code = 404, message = NOT_FOUND)
+    })
+    @ApiOperation(value = "Search if user with specified email exist in database")
+    public boolean getByEmail(@PathVariable String email) {
+        return service.findIfUserExist(email);
+    }
 }
