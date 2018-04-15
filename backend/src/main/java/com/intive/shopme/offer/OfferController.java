@@ -1,7 +1,5 @@
 package com.intive.shopme.offer;
 
-import com.intive.shopme.category.model.db.Category;
-import com.intive.shopme.category.model.view.CategoryView;
 import com.intive.shopme.offer.filter.OfferSpecificationsBuilder;
 import com.intive.shopme.offer.model.db.Offer;
 import com.intive.shopme.offer.model.view.OfferView;
@@ -15,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -111,7 +110,7 @@ public class OfferController {
             @ApiResponse(code = 200, message = SUCCESS),
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    public Page<Offer> searchOffers(
+    public Page<OfferView> searchOffers(
             @RequestParam(name = "page", required = false, defaultValue = FIRST_PAGE) int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
             @RequestParam(name = "sort", required = false, defaultValue = DEFAULT_SORT_FIELD) String sortField,
@@ -143,7 +142,8 @@ public class OfferController {
         if (priceMin != 0) builder.with("basePrice", "≥", priceMin);
         if (priceMax != 0) builder.with("basePrice", "≤", priceMax);
 
-        return service.getAll(pageable, filter);
+        Page<Offer> offers = service.getAll(pageable, filter);
+        return new PageImpl<>(convertToView(offers.getContent()), pageable, offers.getTotalElements());
     }
 
     @GetMapping(value = "{id}")
@@ -178,8 +178,7 @@ public class OfferController {
     }
 
     private OfferView convertToView(final Offer offer) {
-        OfferView offerView = modelMapper.map(offer, OfferView.class);
-        return offerView;
+        return modelMapper.map(offer, OfferView.class);
     }
 
     private List<OfferView> convertToView(final Collection<Offer> offer) {
@@ -191,7 +190,6 @@ public class OfferController {
     }
 
     private Offer convertToModel(final OfferView offerViews) {
-        Offer offer = modelMapper.map(offerViews, Offer.class);
-        return offer;
+        return modelMapper.map(offerViews, Offer.class);
     }
 }

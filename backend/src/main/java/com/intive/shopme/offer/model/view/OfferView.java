@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intive.shopme.base.model.IdentifiableView;
 import com.intive.shopme.category.model.view.CategoryView;
 import com.intive.shopme.category.validation.CategoryCheck;
-import com.intive.shopme.offer.model.db.Owner;
 import com.intive.shopme.offer.validation.LinkInTextCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -19,7 +18,7 @@ import java.util.Date;
 import static com.intive.shopme.configuration.api.AppConfiguration.OFFER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.configuration.api.AppConfiguration.OFFER_TITLE_MAX_LENGTH;
 
-@ApiModel(value = "OfferView", description = "Represents the offer created by user")
+@ApiModel(value = "Offer", description = "Represents the offer created by user")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class OfferView extends IdentifiableView {
@@ -30,7 +29,7 @@ public class OfferView extends IdentifiableView {
 
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
-    @NotNull(message = "OfferView's title cannot be empty.")
+    @NotNull(message = "Offer's title cannot be empty.")
     @Size(max = OFFER_TITLE_MAX_LENGTH, message = "OfferView's title has too many characters.")
     private String title;
 
@@ -42,7 +41,7 @@ public class OfferView extends IdentifiableView {
 
     @NotNull(message = "Base description cannot be empty.")
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
-            message = "OfferView's base description has too many characters (max " + OFFER_DESCRIPTION_MAX_LENGTH + ").")
+            message = "Offer's base description has too many characters (max " + OFFER_DESCRIPTION_MAX_LENGTH + ").")
     @LinkInTextCheck(message = "OfferView's base description can't contain any urls/links.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
@@ -53,9 +52,9 @@ public class OfferView extends IdentifiableView {
     private Float basePrice;
 
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
-            message = "OfferView's extended level description has too many characters (max " +
+            message = "Offer's extended level description has too many characters (max " +
                     OFFER_DESCRIPTION_MAX_LENGTH + ").")
-    @LinkInTextCheck(message = "OfferView's extended description can't contain any urls/links.")
+    @LinkInTextCheck(message = "Offer's extended description can't contain any urls/links.")
     @ApiModelProperty(value = "Represents offer's extended level description", position = 7,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy.")
@@ -65,9 +64,9 @@ public class OfferView extends IdentifiableView {
     private Float extendedPrice;
 
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
-            message = "OfferView's extra level description has too many characters (max " +
+            message = "Offer's extra level description has too many characters (max " +
                     OFFER_DESCRIPTION_MAX_LENGTH + ").")
-    @LinkInTextCheck(message = "OfferView's extra description can't contain any urls/links.")
+    @LinkInTextCheck(message = "Offer's extra description can't contain any urls/links.")
     @ApiModelProperty(value = "Represents offer's extra level description", position = 9,
             example = "Oferuję odśnieżanie powierzchni płaskich. Profesjonalne narzędzia, " +
                     "wysoka jakość wykonania usługi oraz dogodne terminy. W lato wysokie rabaty;)")
