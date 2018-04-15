@@ -1,7 +1,7 @@
 package com.intive.shopme.user.registration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.intive.shopme.identifiable.Identifiable;
+import com.intive.shopme.base.model.Identifiable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

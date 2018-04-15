@@ -1,8 +1,8 @@
 package com.intive.shopme.offer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.intive.shopme.identifiable.Identifiable;
-import com.intive.shopme.category.Category;
+import com.intive.shopme.base.model.Identifiable;
+import com.intive.shopme.category.model.db.Category;
 import com.intive.shopme.category.validation.CategoryCheck;
 import com.intive.shopme.offer.validation.LinkInTextCheck;
 import io.swagger.annotations.ApiModel;

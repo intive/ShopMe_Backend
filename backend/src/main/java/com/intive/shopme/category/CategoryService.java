@@ -1,5 +1,6 @@
 package com.intive.shopme.category;
 
+import com.intive.shopme.category.model.db.Category;
 import com.intive.shopme.exception.AlreadyExistException;
 import com.intive.shopme.validator.Validated;
 import org.springframework.stereotype.Service;

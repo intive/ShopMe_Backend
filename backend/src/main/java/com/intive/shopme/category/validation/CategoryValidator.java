@@ -1,6 +1,6 @@
 package com.intive.shopme.category.validation;
 
-import com.intive.shopme.category.Category;
+import com.intive.shopme.category.model.db.Category;
 import com.intive.shopme.category.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 
