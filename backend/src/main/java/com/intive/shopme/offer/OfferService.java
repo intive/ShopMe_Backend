@@ -1,5 +1,6 @@
 package com.intive.shopme.offer;
 
+import com.intive.shopme.offer.model.db.Offer;
 import com.intive.shopme.validator.Validated;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.domain.Page;

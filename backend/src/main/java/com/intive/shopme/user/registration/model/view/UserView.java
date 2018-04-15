@@ -1,25 +1,17 @@
-package com.intive.shopme.user.registration;
+package com.intive.shopme.user.registration.model.view;
 
-import com.intive.shopme.identifiable.Identifiable;
+import com.intive.shopme.base.model.IdentifiableView;
 import com.intive.shopme.user.registration.validation.ValidInvoiceIfInvoiceRequested;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "USERS") // Note: USER is SQL reserved keyword
 @ApiModel(value = "Users", description = "Represents the user")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ValidInvoiceIfInvoiceRequested
-public class User extends Identifiable {
+public class UserView extends IdentifiableView {
 
     @ApiModelProperty(value = "Represents user's name",
             required = true, position = 2, example = "Jan")
@@ -47,21 +39,19 @@ public class User extends Identifiable {
 
     @ApiModelProperty(value = "Represents user's address",
             required = true, position = 8)
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Address address;
+    private AddressView address;
 
     @ApiModelProperty(value = "Represents request user`s for invoice",
             required = true, position = 9, example = "true")
     private Boolean invoiceRequest;
 
     @ApiModelProperty(value = "Represents invoice data for user`s", position = 10)
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Invoice invoice;
+    private InvoiceView invoice;
 
     // FIXME
     @Deprecated
-    User hidePassword() {
-        User result = this;
+    UserView hidePassword() {
+        UserView result = this;
         result.setPassword("");
         return result;
     }

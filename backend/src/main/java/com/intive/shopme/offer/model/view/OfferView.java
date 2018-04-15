@@ -1,8 +1,8 @@
-package com.intive.shopme.offer;
+package com.intive.shopme.offer.model.view;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.intive.shopme.identifiable.Identifiable;
-import com.intive.shopme.category.Category;
+import com.intive.shopme.base.model.IdentifiableView;
+import com.intive.shopme.category.model.view.CategoryView;
 import com.intive.shopme.category.validation.CategoryCheck;
 import com.intive.shopme.offer.validation.LinkInTextCheck;
 import io.swagger.annotations.ApiModel;
@@ -10,15 +10,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,37 +18,31 @@ import java.util.Date;
 import static com.intive.shopme.configuration.api.AppConfiguration.OFFER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.configuration.api.AppConfiguration.OFFER_TITLE_MAX_LENGTH;
 
-@Entity
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Offer extends Identifiable {
+public class OfferView extends IdentifiableView {
 
     @ApiModelProperty(value = "Represents offer's date of submitting (EPOCH time in milliseconds)", position = 2,
             example = "1520031600000")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
 
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
     @NotNull(message = "Offer's title cannot be empty.")
-    @Size(max = OFFER_TITLE_MAX_LENGTH, message = "Offer's title has too many characters.")
+    @Size(max = OFFER_TITLE_MAX_LENGTH, message = "OfferView's title has too many characters.")
     private String title;
 
     @CategoryCheck
     @Valid
     @NotNull(message = "No category selected.")
     @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)
-    @ManyToOne
-    @JoinTable(name = "offer_category",
-            joinColumns = @JoinColumn(name = "offer_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Category category;
+    private CategoryView category;
 
     @NotNull(message = "Base description cannot be empty.")
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's base description has too many characters (max " + OFFER_DESCRIPTION_MAX_LENGTH + ").")
-    @LinkInTextCheck(message = "Offer's base description can't contain any urls/links.")
+    @LinkInTextCheck(message = "OfferView's base description can't contain any urls/links.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
@@ -93,7 +78,7 @@ public class Offer extends Identifiable {
     @Valid
     @NotNull(message = "No user selected.")
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonProperty("user")
-    private Owner owner;
+    private OwnerView owner;
+
 }

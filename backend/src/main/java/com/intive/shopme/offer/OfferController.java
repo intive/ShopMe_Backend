@@ -1,6 +1,8 @@
 package com.intive.shopme.offer;
 
 import com.intive.shopme.offer.filter.OfferSpecificationsBuilder;
+import com.intive.shopme.offer.model.db.Offer;
+import com.intive.shopme.offer.model.view.OfferView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -8,7 +10,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -26,9 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 
 import static com.intive.shopme.configuration.api.ApiUrl.OFFERS;
@@ -54,6 +57,9 @@ public class OfferController {
 
     private final OfferService service;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public OfferController(OfferService service) {
         this.service = service;
     }
@@ -65,10 +71,11 @@ public class OfferController {
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new offer")
-    public Offer add(@RequestBody Offer offer) {
+    public OfferView add(@RequestBody OfferView offerView) {
+        final Offer offer = convertToModel(offerView);
         offer.setId(UUID.randomUUID());
         offer.setDate(new Date());
-        return service.createOrUpdate(offer);
+        return convertToView(service.createOrUpdate(offer));
     }
 
     @GetMapping
@@ -103,7 +110,7 @@ public class OfferController {
             @ApiResponse(code = 200, message = SUCCESS),
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    public Page<Offer> searchOffers(
+    public Page<OfferView> searchOffers(
             @RequestParam(name = "page", required = false, defaultValue = FIRST_PAGE) int page,
             @RequestParam(name = "pageSize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
             @RequestParam(name = "sort", required = false, defaultValue = DEFAULT_SORT_FIELD) String sortField,
@@ -135,7 +142,8 @@ public class OfferController {
         if (priceMin != 0) builder.with("basePrice", "≥", priceMin);
         if (priceMax != 0) builder.with("basePrice", "≤", priceMax);
 
-        return service.getAll(pageable, filter);
+        Page<Offer> offers = service.getAll(pageable, filter);
+        return new PageImpl<>(convertToView(offers.getContent()), pageable, offers.getTotalElements());
     }
 
     @GetMapping(value = "{id}")
@@ -144,8 +152,8 @@ public class OfferController {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Returns offer by id")
-    public Offer get(@PathVariable UUID id) {
-        return service.get(id);
+    public OfferView get(@PathVariable UUID id) {
+        return convertToView(service.get(id));
     }
 
     @PutMapping(value = "{id}")
@@ -154,8 +162,9 @@ public class OfferController {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
-    public Offer update(Offer offer) {
-        return service.createOrUpdate(offer);
+    public OfferView update(OfferView offerView) {
+        final Offer offer = convertToModel(offerView);
+        return convertToView(service.createOrUpdate(offer));
     }
 
     @DeleteMapping(value = "{id}")
@@ -166,5 +175,21 @@ public class OfferController {
     @ApiOperation(value = "Removes offer by id")
     public void delete(@PathVariable UUID id) {
         service.delete(id);
+    }
+
+    private OfferView convertToView(final Offer offer) {
+        return modelMapper.map(offer, OfferView.class);
+    }
+
+    private List<OfferView> convertToView(final Collection<Offer> offer) {
+        List<OfferView> offerViews = new ArrayList<>();
+        offer.forEach(
+                object -> offerViews.add(convertToView(object))
+        );
+        return offerViews;
+    }
+
+    private Offer convertToModel(final OfferView offerViews) {
+        return modelMapper.map(offerViews, Offer.class);
     }
 }

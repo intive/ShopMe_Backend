@@ -1,20 +1,15 @@
-package com.intive.shopme.user.registration;
+package com.intive.shopme.user.registration.model.view;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.intive.shopme.identifiable.Identifiable;
+import com.intive.shopme.base.model.IdentifiableView;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.Entity;
-
-@Entity
 @ApiModel(value = "Adress data", description = "Represents data for adress")
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class Address extends Identifiable {
+public class AddressView extends IdentifiableView {
 
     @ApiModelProperty(value = "Represents street name",
             required = true, position = 2, example = "Niepodległości")
@@ -32,12 +27,5 @@ public class Address extends Identifiable {
             required = true, position = 5, example = "70-125")
     private String zipCode;
 
-    @JsonIgnore
-    public boolean isFilled() {
-        return !StringUtils.isEmpty(street) &&
-                !StringUtils.isEmpty(number) &&
-                !StringUtils.isEmpty(city) &&
-                !StringUtils.isEmpty(zipCode);
-    }
 }
 

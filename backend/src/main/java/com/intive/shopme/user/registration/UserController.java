@@ -1,9 +1,13 @@
 package com.intive.shopme.user.registration;
 
+import com.intive.shopme.user.registration.model.db.User;
+import com.intive.shopme.user.registration.model.view.UserView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +31,9 @@ class UserController {
 
     private final UserService service;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public UserController(UserService service) {
         this.service = service;
     }
@@ -37,9 +44,11 @@ class UserController {
             @ApiResponse(code = 201, message = CREATED),
     })
     @ApiOperation("Saves new user")
-    public User add(@RequestBody User user) {
+    public UserView add(@RequestBody UserView userView) {
+        final User user = convertToModel(userView);
         user.setId(UUID.randomUUID());
-        return service.createOrUpdate(user);
+        final User userCreated = service.createOrUpdate(user);
+        return convertToView(userCreated);
     }
 
     @GetMapping(value = "{id}")
@@ -48,8 +57,16 @@ class UserController {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Returns user by id (temporary endpoint, please confirm in next REST API specification before production use)")
-    public User get(@PathVariable UUID id) {
-        return service.get(id).hidePassword();
+    public UserView get(@PathVariable UUID id) {
+        return convertToView(service.get(id).hidePassword());
+    }
+
+    private UserView convertToView(final User user) {
+        return modelMapper.map(user, UserView.class);
+    }
+
+    private User convertToModel(final UserView userView) {
+        return modelMapper.map(userView, User.class);
     }
 
     // TODO temporary solution, need to be change/discuss - public method to check if email exist in database should not be avalible
