@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
@@ -17,6 +18,7 @@ import static com.intive.shopme.configuration.api.AppConfiguration.*;
 @ApiModel(value = "Offer's user", description = "Represents offer's owner")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class OwnerView extends IdentifiableView {
 
     @NotNull(message = "User's name cannot be empty.")

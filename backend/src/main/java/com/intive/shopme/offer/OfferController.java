@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static com.intive.shopme.configuration.api.ApiUrl.OFFERS;
 import static com.intive.shopme.configuration.api.AppConfiguration.ACCEPTABLE_TITLE_SEARCH_CHARS;
@@ -64,7 +65,7 @@ public class OfferController {
 
     private final OfferService service;
 
-    private static ObjectMapper mapper = new ObjectMapper()
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     @Autowired
@@ -153,9 +154,7 @@ public class OfferController {
         if (priceMax != 0) builder.with("basePrice", "≤", priceMax);
 
         Page<Offer> offers = service.getAll(pageable, filter);
-
-        return (offers != null) ? new PageImpl<>(convertToView(offers.getContent()), pageable, offers.getTotalElements())
-                : new PageImpl<>(Collections.EMPTY_LIST);
+        return new PageImpl<>(convertToView(offers.getContent()), pageable, offers.getTotalElements());
     }
 
     @GetMapping(value = "{id}")
@@ -189,25 +188,25 @@ public class OfferController {
         service.delete(id);
     }
 
-    private OfferView convertToView(final Offer offer) {
-        return modelMapper.map(offer, OfferView.class);
-//        return mapper.convertValue(offer, OfferView.class);
+    private static OfferView convertToView(final Offer offer) {
+//        return modelMapper.map(offer, OfferView.class);
+        return OBJECT_MAPPER.convertValue(offer, OfferView.class);
     }
 
     // TODO - for object mapper (static)
-//    private List<OfferView> convertToView(final Collection<Offer> offer) {
-//        return offer.stream().map(OfferController::convertToView).collect(Collectors.toList());
-//    }
-
-    // TODO - for model mapper (cannot be static)
     private List<OfferView> convertToView(final Collection<Offer> offer) {
-        List<OfferView> offerViews = new ArrayList<>();
-        offer.forEach(object -> offerViews.add(convertToView(object)));
-        return offerViews;
+        return offer.stream().map(OfferController::convertToView).collect(Collectors.toList());
     }
 
+    // TODO - for model mapper (cannot be static)
+//    private List<OfferView> convertToView(final Collection<Offer> offer) {
+//        List<OfferView> offerViews = new ArrayList<>();
+//        offer.forEach(object -> offerViews.add(convertToView(object)));
+//        return offerViews;
+//    }
+
     private Offer convertToModel(final OfferView offerViews) {
-        return modelMapper.map(offerViews, Offer.class);
-//        return mapper.convertValue(offerViews, Offer.class);
+//        return modelMapper.map(offerViews, Offer.class);
+        return OBJECT_MAPPER.convertValue(offerViews, Offer.class);
     }
 }

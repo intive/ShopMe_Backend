@@ -34,7 +34,7 @@ public class CategoryController {
 
     private final CategoryService service;
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public CategoryController(CategoryService service) {
         this.service = service;
@@ -46,7 +46,7 @@ public class CategoryController {
             @ApiResponse(code = 200, message = SUCCESS)
     })
     public List<CategoryView> getAllCategories() {
-        return (service.getAll() != null) ? convertToView(service.getAll()) : Collections.EMPTY_LIST;
+        return convertToView(service.getAll());
     }
 
     @PostMapping
@@ -63,7 +63,7 @@ public class CategoryController {
     }
 
     private static CategoryView convertToView(final Category category) {
-        return mapper.convertValue(category, CategoryView.class);
+        return OBJECT_MAPPER.convertValue(category, CategoryView.class);
     }
 
     private List<CategoryView> convertToView(final Collection<Category> category) {
@@ -71,6 +71,6 @@ public class CategoryController {
     }
 
     private Category convertToModel(final CategoryView categoryView) {
-        return mapper.convertValue(categoryView, Category.class);
+        return OBJECT_MAPPER.convertValue(categoryView, Category.class);
     }
 }

@@ -30,7 +30,7 @@ class UserController {
 
     private final UserService service;
 
-    private static ObjectMapper mapper = new ObjectMapper();
+    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public UserController(UserService service) {
         this.service = service;
@@ -60,11 +60,11 @@ class UserController {
     }
 
     private UserView convertToView(final User user) {
-        return mapper.convertValue(user, UserView.class);
+        return OBJECT_MAPPER.convertValue(user, UserView.class);
     }
 
     private User convertToModel(final UserView userView) {
-        return mapper.convertValue(userView, User.class);
+        return OBJECT_MAPPER.convertValue(userView, User.class);
     }
 
     // TODO temporary solution, need to be change/discuss - public method to check if email exist in database should not be avalible
