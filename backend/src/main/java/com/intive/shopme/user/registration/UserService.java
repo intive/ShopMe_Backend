@@ -32,6 +32,6 @@ class UserService extends Validated<User> {
     }
 
     boolean findIfUserExist(String email) {
-        return (!repository.findUserByEmail(email).isEmpty());
+        return !repository.findUserByEmail(email).isEmpty();
     }
 }
