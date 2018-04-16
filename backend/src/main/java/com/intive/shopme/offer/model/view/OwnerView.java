@@ -14,7 +14,7 @@ import javax.validation.constraints.Size;
 
 import static com.intive.shopme.configuration.api.AppConfiguration.*;
 
-@ApiModel(value = "OfferView's user", description = "Represents offer's owner")
+@ApiModel(value = "Offer's user", description = "Represents offer's owner")
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class OwnerView extends IdentifiableView {
@@ -39,5 +39,4 @@ public class OwnerView extends IdentifiableView {
     @ApiModelProperty(value = "Represents additional information typed by user", position = 5,
             example = "Dodatkowe info")
     private String additionalInfo;
-
 }

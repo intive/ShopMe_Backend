@@ -13,11 +13,7 @@ import javax.persistence.Entity;
 public class Owner extends Identifiable {
 
     private String name;
-
     private String email;
-
     private String phoneNumber;
-
     private String additionalInfo;
-
 }

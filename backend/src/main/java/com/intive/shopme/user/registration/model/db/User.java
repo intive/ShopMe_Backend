@@ -17,22 +17,14 @@ import javax.persistence.Table;
 public class User extends Identifiable {
 
     private String name;
-
     private String surname;
-
     private String email;
-
     private String password;
-
     private String phoneNumber;
-
     private String bankAccount;
-
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address address;
-
     private Boolean invoiceRequest;
-
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Invoice invoice;
 

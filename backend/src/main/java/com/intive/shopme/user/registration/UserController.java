@@ -1,13 +1,12 @@
 package com.intive.shopme.user.registration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intive.shopme.user.registration.model.db.User;
 import com.intive.shopme.user.registration.model.view.UserView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +30,7 @@ class UserController {
 
     private final UserService service;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private static ObjectMapper mapper = new ObjectMapper();
 
     public UserController(UserService service) {
         this.service = service;
@@ -62,11 +60,11 @@ class UserController {
     }
 
     private UserView convertToView(final User user) {
-        return modelMapper.map(user, UserView.class);
+        return mapper.convertValue(user, UserView.class);
     }
 
     private User convertToModel(final UserView userView) {
-        return modelMapper.map(userView, User.class);
+        return mapper.convertValue(userView, User.class);
     }
 
     // TODO temporary solution, need to be change/discuss - public method to check if email exist in database should not be avalible

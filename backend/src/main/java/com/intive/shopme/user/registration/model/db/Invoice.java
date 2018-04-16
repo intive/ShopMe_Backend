@@ -18,12 +18,9 @@ import javax.persistence.OneToOne;
 public class Invoice extends Identifiable {
 
     private String companyName;
-
     private String nip;
-
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Address invoiceAddress;
-
     @JsonIgnore
     public boolean hasCompanyDetails() {
         return !StringUtils.isEmpty(companyName) && !StringUtils.isEmpty(nip);

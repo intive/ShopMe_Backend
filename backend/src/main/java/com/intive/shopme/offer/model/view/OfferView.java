@@ -30,7 +30,7 @@ public class OfferView extends IdentifiableView {
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
     @NotNull(message = "Offer's title cannot be empty.")
-    @Size(max = OFFER_TITLE_MAX_LENGTH, message = "OfferView's title has too many characters.")
+    @Size(max = OFFER_TITLE_MAX_LENGTH, message = "Offer's title has too many characters.")
     private String title;
 
     @CategoryCheck
@@ -42,7 +42,7 @@ public class OfferView extends IdentifiableView {
     @NotNull(message = "Base description cannot be empty.")
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's base description has too many characters (max " + OFFER_DESCRIPTION_MAX_LENGTH + ").")
-    @LinkInTextCheck(message = "OfferView's base description can't contain any urls/links.")
+    @LinkInTextCheck(message = "Offer's base description can't contain any urls/links.")
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,
             example = "Oferuję odśnieżanie powierzchni płaskich.")
     private String baseDescription;
@@ -80,5 +80,4 @@ public class OfferView extends IdentifiableView {
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
     @JsonProperty("user")
     private OwnerView owner;
-
 }
