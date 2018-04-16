@@ -39,6 +39,7 @@ class UserController {
     @ApiOperation("Saves new user")
     public User add(@RequestBody User user) {
         user.setId(UUID.randomUUID());
+        user.setEmail(user.getEmail().toLowerCase());
         return service.createOrUpdate(user);
     }
 
