@@ -61,6 +61,6 @@ class UserController {
     })
     @ApiOperation(value = "Search if user with specified email exist in database")
     public boolean getByEmail(@PathVariable String email) {
-        return service.findIfUserExist(email);
+        return service.findIfUserExist(email.toLowerCase());
     }
 }
