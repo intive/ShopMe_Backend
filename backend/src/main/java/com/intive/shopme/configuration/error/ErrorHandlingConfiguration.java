@@ -3,13 +3,13 @@ package com.intive.shopme.configuration.error;
 import com.intive.shopme.exception.AlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.TypeMismatchException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -58,12 +58,12 @@ public class ErrorHandlingConfiguration {
                 .body(createResponseBody(exception.getMessage()));
     }
 
-    @ExceptionHandler(value = {TypeMismatchException.class})
+    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     @ResponseBody
-    public ResponseEntity handleTypeMismatchException(TypeMismatchException exception) {
+    public ResponseEntity handleTypeMismatchException(MethodArgumentTypeMismatchException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(createResponseBody(exception.getMessage()));
+                .body(createResponseBody(exception.getRootCause().getMessage()));
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
