@@ -60,7 +60,7 @@ public class ErrorHandlingConfiguration {
 
     @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     @ResponseBody
-    public ResponseEntity handleTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+    public ResponseEntity handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(createResponseBody(exception.getRootCause().getMessage()));
