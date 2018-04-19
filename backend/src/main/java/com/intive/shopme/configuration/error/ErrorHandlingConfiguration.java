@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -55,6 +56,14 @@ public class ErrorHandlingConfiguration {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(createResponseBody(exception.getMessage()));
+    }
+
+    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
+    @ResponseBody
+    public ResponseEntity handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(createResponseBody(exception.getRootCause().getMessage()));
     }
 
     @ExceptionHandler(value = {RuntimeException.class})
