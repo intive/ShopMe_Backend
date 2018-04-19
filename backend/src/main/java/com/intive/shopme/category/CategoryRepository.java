@@ -9,6 +9,4 @@ import java.util.UUID;
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     Category findByName(String name);
-
-    Category findByTranslateKey(String translateKey);
 }

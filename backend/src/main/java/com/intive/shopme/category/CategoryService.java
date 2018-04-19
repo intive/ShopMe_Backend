@@ -35,9 +35,5 @@ public class CategoryService extends Validated<Category> {
         if (foundByName != null) {
             throw new AlreadyExistException(foundByName + " - name already exist");
         }
-        var foundByTranslateKey = repository.findByTranslateKey(category.getTranslateKey());
-        if (foundByTranslateKey != null) {
-            throw new AlreadyExistException(foundByTranslateKey + " - translate key already exist");
-        }
     }
 }

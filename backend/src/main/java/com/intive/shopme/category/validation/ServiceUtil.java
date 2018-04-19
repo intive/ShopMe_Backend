@@ -22,5 +22,4 @@ public class ServiceUtil {
     public static CategoryService getCategoryService() {
         return instance.categoryService;
     }
-
 }

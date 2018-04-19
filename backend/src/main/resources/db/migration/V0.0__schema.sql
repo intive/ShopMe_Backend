@@ -12,15 +12,11 @@ create table CATEGORY
 (
 	ID UUID not null primary key,
 	NAME VARCHAR(255),
-	TRANSLATE_KEY VARCHAR(255)
 )
 ;
 
 create unique index IDX_CATEGORY_NAME
-on CATEGORY (NAME);
-
-create unique index IDX_CATEGORY_TRANSLATE_KEY
-on CATEGORY (TRANSLATE_KEY)
+on CATEGORY (NAME)
 ;
 
 create table INVOICE
