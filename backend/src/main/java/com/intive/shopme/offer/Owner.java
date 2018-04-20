@@ -1,6 +1,7 @@
 package com.intive.shopme.offer;
 
 import com.intive.shopme.identifiable.Identifiable;
+import com.intive.shopme.voivodeship.Voivodeship;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,6 +9,9 @@ import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -39,8 +43,18 @@ class Owner extends Identifiable {
             example = "0234567890")
     private String phoneNumber;
 
+    @ApiModelProperty(value = "Represents user's city", required = true, position = 5, example = "Szczecin")
+    private String city;
+
+    @ApiModelProperty(value = "Represents user's voivodeship", required = true, position = 6)
+    @ManyToOne
+    @JoinTable(name = "owner_voivodeship",
+            joinColumns = @JoinColumn(name = "owner_id"),
+            inverseJoinColumns = @JoinColumn(name = "voivodeship_id"))
+    private Voivodeship voivodeship;
+
     @Size(max = USER_DESCRIPTION_MAX_LENGTH, message = "The additional user's information has too many characters.")
-    @ApiModelProperty(value = "Represents additional information typed by user", position = 5,
+    @ApiModelProperty(value = "Represents additional information typed by user", position = 7,
             example = "Dodatkowe info")
     private String additionalInfo;
 
