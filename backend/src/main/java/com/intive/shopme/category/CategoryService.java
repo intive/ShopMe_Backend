@@ -1,14 +1,15 @@
 package com.intive.shopme.category;
 
-import com.intive.shopme.exception.AlreadyExistException;
-import com.intive.shopme.validator.Validated;
+import com.intive.shopme.common.Validated;
+import com.intive.shopme.model.db.DbCategory;
+import com.intive.shopme.validation.AlreadyExistException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class CategoryService extends Validated<Category> {
+class CategoryService extends Validated<DbCategory> {
 
     private final CategoryRepository repository;
 
@@ -16,22 +17,22 @@ public class CategoryService extends Validated<Category> {
         this.repository = repository;
     }
 
-    public List<Category> getAll() {
+    List<DbCategory> getAll() {
         return repository.findAll();
     }
 
-    public Category create(Category category) {
-        checkExistence(category);
-        validate(category);
-        return repository.save(category);
+    DbCategory create(DbCategory dbCategory) {
+        checkExistence(dbCategory);
+        validate(dbCategory);
+        return repository.save(dbCategory);
     }
 
-    public Category getCategoryById(UUID id) {
-        return repository.getOne(id);
+    boolean getCategoryById(UUID id) {
+        return repository.existsById(id);
     }
 
-    private void checkExistence(Category category) {
-        var foundByName = repository.findByName(category.getName());
+    private void checkExistence(DbCategory dbCategory) {
+        var foundByName = repository.findByName(dbCategory.getName());
         if (foundByName != null) {
             throw new AlreadyExistException(foundByName + " - name already exist");
         }

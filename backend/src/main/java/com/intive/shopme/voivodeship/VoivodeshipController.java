@@ -1,5 +1,6 @@
 package com.intive.shopme.voivodeship;
 
+import com.intive.shopme.model.db.DbVoivodeship;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static com.intive.shopme.configuration.api.ApiUrl.VOIVODESHIPS;
-import static com.intive.shopme.configuration.swagger.SwaggerApiInfoConfigurer.Operations.SUCCESS;
+import static com.intive.shopme.config.ApiUrl.VOIVODESHIPS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 
 @RestController
 @RequestMapping(value = VOIVODESHIPS)
@@ -29,7 +30,7 @@ class VoivodeshipController {
             @ApiResponse(code = 200, message = SUCCESS)
     })
     @ApiOperation(value = "Returns all voivodeships")
-    public List<Voivodeship> getAllVoivodeships() {
+    public List<DbVoivodeship> getAllVoivodeships() {
         return service.getAll();
     }
 }
