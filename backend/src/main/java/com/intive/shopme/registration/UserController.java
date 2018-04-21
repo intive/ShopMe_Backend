@@ -3,6 +3,7 @@ package com.intive.shopme.registration;
 import com.intive.shopme.common.ConvertibleController;
 import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.rest.User;
+import com.intive.shopme.voivodeship.VoivodeshipValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -37,11 +38,14 @@ class UserController extends ConvertibleController<DbUser, User> {
 
     private final UserService service;
     private final ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator;
+    private final VoivodeshipValidator voivodeshipValidator;
 
-    UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator) {
+    UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
+                   VoivodeshipValidator voivodeshipValidator) {
         super(DbUser.class, User.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
+        this.voivodeshipValidator = voivodeshipValidator;
     }
 
     @PostMapping
@@ -52,6 +56,7 @@ class UserController extends ConvertibleController<DbUser, User> {
     @ApiOperation(value = "Saves new user", response = User.class)
     ResponseEntity<?> add(@Valid @RequestBody User user, Errors errors) {
         invoiceRequestedValidator.validate(user, errors);
+        voivodeshipValidator.validate(user, errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.BAD_REQUEST);
         }
