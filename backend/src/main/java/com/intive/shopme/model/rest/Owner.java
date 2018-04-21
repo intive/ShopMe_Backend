@@ -3,24 +3,24 @@ package com.intive.shopme.model.rest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.UUID;
 
 import static com.intive.shopme.config.AppConfig.USER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_NAME_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_NAME_MIN_LENGTH;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
 @ApiModel(value = "Offer's user", description = "Represents offer's owner")
-public class Owner extends Identifiable {
+public class Owner {
+
+    @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
+    private UUID id;
 
     @NotNull(message = "User's name cannot be empty.")
     @Length(min = USER_NAME_MIN_LENGTH, max = USER_NAME_MAX_LENGTH)

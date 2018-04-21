@@ -5,21 +5,21 @@ import com.intive.shopme.validation.LinkInTextCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.intive.shopme.config.AppConfig.OFFER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 
 @Data
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class Offer extends Identifiable {
+public class Offer {
+
+    @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
+    private UUID id;
 
     @ApiModelProperty(value = "Represents offer's date of submitting (EPOCH time in milliseconds)", position = 2,
             example = "1520031600000")
