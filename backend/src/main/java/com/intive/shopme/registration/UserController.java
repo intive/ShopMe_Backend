@@ -8,8 +8,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +41,15 @@ class UserController extends ConvertibleController<DbUser, User> {
     private final UserService service;
     private final ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator;
     private final VoivodeshipValidator voivodeshipValidator;
+    private final PasswordEncoder passwordEncoder;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator) {
+                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder) {
         super(DbUser.class, User.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
         this.voivodeshipValidator = voivodeshipValidator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
@@ -64,6 +68,7 @@ class UserController extends ConvertibleController<DbUser, User> {
         final var dbUser = convertToDbModel(user);
         dbUser.setId(UUID.randomUUID());
         dbUser.setEmail(dbUser.getEmail().toLowerCase());
+        dbUser.setPasswordHash(passwordEncoder.encode(StringUtils.isNotEmpty(user.getPassword()) ? user.getPassword() : ""));
 
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
     }
@@ -75,7 +80,7 @@ class UserController extends ConvertibleController<DbUser, User> {
     })
     @ApiOperation(value = "Returns user by id (temporary endpoint, please confirm in next REST API specification before production use)")
     User get(@PathVariable UUID id) {
-        return convertToView(service.get(id).hidePassword());
+        return convertToView(service.get(id));
     }
 
     @GetMapping(value = "/email={email}")
