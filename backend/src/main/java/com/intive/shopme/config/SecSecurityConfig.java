@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public static final int BCRYPT_HASHING_STRENGTH = 11;
+
     public SecSecurityConfig() {
         super();
     }
@@ -30,6 +32,6 @@ public class SecSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder(11);
+        return new BCryptPasswordEncoder(BCRYPT_HASHING_STRENGTH);
     }
 }
