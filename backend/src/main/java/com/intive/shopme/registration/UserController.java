@@ -8,7 +8,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,7 +67,7 @@ class UserController extends ConvertibleController<DbUser, User> {
         final var dbUser = convertToDbModel(user);
         dbUser.setId(UUID.randomUUID());
         dbUser.setEmail(dbUser.getEmail().toLowerCase());
-        dbUser.setPasswordHash(passwordEncoder.encode(StringUtils.isNotEmpty(user.getPassword()) ? user.getPassword() : ""));
+        dbUser.setPasswordHash(passwordEncoder.encode(user.getPassword()));
 
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
     }
