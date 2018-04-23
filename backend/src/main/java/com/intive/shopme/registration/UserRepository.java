@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface UserRepository extends JpaRepository<DbUser, UUID> {
+interface UserRepository extends JpaRepository<DbUser, UUID> {
 
     List<DbUser> findUserByEmail(String email);
 }
