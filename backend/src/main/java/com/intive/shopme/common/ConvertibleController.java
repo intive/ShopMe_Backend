@@ -1,6 +1,5 @@
 package com.intive.shopme.common;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collection;
@@ -24,7 +23,6 @@ public abstract class ConvertibleController<DB, V> {
     public ConvertibleController(Class<DB> dbClass, Class<V> vClass) {
         this.vClass = vClass;
         this.dbClass = dbClass;
-        OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     public static <D> D genericConvert(Object source, Class<D> aClass) {

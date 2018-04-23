@@ -1,5 +1,6 @@
 package com.intive.shopme.model.db;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+@JsonIgnoreProperties(ignoreUnknown = false, value = {"passwordHash", "password"})
 @Entity
 @Table(name = "USERS") // Note: USER is SQL reserved keyword
 @Data

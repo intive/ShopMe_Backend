@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.UUID;
 
 @Data
@@ -22,6 +23,7 @@ public class User {
     @ApiModelProperty(value = "Represents user's email", required = true, position = 4, example = "unknown@gmail.com")
     private String email;
 
+    @NotEmpty
     @ApiModelProperty(value = "Represents user's password", required = true, position = 5, example = "password")
     private String password;
 
