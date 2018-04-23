@@ -1,1 +1,1 @@
-alter table USERS change PASSWORD PASSWORD_HASH VARCHAR(60) not null;
+alter table USERS alter column PASSWORD VARCHAR(60) not null;
