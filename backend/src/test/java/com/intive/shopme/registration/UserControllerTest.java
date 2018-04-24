@@ -26,11 +26,13 @@ class UserControllerTest {
         user.setId(ID);
         user.setEmail(EMAIL);
         user.setInvoice(new DbInvoice());
+        user.setPassword(PASSWORD_ENCODED);
 
         final var result = controller.convertToView(user);
         assertThat(result)
                 .hasFieldOrPropertyWithValue("id", ID)
                 .hasFieldOrPropertyWithValue("email", EMAIL)
+                .hasFieldOrPropertyWithValue("password", null)
                 .hasFieldOrProperty("invoice").isNotNull();
     }
 
