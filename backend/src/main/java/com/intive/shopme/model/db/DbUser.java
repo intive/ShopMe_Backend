@@ -28,12 +28,4 @@ public class DbUser extends DbIdentifiable {
     private Boolean invoiceRequest;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DbInvoice invoice;
-
-    // FIXME - changed to public to view-db access scope
-    @Deprecated
-    public DbUser hidePassword() {
-        DbUser result = this;
-        result.setPassword("");
-        return result;
-    }
 }

@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 // TODO Beware: spring bean validation is not working -> happy path testing only is possible
-@WebMvcTest(controllers = CategoryController.class)
+@WebMvcTest(controllers = CategoryController.class, secure = false)
 class CategoryControllerTest extends WebTierTest {
 
     @MockBean

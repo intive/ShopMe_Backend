@@ -1,8 +1,14 @@
 package com.intive.shopme.registration;
 
 import com.intive.shopme.common.ConvertibleController;
+import com.intive.shopme.model.db.DbAddress;
+import com.intive.shopme.model.db.DbInvoice;
 import com.intive.shopme.model.db.DbUser;
+import com.intive.shopme.model.db.DbVoivodeship;
+import com.intive.shopme.model.rest.Address;
+import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.User;
+import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,6 +16,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +46,15 @@ class UserController extends ConvertibleController<DbUser, User> {
     private final UserService service;
     private final ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator;
     private final VoivodeshipValidator voivodeshipValidator;
+    private final PasswordEncoder passwordEncoder;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator) {
+                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder) {
         super(DbUser.class, User.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
         this.voivodeshipValidator = voivodeshipValidator;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
@@ -63,7 +72,6 @@ class UserController extends ConvertibleController<DbUser, User> {
 
         final var dbUser = convertToDbModel(user);
         dbUser.setId(UUID.randomUUID());
-        dbUser.setEmail(dbUser.getEmail().toLowerCase());
 
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
     }
@@ -75,7 +83,7 @@ class UserController extends ConvertibleController<DbUser, User> {
     })
     @ApiOperation(value = "Returns user by id (temporary endpoint, please confirm in next REST API specification before production use)")
     User get(@PathVariable UUID id) {
-        return convertToView(service.get(id).hidePassword());
+        return convertToView(service.get(id));
     }
 
     @GetMapping(value = "/email={email}")
@@ -92,5 +100,50 @@ class UserController extends ConvertibleController<DbUser, User> {
         return errors.getAllErrors().stream()
                 .map(ObjectError::toString)
                 .collect(Collectors.joining(","));
+    }
+
+    @Override
+    protected User convertToView(DbUser dbUser) {
+        final var result = new User();
+        result.setId(dbUser.getId());
+        result.setName(dbUser.getName());
+        result.setSurname(dbUser.getSurname());
+        result.setEmail(dbUser.getEmail());
+        result.setPhoneNumber(dbUser.getPhoneNumber());
+        result.setBankAccount(dbUser.getBankAccount());
+        if (dbUser.getAddress() != null) {
+            result.setAddress(genericConvert(dbUser.getAddress(), Address.class));
+        }
+        if (dbUser.getVoivodeship() != null) {
+            result.setVoivodeship(genericConvert(dbUser.getVoivodeship(), Voivodeship.class));
+        }
+        result.setInvoiceRequest(dbUser.getInvoiceRequest());
+        if (dbUser.getVoivodeship() != null) {
+            result.setInvoice(genericConvert(dbUser.getInvoice(), Invoice.class));
+        }
+        return result;
+    }
+
+    @Override
+    protected DbUser convertToDbModel(User user) {
+        final var result = new DbUser();
+        result.setId(user.getId());
+        result.setName(user.getName());
+        result.setSurname(user.getSurname());
+        result.setEmail(user.getEmail().toLowerCase());
+        result.setPassword(passwordEncoder.encode(user.getPassword()));
+        result.setPhoneNumber(user.getPhoneNumber());
+        result.setBankAccount(user.getBankAccount());
+        if (user.getAddress() != null) {
+            result.setAddress(genericConvert(user.getAddress(), DbAddress.class));
+        }
+        if (user.getVoivodeship() != null) {
+            result.setVoivodeship(genericConvert(user.getVoivodeship(), DbVoivodeship.class));
+        }
+        result.setInvoiceRequest(user.getInvoiceRequest());
+        if (user.getVoivodeship() != null) {
+            result.setInvoice(genericConvert(user.getInvoice(), DbInvoice.class));
+        }
+        return result;
     }
 }

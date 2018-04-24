@@ -4,10 +4,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.UUID;
 
 @Data
-@ApiModel(value = "Users", description = "Represents the user")
+@ApiModel(value = "User", description = "Represents the user")
 public class User {
 
     @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
@@ -22,6 +23,7 @@ public class User {
     @ApiModelProperty(value = "Represents user's email", required = true, position = 4, example = "unknown@gmail.com")
     private String email;
 
+    @NotEmpty
     @ApiModelProperty(value = "Represents user's password", required = true, position = 5, example = "password")
     private String password;
 
@@ -42,12 +44,4 @@ public class User {
 
     @ApiModelProperty(value = "Represents invoice data for user`s", position = 11)
     private Invoice invoice;
-
-    // FIXME
-    @Deprecated
-    User hidePassword() {
-        User result = this;
-        result.setPassword("");
-        return result;
-    }
 }

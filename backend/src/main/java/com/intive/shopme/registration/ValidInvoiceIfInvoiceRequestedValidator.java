@@ -33,7 +33,7 @@ class ValidInvoiceIfInvoiceRequestedValidator implements Validator {
     public void validate(Object target, Errors errors) {
         if (target != null) {
             if (!isValid((User) target)) {
-                // FIXME be precise handle each case separatelly in isValid() method
+                // FIXME be precise handle each case separately in isValid() method
                 errors.rejectValue("invoice.companyName", "invoiceRequest.requires.companyName", "When invoice request, company name has to be filled");
                 errors.rejectValue("invoice.nip", "invoiceRequest.requires.nip", "When invoice request, nip has to be filled");
                 errors.rejectValue("address", "invoiceRequest.address", "When invoice request, address has to be filled");
