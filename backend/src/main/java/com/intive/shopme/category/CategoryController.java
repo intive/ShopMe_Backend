@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.CATEGORIES;
-import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.*;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.EXISTS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 
 @RestController
 @RequestMapping(value = CATEGORIES)
