@@ -19,7 +19,7 @@ class UserService extends Validated<DbUser> {
     }
 
     DbUser createOrUpdate(DbUser dbUser) {
-        if (!dbUser.getInvoiceRequest()) {
+        if (dbUser.getInvoiceRequest() != null && !dbUser.getInvoiceRequest()) {
             dbUser.setInvoice(null);
         }
         validate(dbUser);
