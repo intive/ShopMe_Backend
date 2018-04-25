@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -21,7 +22,7 @@ public class DbOffer extends DbIdentifiable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     private String title;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     private DbCategory category;
     private String baseDescription;
     private Double basePrice;

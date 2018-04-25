@@ -17,11 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 
 import static com.intive.shopme.config.ApiUrl.CATEGORIES;
-import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
-import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.EXISTS;
-import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.*;
 
 @RestController
 @RequestMapping(value = CATEGORIES)
@@ -52,6 +51,7 @@ class CategoryController extends ConvertibleController<DbCategory, Category> {
             @ApiResponse(code = 409, message = EXISTS)
     })
     Category add(@Valid @RequestBody Category category) {
+        category.setId(UUID.randomUUID());
         var dbCategory = convertToDbModel(category);
         return convertToView(service.create(dbCategory));
     }
