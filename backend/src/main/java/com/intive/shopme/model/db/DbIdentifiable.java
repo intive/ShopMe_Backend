@@ -2,6 +2,7 @@ package com.intive.shopme.model.db;
 
 import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -18,5 +19,6 @@ public abstract class DbIdentifiable {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
+    @Type(type="org.hibernate.type.PostgresUUIDType")
     private UUID id;
 }

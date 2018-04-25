@@ -45,7 +45,7 @@ public class Offer {
 
     @NotNull(message = "Base price cannot be empty.")
     @ApiModelProperty(value = "Represents offer's base price", required = true, position = 6, example = "12.34")
-    private Float basePrice;
+    private Double basePrice;
 
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's extended level description has too many characters (max " +
@@ -57,7 +57,7 @@ public class Offer {
     private String extendedDescription;
 
     @ApiModelProperty(value = "Represents offer's extended level price", position = 8, example = "23.45")
-    private Float extendedPrice;
+    private Double extendedPrice;
 
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's extra level description has too many characters (max " +
@@ -69,7 +69,7 @@ public class Offer {
     private String extraDescription;
 
     @ApiModelProperty(value = "Represents offer's extra level price", position = 10, example = "34.56")
-    private Float extraPrice;
+    private Double extraPrice;
 
     @NotNull(message = "No user selected.")
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)

@@ -24,11 +24,11 @@ public class DbOffer extends DbIdentifiable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DbCategory category;
     private String baseDescription;
-    private Float basePrice;
+    private Double basePrice;
     private String extendedDescription;
-    private Float extendedPrice;
+    private Double extendedPrice;
     private String extraDescription;
-    private Float extraPrice;
+    private Double extraPrice;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DbOwner owner;
 }
