@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Data
@@ -39,6 +40,7 @@ public class User {
     @ApiModelProperty(value = "Represents user's voivodeship", required = true, position = 9)
     private Voivodeship voivodeship;
 
+    @NotNull
     @ApiModelProperty(value = "Represents request user`s for invoice", required = true, position = 10, example = "true")
     private Boolean invoiceRequest;
 
