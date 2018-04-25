@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 class ValidInvoiceIfInvoiceRequestedValidatorTest {
 
     private static ValidInvoiceIfInvoiceRequestedValidator validator = new ValidInvoiceIfInvoiceRequestedValidator();
@@ -16,14 +18,14 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest {
     void isWithoutInvoiceRequestValid() {
         User user = createUser();
         user.setInvoiceRequest(false);
-        validator.isValid(user);
+        assertThat(validator.isValid(user)).isTrue();
     }
 
     @Test
     void isNullInInvoiceRequestValid() {
         User user = createUser();
         user.setInvoiceRequest(null);
-        validator.isValid(user);
+        assertThat(validator.isValid(user)).isTrue();
     }
 
     private User createUser() {
