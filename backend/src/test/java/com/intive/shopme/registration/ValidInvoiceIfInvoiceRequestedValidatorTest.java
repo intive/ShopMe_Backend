@@ -47,7 +47,7 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest {
     }
 
     @Test
-    void invoiceRequest_is_true_user_not_filed_negative_validation() {
+    void invoiceRequest_is_true_user_not_filled_negative_validation() {
         final var user = new User();
         isInvoiceRequest = true;
         user.setInvoiceRequest(isInvoiceRequest);
