@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -23,7 +24,7 @@ public class DbUser extends DbIdentifiable {
     private String bankAccount;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DbAddress address;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne
     private DbVoivodeship voivodeship;
     private Boolean invoiceRequest;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
