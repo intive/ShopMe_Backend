@@ -22,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.Arrays;
 import java.util.List;
 
+import static com.intive.shopme.config.AppConfig.REST_ENTRY_POINT;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -31,7 +33,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      * Bcrypt log rounds to use, between 4 and 31
      */
     private static final int HASHING_STRENGTH = 11;
-    private static final String REST_ENTRY_POINT = "/**";
+
 
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
@@ -42,7 +44,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     private TokenAuthenticationFilter getAuthenticationFilter() throws Exception {
-        final List<String> pathsToSkip = Arrays.asList(ApiUrl.ACQUIRE_TOKEN_PATH);
+        final List<String> pathsToSkip = Arrays.asList(ApiUrl.CURRENT_USER);
         final AuthenticationRequestMatcher matcher = new AuthenticationRequestMatcher(pathsToSkip);
         final TokenAuthenticationFilter filter =
                 new TokenAuthenticationFilter(new TokenAuthenticationFailureHandler(), matcher);
@@ -61,7 +63,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests().antMatchers(ApiUrl.ACQUIRE_TOKEN_PATH).permitAll()
+                .and().authorizeRequests().antMatchers(ApiUrl.CURRENT_USER).permitAll()
                 .and().authorizeRequests().antMatchers(REST_ENTRY_POINT).authenticated()
                 .and().httpBasic()
                 .and().headers().frameOptions().disable()

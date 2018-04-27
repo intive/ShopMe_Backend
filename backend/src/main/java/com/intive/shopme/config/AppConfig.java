@@ -40,6 +40,8 @@ public final class AppConfig {
     public static final int CITY_MAX_LENGTH = 50;
     public static final int ZIP_CODE_MAX_LENGTH = 6;
 
+    public static final String REST_ENTRY_POINT = "/**";
+
     private AppConfig() {
     }
 }

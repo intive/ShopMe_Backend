@@ -1,6 +1,5 @@
 package com.intive.shopme.tokens;
 
-import com.intive.shopme.config.ApiUrl;
 import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.registration.UserService;
 import com.intive.shopme.tokens.model.JwtView;
@@ -19,16 +18,17 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 
-@Api(tags = "Tokens", description = "Tokens operations (operations related to authentication).")
+import static com.intive.shopme.config.ApiUrl.CURRENT_USER;
+import static com.intive.shopme.config.ApiUrl.LOGIN;
+
+@Api(tags = "Login", description = "Logging to application")
 @RestController
-@RequestMapping(value = ApiUrl.TOKENS_PATH, produces = MediaType.APPLICATION_JSON_VALUE)
 public class TokenController {
 
     private final TokenService tokensService;
@@ -45,10 +45,10 @@ public class TokenController {
     @ApiOperation("Login to api")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User info and JWT token"),
-            @ApiResponse(code = 401, message = "Incorrect user or password", response = ErrorResponse.class)
+            @ApiResponse(code = 401, message = "Incorrect user or password")
     })
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/acquire", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = LOGIN, consumes = MediaType.APPLICATION_JSON_VALUE)
     public JwtView login(@Valid @RequestBody UserCredentialsView credentials) {
 
         final DbUser user = userService.findOneByEmail(credentials.getEmail());
@@ -71,10 +71,10 @@ public class TokenController {
                 .build();
     }
 
-    @ApiOperation(value = "Show current user", notes = "Required roles: TOZ, VOLUNTEER")
+    @ApiOperation(value = "Show current user", notes = "Required roles: USER")
     @PreAuthorize("hasAnyAuthority('USER')")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(value = "/whoami")
+    @GetMapping(value = CURRENT_USER)
     public UserContext whoAmI(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
         return userContext;
     }

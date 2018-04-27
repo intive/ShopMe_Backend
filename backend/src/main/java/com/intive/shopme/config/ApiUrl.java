@@ -5,8 +5,8 @@ public final class ApiUrl {
     public static final String CATEGORIES = "/categories";
     public static final String USERS = "/users";
     public static final String VOIVODESHIPS = "/voivodeships";
-    public final static String TOKENS_PATH = "/tokens";
-    public final static String ACQUIRE_TOKEN_PATH = TOKENS_PATH + "/acquire";
+    public final static String LOGIN = "/login";
+    public final static String CURRENT_USER = "/user/current";
 
     private ApiUrl() {
     }
