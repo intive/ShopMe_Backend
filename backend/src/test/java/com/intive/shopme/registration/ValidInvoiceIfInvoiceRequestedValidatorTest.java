@@ -1,87 +1,69 @@
 package com.intive.shopme.registration;
 
+import com.intive.shopme.common.Validated;
 import com.intive.shopme.model.rest.Address;
 import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.User;
 import org.junit.jupiter.api.Test;
 
+import javax.validation.ConstraintViolationException;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ValidInvoiceIfInvoiceRequestedValidatorTest {
+class ValidInvoiceIfInvoiceRequestedValidatorTest extends Validated<User> {
 
     private final ValidInvoiceIfInvoiceRequestedValidator validator = new ValidInvoiceIfInvoiceRequestedValidator();
-    private Boolean isInvoiceRequest;
 
     @Test
     void invoiceRequest_is_false_should_be_valid() {
-        final var user = new User();
-        isInvoiceRequest = false;
-        user.setInvoiceRequest(isInvoiceRequest);
-        assertThat(validator.isValid(user)).isTrue();
+        final var result = validator.isValid(createUser(false));
+        assertThat(result).isTrue();
     }
 
     @Test
-    void invoiceRequest_is_null_user_not_filled_negative_validation() {
-        final var user = new User();
-        isInvoiceRequest = null;
-        user.setInvoiceRequest(isInvoiceRequest);
-        assertThat(validator.isValid(user)).isFalse();
-    }
-
-    @Test
-    void invoiceRequest_is_null_user_filled_negative_validation() {
-        final var user = fillRequiredFieldToValidator();
-        isInvoiceRequest = null;
-        user.setInvoiceRequest(isInvoiceRequest);
-        assertThat(validator.isValid(user)).isFalse();
+    void invoiceRequest_is_null_expected_exception() {
+        final var user = createUser(null);
+        assertThrows(ConstraintViolationException.class, () -> validate(user));
     }
 
     @Test
     void invoiceRequest_is_true_user_filled_positive_validation() {
-        final var user = fillRequiredFieldToValidator();
-        isInvoiceRequest = true;
-        user.setInvoiceRequest(isInvoiceRequest);
+        final var user = createUser(true);
         assertThat(validator.isValid(user)).isTrue();
     }
 
     @Test
     void invoiceRequest_is_true_user_not_filled_negative_validation() {
         final var user = new User();
-        isInvoiceRequest = true;
-        user.setInvoiceRequest(isInvoiceRequest);
-        assertThat(validator.isValid(user)).isFalse();
+        user.setInvoiceRequest(true);
+        final var result = validator.isValid(user);
+        assertThat(result).isFalse();
     }
 
-    private User fillRequiredFieldToValidator() {
+    private User createUser(Boolean isInvoiceRequest) {
         final var address = new Address();
         address.setId(UUID.randomUUID());
-        setAddressIsFilled(address);
+        address.setCity("foo");
+        address.setNumber("foo");
+        address.setStreet("foo");
+        address.setCity("foo");
+        address.setZipCode("foo");
 
         final var invoice = new Invoice();
         invoice.setId(UUID.randomUUID());
         invoice.setInvoiceAddress(address);
-        setHasCompanyDetailsIsFilled(invoice);
+        invoice.setCompanyName("foo");
+        invoice.setNip("foo");
 
         final var user = new User();
         user.setId(UUID.randomUUID());
         user.setInvoice(invoice);
         user.setAddress(address);
+        user.setPassword("foo");
+        user.setInvoiceRequest(isInvoiceRequest);
 
         return user;
-    }
-
-    private void setHasCompanyDetailsIsFilled(Invoice invoice) {
-        invoice.setCompanyName("test");
-        invoice.setNip("test");
-    }
-
-    private void setAddressIsFilled(Address address) {
-        address.setCity("test");
-        address.setNumber("test");
-        address.setStreet("test");
-        address.setCity("test");
-        address.setZipCode("test");
     }
 }

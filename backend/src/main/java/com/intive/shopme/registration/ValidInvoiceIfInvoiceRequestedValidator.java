@@ -11,8 +11,8 @@ import org.springframework.validation.Validator;
 class ValidInvoiceIfInvoiceRequestedValidator implements Validator {
 
     boolean isValid(User value) {
-        boolean result = value.getInvoiceRequest() != null;
-        if (value.getInvoiceRequest() != null && value.getInvoiceRequest()) {
+        boolean result = true;
+        if (value.getInvoiceRequest()) {
             Invoice invoice = value.getInvoice();
             result = (invoice != null) && invoice.hasCompanyDetails();
 
