@@ -1,19 +1,16 @@
 package com.intive.shopme.tokens.authentication;
 
 import com.intive.shopme.tokens.model.UserContext;
-import lombok.Data;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-@Data
 public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final UserContext userContext;
     private String token;
-
-
+    
     JwtAuthenticationToken(UserContext userContext, Collection<? extends GrantedAuthority> authorities) {
         this(authorities, userContext, null, true);
         eraseCredentials();

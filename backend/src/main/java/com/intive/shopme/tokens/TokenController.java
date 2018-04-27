@@ -12,7 +12,6 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,8 +70,7 @@ public class TokenController {
                 .build();
     }
 
-    @ApiOperation(value = "Show current user", notes = "Required roles: USER")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @ApiOperation(value = "Show current user")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = CURRENT_USER)
     public UserContext whoAmI(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {

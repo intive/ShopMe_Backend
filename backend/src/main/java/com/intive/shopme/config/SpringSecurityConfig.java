@@ -22,6 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.Arrays;
 import java.util.List;
 
+import static com.intive.shopme.config.ApiUrl.CURRENT_USER;
+import static com.intive.shopme.config.ApiUrl.LOGIN;
 import static com.intive.shopme.config.AppConfig.REST_ENTRY_POINT;
 
 @Configuration
@@ -44,7 +46,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     private TokenAuthenticationFilter getAuthenticationFilter() throws Exception {
-        final List<String> pathsToSkip = Arrays.asList(ApiUrl.CURRENT_USER);
+        final List<String> pathsToSkip = Arrays.asList(LOGIN);
         final AuthenticationRequestMatcher matcher = new AuthenticationRequestMatcher(pathsToSkip);
         final TokenAuthenticationFilter filter =
                 new TokenAuthenticationFilter(new TokenAuthenticationFailureHandler(), matcher);
@@ -63,9 +65,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests().antMatchers(ApiUrl.CURRENT_USER).permitAll()
+                .and().authorizeRequests().antMatchers(CURRENT_USER, LOGIN).permitAll()
                 .and().authorizeRequests().antMatchers(REST_ENTRY_POINT).authenticated()
-                .and().httpBasic()
                 .and().headers().frameOptions().disable()
                 .and().addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

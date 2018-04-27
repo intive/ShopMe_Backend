@@ -1,5 +1,6 @@
 package com.intive.shopme.model.rest;
 
+import com.intive.shopme.model.db.Role;
 import com.intive.shopme.validation.SpecialCharacterCheck;
 import com.intive.shopme.validation.WhiteSpaceTabulatorCheck;
 import io.swagger.annotations.ApiModel;
@@ -12,6 +13,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import static com.intive.shopme.config.AppConfig.ACCEPTABLE_ONLY_DIGITS;
@@ -93,4 +96,7 @@ public class User {
     @Valid
     @ApiModelProperty(value = "Represents invoice data for user`s", position = 11)
     private Invoice invoice;
+
+    @ApiModelProperty
+    private Set<Role> roles = new HashSet<>();
 }
