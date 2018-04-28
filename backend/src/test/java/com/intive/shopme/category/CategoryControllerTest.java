@@ -61,7 +61,6 @@ class CategoryControllerTest extends WebTierTest {
     private static DbCategory buildSampleCategory() {
         var result = new DbCategory();
         result.setName("foo");
-        result.setId(UUID.randomUUID());
         return result;
     }
 }

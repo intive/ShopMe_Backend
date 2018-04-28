@@ -6,15 +6,17 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CATEGORY")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString(callSuper = true)
-public class DbCategory extends DbIdentifiable {
+public class DbCategory {
 
+    @Id
     @Column(unique = true)
     private String name;
 }
