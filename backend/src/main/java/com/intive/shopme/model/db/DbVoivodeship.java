@@ -6,16 +6,18 @@ import lombok.ToString;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "VOIVODESHIP")
 @Data
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 @ToString(callSuper = true)
-public class DbVoivodeship extends DbIdentifiable {
+public class DbVoivodeship {
 
+    @Id
     @Column(unique = true)
     @NotEmpty
     private String name;
