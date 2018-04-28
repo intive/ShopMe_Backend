@@ -14,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "VOIVODESHIP")
 @Data
 @EqualsAndHashCode
-@ToString(callSuper = true)
+@ToString
 public class DbVoivodeship {
 
     @Id
