@@ -13,7 +13,7 @@ import javax.persistence.Table;
 @Table(name = "CATEGORY")
 @Data
 @EqualsAndHashCode
-@ToString(callSuper = true)
+@ToString
 public class DbCategory {
 
     @Id
