@@ -11,6 +11,6 @@ import javax.validation.constraints.NotEmpty;
 public class Voivodeship {
 
     @NotEmpty
-    @ApiModelProperty(value = "Represents voivodeship name", required = true, position = 2, example = "WesternPomeranian")
+    @ApiModelProperty(value = "Represents unique voivodeship name", required = true, example = "WesternPomeranian")
     private String name;
 }

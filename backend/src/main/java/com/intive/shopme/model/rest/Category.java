@@ -11,6 +11,6 @@ import javax.validation.constraints.NotEmpty;
 public class Category {
 
     @NotEmpty
-    @ApiModelProperty(value = "Represents category's name", required = true, position = 2, example = "inne")
+    @ApiModelProperty(value = "Represents unique category's name", required = true, example = "others")
     private String name;
 }
