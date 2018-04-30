@@ -34,15 +34,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
      * Bcrypt log rounds to use, between 4 and 31
      */
     private static final int HASHING_STRENGTH = 11;
-
-
     private final JwtAuthenticationProvider jwtAuthenticationProvider;
 
     @Autowired
     public SpringSecurityConfig(JwtAuthenticationProvider jwtAuthenticationProvider) {
         this.jwtAuthenticationProvider = jwtAuthenticationProvider;
     }
-
 
     private TokenAuthenticationFilter getAuthenticationFilter() throws Exception {
         final List<String> pathsToSkip = Arrays.asList(LOGIN);

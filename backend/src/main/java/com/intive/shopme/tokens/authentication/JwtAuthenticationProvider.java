@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 @Component
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
-
     private final JwtParser jwtParser;
 
     @Autowired

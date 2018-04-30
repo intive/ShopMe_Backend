@@ -39,7 +39,7 @@ To get token ```POST``` user credentials to ```/login```
 Curl:
 ```
  curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
-       "email": "unknown%40gmail.com",
+       "email": "unknown@gmail.com",
        "password": "password"
      }' 'http://localhost:8080/login'
 ```
