@@ -42,7 +42,6 @@ public class DbUser extends DbIdentifiable {
     )
     private Set<RoleEntity> roles = new HashSet<>();
 
-
     public void addRole(final Role role) {
         final RoleEntity roleEntity = RoleEntity.buildWithRole(role);
         roles.add(roleEntity);
