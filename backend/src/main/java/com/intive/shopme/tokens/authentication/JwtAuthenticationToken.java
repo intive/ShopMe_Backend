@@ -10,7 +10,7 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final UserContext userContext;
     private String token;
-    
+
     JwtAuthenticationToken(UserContext userContext, Collection<? extends GrantedAuthority> authorities) {
         this(authorities, userContext, null, true);
         eraseCredentials();

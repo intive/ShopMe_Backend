@@ -42,6 +42,11 @@ public final class AppConfig {
 
     public static final String REST_ENTRY_POINT = "/**";
 
+    public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String EMAIL_CLAIM_NAME = "email";
+    public static final String SCOPES_CLAIM_NAME = "scopes";
+
     private AppConfig() {
     }
 }

@@ -26,7 +26,7 @@ public class JwtParser {
     private Claims claimsBody;
 
     @Autowired
-    public JwtParser(MessageSource messageSource, @Value("${jwt.secret-base64}") String secret) {
+    public JwtParser(MessageSource messageSource, @Value("${jwt.secret}") String secret) {
 
         this.secret = secret;
         this.messageSource = messageSource;

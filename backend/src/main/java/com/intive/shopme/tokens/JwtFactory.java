@@ -11,15 +11,15 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+import static com.intive.shopme.config.AppConfig.EMAIL_CLAIM_NAME;
+import static com.intive.shopme.config.AppConfig.SCOPES_CLAIM_NAME;
+
 @Component
 public class JwtFactory {
 
-    private static final String EMAIL_CLAIM_NAME = "email";
-    private static final String SCOPES_CLAIM_NAME = "scopes";
-
     private final String secret;
 
-    public JwtFactory(@Value("${jwt.secret-base64}") String secret) {
+    public JwtFactory(@Value("${jwt.secret}") String secret) {
         this.secret = secret;
     }
 

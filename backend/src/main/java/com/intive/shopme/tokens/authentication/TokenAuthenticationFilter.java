@@ -14,11 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.intive.shopme.config.AppConfig.AUTHORIZATION_HEADER;
+import static com.intive.shopme.config.AppConfig.TOKEN_PREFIX;
+
 public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
-
-
-    private static final String AUTHORIZATION_HEADER = "Authorization";
-    private static final String TOKEN_PREFIX = "Bearer ";
 
     private final AuthenticationFailureHandler failureHandler;
 
