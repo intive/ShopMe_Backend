@@ -13,12 +13,12 @@ import javax.validation.constraints.NotNull;
 @ApiModel(value = "User Credentials")
 public class UserCredentialsView {
 
-    @ApiModelProperty(example = "user@mail.com", position = 1, required = true)
+    @ApiModelProperty(example = "unknown@gmail.com", position = 1, required = true)
     @NotNull
     @Email
     private final String email;
 
-    @ApiModelProperty(example = "Password", position = 2, required = true)
+    @ApiModelProperty(example = "password", position = 2, required = true)
     @NotNull
     private final String password;
 }

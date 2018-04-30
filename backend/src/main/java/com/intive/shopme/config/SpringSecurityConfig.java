@@ -22,7 +22,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.util.Arrays;
 import java.util.List;
 
-import static com.intive.shopme.config.ApiUrl.CURRENT_USER;
 import static com.intive.shopme.config.ApiUrl.LOGIN;
 import static com.intive.shopme.config.AppConfig.REST_ENTRY_POINT;
 
@@ -65,7 +64,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests().antMatchers(CURRENT_USER, LOGIN).permitAll()
+                .and().authorizeRequests().antMatchers(LOGIN).permitAll()
                 .and().authorizeRequests().antMatchers(REST_ENTRY_POINT).authenticated()
                 .and().headers().frameOptions().disable()
                 .and().addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

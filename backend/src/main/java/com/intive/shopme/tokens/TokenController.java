@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ import javax.validation.Valid;
 import static com.intive.shopme.config.ApiUrl.CURRENT_USER;
 import static com.intive.shopme.config.ApiUrl.LOGIN;
 
-@Api(tags = "Login", description = "Logging to application")
+@Api(tags = "Login", description = "Log in to application")
 @RestController
 public class TokenController {
 
@@ -41,7 +42,7 @@ public class TokenController {
         this.jwtParser = jwtParser;
     }
 
-    @ApiOperation("Login to api")
+    @ApiOperation("Log in to api")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "User info and JWT token"),
             @ApiResponse(code = 401, message = "Incorrect user or password")
@@ -73,6 +74,7 @@ public class TokenController {
     @ApiOperation(value = "Show current user")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = CURRENT_USER)
+    @PreAuthorize("hasAnyAuthority('SA', 'USER')")
     public UserContext whoAmI(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
         return userContext;
     }

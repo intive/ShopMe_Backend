@@ -18,7 +18,7 @@ public class JwtView {
 
     @ApiModelProperty(example = "c5296892-347f-4b2e-b1c6-6faff971f767", position = 1)
     private final UUID userId;
-    @ApiModelProperty(example = "user@mail.com", position = 2)
+    @ApiModelProperty(example = "unknown@gmail.com", position = 2)
     private final String email;
     @ApiModelProperty(position = 3)
     private final String name;
