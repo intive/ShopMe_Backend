@@ -9,5 +9,5 @@ interface CategoryRepository extends JpaRepository<DbCategory, String> {
 
     DbCategory findByName(String name);
 
-    Boolean existsByName(String name);
+    boolean existsByName(String name);
 }

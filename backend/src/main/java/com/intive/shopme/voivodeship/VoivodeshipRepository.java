@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 interface VoivodeshipRepository extends JpaRepository<DbVoivodeship, String> {
 
-    Boolean existsByName(String name);
+    boolean existsByName(String name);
 }

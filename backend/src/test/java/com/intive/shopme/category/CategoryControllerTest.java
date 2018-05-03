@@ -9,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
@@ -37,8 +36,7 @@ class CategoryControllerTest extends WebTierTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(greaterThan(0))))
-                .andExpect(jsonPath("$[0].name", notNullValue()))
-                .andExpect(jsonPath("$[0].id", notNullValue()));
+                .andExpect(jsonPath("$[0].name", notNullValue()));
     }
 
     @Test
@@ -50,8 +48,7 @@ class CategoryControllerTest extends WebTierTest {
                         .contentType(MediaType.APPLICATION_JSON_UTF8)
                         .content(convertToJsonString(buildSampleCategory())))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", notNullValue()))
-                .andExpect(jsonPath("$.id", notNullValue()));
+                .andExpect(jsonPath("$.name", notNullValue()));
     }
 
     private static List<DbCategory> buildSampleCategories() {
