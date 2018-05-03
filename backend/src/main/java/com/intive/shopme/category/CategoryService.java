@@ -26,7 +26,7 @@ class CategoryService extends Validated<DbCategory> {
         return repository.save(dbCategory);
     }
 
-    boolean getCategoryByName(String name) {
+    boolean checkCategoryExistenceByName(String name) {
         return repository.existsByName(name);
     }
 

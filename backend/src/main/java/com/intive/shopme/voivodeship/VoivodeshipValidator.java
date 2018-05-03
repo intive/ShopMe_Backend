@@ -25,7 +25,7 @@ public class VoivodeshipValidator implements Validator {
             var voivodeship = ((User) target).getVoivodeship();
             if (voivodeship != null) {
                 var name = voivodeship.getName();
-                if (name != null && !voivodeshipService.getVoivodeshipByName(name)) {
+                if (!voivodeshipService.getVoivodeshipByName(name)) {
                     errors.rejectValue("voivodeship.name", "name.invalid", "Voivodeship name is not known: " + name);
                 }
             }
