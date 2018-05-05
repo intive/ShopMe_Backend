@@ -1,5 +1,7 @@
 package com.intive.shopme.model.rest;
 
+import com.intive.shopme.validation.SpecialCharacterCheck;
+import com.intive.shopme.validation.WhiteSpaceTabulatorCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -7,7 +9,11 @@ import lombok.Data;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.UUID;
+
+import static com.intive.shopme.config.AppConfig.*;
 
 @Data
 @ApiModel(value = "User", description = "Represents the user")
@@ -16,9 +22,21 @@ public class User {
     @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
     private UUID id;
 
+    @NotEmpty
+    @Size(min = USER_NAME_MIN_LENGTH, message = "User's name contains not enough characters, minimum is 3.")
+    @Size(max = USER_NAME_MAX_LENGTH)
+    @SpecialCharacterCheck
+    @WhiteSpaceTabulatorCheck
+    @Pattern(regexp = ".*[^0-9].*")
     @ApiModelProperty(value = "Represents user's name", required = true, position = 2, example = "Jan")
     private String name;
 
+    @NotEmpty
+    @Size(min = USER_SURNAME_MIN_LENGTH, message = "User's name contains not enough characters, minimum is 2.")
+    @Size(max = USER_SURNAME_MAX_LENGTH)
+    @SpecialCharacterCheck
+    @WhiteSpaceTabulatorCheck
+    @Pattern(regexp = ".*[^0-9].*")
     @ApiModelProperty(value = "Represents user's surname", required = true, position = 3, example = "Kowalski")
     private String surname;
 
