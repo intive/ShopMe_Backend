@@ -1,6 +1,5 @@
 package com.intive.shopme.registration;
 
-import com.intive.shopme.common.Validated;
 import com.intive.shopme.model.db.DbUser;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.stereotype.Service;
@@ -10,7 +9,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-class UserService extends Validated<DbUser> {
+class UserService {
 
     private final UserRepository repository;
 
@@ -22,7 +21,6 @@ class UserService extends Validated<DbUser> {
         if (!dbUser.getInvoiceRequest()) {
             dbUser.setInvoice(null);
         }
-        validate(dbUser);
         return repository.save(dbUser);
     }
 

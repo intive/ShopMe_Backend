@@ -1,6 +1,5 @@
 package com.intive.shopme.category;
 
-import com.intive.shopme.common.Validated;
 import com.intive.shopme.model.db.DbCategory;
 import com.intive.shopme.validation.AlreadyExistException;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
-class CategoryService extends Validated<DbCategory> {
+class CategoryService {
 
     private final CategoryRepository repository;
 
@@ -23,7 +22,6 @@ class CategoryService extends Validated<DbCategory> {
 
     DbCategory create(DbCategory dbCategory) {
         checkExistence(dbCategory);
-        validate(dbCategory);
         return repository.save(dbCategory);
     }
 

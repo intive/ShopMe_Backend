@@ -1,6 +1,5 @@
 package com.intive.shopme.offer;
 
-import com.intive.shopme.common.Validated;
 import com.intive.shopme.model.db.DbOffer;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.domain.Page;
@@ -13,7 +12,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-class OfferService extends Validated<DbOffer> {
+class OfferService {
 
     private final OfferRepository repository;
 
@@ -31,7 +30,6 @@ class OfferService extends Validated<DbOffer> {
     }
 
     DbOffer createOrUpdate(DbOffer dbOffer) {
-        validate(dbOffer);
         return repository.save(dbOffer);
     }
 
