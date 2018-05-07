@@ -18,7 +18,7 @@ class VoivodeshipService {
         return repository.findAll();
     }
 
-    boolean getVoivodeshipByName(String name) {
-        return repository.existsByName(name);
+    boolean exists(String voiovdeshipName) {
+        return repository.existsByName(voiovdeshipName);
     }
 }
