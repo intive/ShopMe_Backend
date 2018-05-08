@@ -20,13 +20,13 @@ import java.util.UUID;
 
 @Component
 public class JwtParser {
+    
     private final MessageSource messageSource;
     private final String secret;
     private Claims claimsBody;
 
     @Autowired
     public JwtParser(MessageSource messageSource, @Value("${jwt.secret}") String secret) {
-
         this.secret = secret;
         this.messageSource = messageSource;
     }
