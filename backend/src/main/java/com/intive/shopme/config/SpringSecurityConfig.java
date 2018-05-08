@@ -42,9 +42,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private TokenAuthenticationFilter getAuthenticationFilter() throws Exception {
-        final List<String> pathsToSkip = Arrays.asList(LOGIN);
-        final AuthenticationRequestMatcher matcher = new AuthenticationRequestMatcher(pathsToSkip);
-        final TokenAuthenticationFilter filter =
+        final var pathsToSkip = Arrays.asList(LOGIN);
+        final var matcher = new AuthenticationRequestMatcher(pathsToSkip);
+        final var filter =
                 new TokenAuthenticationFilter(new TokenAuthenticationFailureHandler(), matcher);
         filter.setAuthenticationManager(authenticationManager());
 

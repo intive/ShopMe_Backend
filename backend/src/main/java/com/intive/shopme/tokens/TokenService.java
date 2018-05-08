@@ -7,7 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TokenService {
+class TokenService {
     private final long expirationTime;
     private final PasswordEncoder passwordEncoder;
     private final JwtFactory jwtFactory;

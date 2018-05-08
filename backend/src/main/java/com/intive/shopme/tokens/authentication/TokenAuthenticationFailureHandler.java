@@ -1,9 +1,9 @@
 package com.intive.shopme.tokens.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.intive.shopme.tokens.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
@@ -24,6 +24,6 @@ public class TokenAuthenticationFailureHandler implements AuthenticationFailureH
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 
-        MAPPER.writeValue(response.getWriter(), new ErrorResponse(HttpStatus.UNAUTHORIZED, exception.getMessage()));
+        MAPPER.writeValue(response.getWriter(), ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exception.getMessage()));
     }
 }

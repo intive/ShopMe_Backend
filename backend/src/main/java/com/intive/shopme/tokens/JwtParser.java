@@ -20,7 +20,6 @@ import java.util.UUID;
 
 @Component
 public class JwtParser {
-
     private final MessageSource messageSource;
     private final String secret;
     private Claims claimsBody;

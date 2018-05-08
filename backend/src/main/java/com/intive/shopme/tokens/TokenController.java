@@ -29,7 +29,7 @@ import static com.intive.shopme.config.ApiUrl.LOGIN;
 
 @Api(tags = "Login", description = "Log in to application")
 @RestController
-public class TokenController {
+class TokenController {
 
     private final TokenService tokensService;
     private final UserService userService;

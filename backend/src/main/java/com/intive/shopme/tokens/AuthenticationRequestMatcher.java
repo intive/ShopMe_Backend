@@ -13,7 +13,7 @@ public class AuthenticationRequestMatcher implements RequestMatcher {
     private final OrRequestMatcher skipMatcher;
 
     public AuthenticationRequestMatcher(List<String> pathsToSkip) {
-        List<RequestMatcher> matcher = pathsToSkip.stream()
+       final List<RequestMatcher> matcher = pathsToSkip.stream()
                 .map(AntPathRequestMatcher::new)
                 .collect(Collectors.toList());
 

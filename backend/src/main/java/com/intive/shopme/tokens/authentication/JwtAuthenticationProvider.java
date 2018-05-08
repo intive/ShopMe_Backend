@@ -44,7 +44,7 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
                 .map(Role::valueOf)
                 .collect(Collectors.toSet());
 
-        final UserContext userContext = new UserContext(userID, email, authorities);
+        final var userContext = new UserContext(userID, email, authorities);
         return new JwtAuthenticationToken(userContext, authorities);
     }
 
