@@ -69,7 +69,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new offer", response = Offer.class)
-    @PreAuthorize("hasAnyAuthority('SA', 'USER')")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors) {
         categoryValidator.validate(offer, errors);
         if (errors.hasErrors()) {

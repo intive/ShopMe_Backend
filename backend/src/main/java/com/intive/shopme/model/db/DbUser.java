@@ -1,5 +1,6 @@
 package com.intive.shopme.model.db;
 
+import com.intive.shopme.model.rest.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,28 +41,28 @@ public class DbUser extends DbIdentifiable {
             joinColumns = @JoinColumn(name = "users_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<RoleEntity> roles = new HashSet<>();
+    private Set<DbRole> roles = new HashSet<>();
 
     public void addRole(final Role role) {
-        final RoleEntity roleEntity = RoleEntity.buildWithRole(role);
-        roles.add(roleEntity);
+        final DbRole dbRole = DbRole.buildWithRole(role);
+        roles.add(dbRole);
     }
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles.stream()
-                .map(RoleEntity::buildWithRole)
+                .map(DbRole::buildWithRole)
                 .collect(Collectors.toSet());
     }
 
     public boolean hasRole(final Role role) {
         return roles.stream().anyMatch(
-                roleEntity -> roleEntity.getRole().equals(role));
+                dbRole -> dbRole.getRole().equals(role));
     }
 
     public Set<Role> getRoles() {
         Set<Role> userRoles = new HashSet<>();
-        for (RoleEntity roleEntity : roles) {
-            userRoles.add(roleEntity.getRole());
+        for (DbRole dbRole : roles) {
+            userRoles.add(dbRole.getRole());
         }
         return userRoles;
     }

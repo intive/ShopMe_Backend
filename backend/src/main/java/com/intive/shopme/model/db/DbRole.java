@@ -1,5 +1,6 @@
 package com.intive.shopme.model.db;
 
+import com.intive.shopme.model.rest.Role;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -12,28 +13,28 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table(name = "ROLE")
-public class RoleEntity implements Serializable {
+public class DbRole implements Serializable {
 
     @Id
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    private RoleEntity() {
+    private DbRole() {
     }
 
-    private RoleEntity(String role) {
+    private DbRole(String role) {
         this.role = Role.valueOf(role);
     }
 
-    public static RoleEntity buildWithRole(Role role) {
-        RoleEntity roleEntity = new RoleEntity();
-        roleEntity.role = role;
-        return roleEntity;
+    public static DbRole buildWithRole(Role role) {
+        DbRole dbRole = new DbRole();
+        dbRole.role = role;
+        return dbRole;
     }
 
     @Override
     public String toString() {
-        return "RoleEntity{" +
+        return "DbRole{" +
                 "role=" + role +
                 '}';
     }

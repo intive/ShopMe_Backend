@@ -74,7 +74,7 @@ public class TokenController {
     @ApiOperation(value = "Show current user")
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(value = CURRENT_USER)
-    @PreAuthorize("hasAnyAuthority('SA', 'USER')")
+    @PreAuthorize("hasAnyAuthority('USER')")
     public UserContext whoAmI(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
         return userContext;
     }

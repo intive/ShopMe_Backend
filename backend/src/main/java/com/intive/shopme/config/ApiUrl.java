@@ -6,7 +6,7 @@ public final class ApiUrl {
     public static final String USERS = "/users";
     public static final String VOIVODESHIPS = "/voivodeships";
     public final static String LOGIN = "/login";
-    public final static String CURRENT_USER = "/user/current";
+    public final static String CURRENT_USER = USERS + "/current";
 
     private ApiUrl() {
     }

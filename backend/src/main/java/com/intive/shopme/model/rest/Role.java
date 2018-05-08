@@ -1,9 +1,9 @@
-package com.intive.shopme.model.db;
+package com.intive.shopme.model.rest;
 
 import org.springframework.security.core.GrantedAuthority;
 
 public enum Role implements GrantedAuthority {
-    USER, SA, ANONYMOUS;
+    USER, ANONYMOUS;
 
     @Override
     public String getAuthority() {

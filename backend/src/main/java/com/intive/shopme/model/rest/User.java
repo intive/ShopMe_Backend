@@ -1,6 +1,5 @@
 package com.intive.shopme.model.rest;
 
-import com.intive.shopme.model.db.Role;
 import com.intive.shopme.validation.SpecialCharacterCheck;
 import com.intive.shopme.validation.WhiteSpaceTabulatorCheck;
 import io.swagger.annotations.ApiModel;

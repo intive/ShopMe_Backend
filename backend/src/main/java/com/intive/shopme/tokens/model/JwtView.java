@@ -1,7 +1,7 @@
 package com.intive.shopme.tokens.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.intive.shopme.model.db.Role;
+import com.intive.shopme.model.rest.Role;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
