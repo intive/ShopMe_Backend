@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.UUID;
@@ -21,6 +22,7 @@ public class User {
     @ApiModelProperty(value = "Represents user's surname", required = true, position = 3, example = "Kowalski")
     private String surname;
 
+    @Email(message = "User's email has wrong format")
     @ApiModelProperty(value = "Represents user's email", required = true, position = 4, example = "unknown@gmail.com")
     private String email;
 
