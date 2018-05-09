@@ -1,6 +1,6 @@
-package com.intive.shopme.tokens.authentication;
+package com.intive.shopme.token.authentication;
 
-import com.intive.shopme.tokens.model.UserContext;
+import com.intive.shopme.model.rest.UserContext;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 

@@ -1,6 +1,6 @@
-package com.intive.shopme.tokens;
+package com.intive.shopme.token;
 
-import com.intive.shopme.tokens.authentication.JwtAuthenticationException;
+import com.intive.shopme.token.authentication.JwtAuthenticationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Component
 public class JwtParser {
-    
+
     private final MessageSource messageSource;
     private final String secret;
     private Claims claimsBody;

@@ -1,4 +1,4 @@
-package com.intive.shopme.tokens.authentication;
+package com.intive.shopme.token.authentication;
 
 import org.springframework.security.core.AuthenticationException;
 

@@ -1,4 +1,4 @@
-package com.intive.shopme.tokens;
+package com.intive.shopme.token;
 
 import com.intive.shopme.model.db.DbUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,7 @@ class TokenService {
     private final JwtFactory jwtFactory;
 
     @Autowired
-    TokenService(@Value("${jwt.expiration-time-minutes}") long expirationTime,
+    TokenService(@Value("${jwt.expiration-time}") long expirationTime,
                  PasswordEncoder passwordEncoder,
                  JwtFactory jwtFactory) {
         this.expirationTime = expirationTime;
@@ -21,8 +21,8 @@ class TokenService {
         this.jwtFactory = jwtFactory;
     }
 
-    boolean isUserAuthenticated(final DbUser user, final String plainPassword) {
-        return passwordEncoder.matches(plainPassword, user.getPassword());
+    boolean isUserAuthenticated(final DbUser user, final String password) {
+        return passwordEncoder.matches(password, user.getPassword());
     }
 
     String getToken(final DbUser user) {

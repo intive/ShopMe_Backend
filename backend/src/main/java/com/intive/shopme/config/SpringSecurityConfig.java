@@ -1,10 +1,10 @@
 package com.intive.shopme.config;
 
-import com.intive.shopme.tokens.AuthenticationRequestMatcher;
-import com.intive.shopme.tokens.UnauthorizedEntryPoint;
-import com.intive.shopme.tokens.authentication.JwtAuthenticationProvider;
-import com.intive.shopme.tokens.authentication.TokenAuthenticationFailureHandler;
-import com.intive.shopme.tokens.authentication.TokenAuthenticationFilter;
+import com.intive.shopme.token.AuthenticationRequestMatcher;
+import com.intive.shopme.token.UnauthorizedEntryPoint;
+import com.intive.shopme.token.authentication.JwtAuthenticationProvider;
+import com.intive.shopme.token.authentication.TokenAuthenticationFailureHandler;
+import com.intive.shopme.token.authentication.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
-import java.util.List;
 
 import static com.intive.shopme.config.ApiUrl.LOGIN;
 import static com.intive.shopme.config.AppConfig.REST_ENTRY_POINT;
@@ -52,7 +51,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(jwtAuthenticationProvider);
     }
 

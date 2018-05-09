@@ -1,4 +1,4 @@
-package com.intive.shopme.tokens;
+package com.intive.shopme.token;
 
 import com.intive.shopme.model.db.DbUser;
 import io.jsonwebtoken.Jwts;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 import static com.intive.shopme.config.AppConfig.EMAIL_CLAIM_NAME;
@@ -29,7 +28,7 @@ public class JwtFactory {
                 .claim(EMAIL_CLAIM_NAME, user.getEmail())
                 .claim(SCOPES_CLAIM_NAME, user.getRoles())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(Instant.now().plus(expirationTime, ChronoUnit.MINUTES).toEpochMilli()))
+                .setExpiration(new Date(Instant.now().plusMillis(expirationTime).toEpochMilli()))
                 .signWith(SignatureAlgorithm.HS512, TextCodec.BASE64.decode(secret))
                 .compact();
     }

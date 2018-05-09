@@ -32,9 +32,8 @@ java -jar -Dspring.profiles.active={dev,stage,production} target/be.jar
 * http://localhost:8080/v2/api-docs
 
 ## Authorization
-* To configure secret for JWT add ```SHOPME_JWT_SECRET``` environment variable
 
-To get token ```POST``` user credentials to ```/login```
+To get token ```POST``` user credentials to ```/users/login```
 
 Curl:
 ```
@@ -55,7 +54,7 @@ curl -X GET --header 'Accept: application/json'
 
 #### Swagger Authorization
 
-To get token ```POST``` user credentials to ```/login```
+To get token ```POST``` user credentials to ```/users/login```
 
 Then go to ```Authorization``` by pressing ```Authorize``` button.
 

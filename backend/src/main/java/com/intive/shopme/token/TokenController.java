@@ -1,10 +1,10 @@
-package com.intive.shopme.tokens;
+package com.intive.shopme.token;
 
 import com.intive.shopme.model.db.DbUser;
+import com.intive.shopme.model.rest.Token;
+import com.intive.shopme.model.rest.UserContext;
+import com.intive.shopme.model.rest.UserCredentials;
 import com.intive.shopme.registration.UserService;
-import com.intive.shopme.tokens.model.JwtView;
-import com.intive.shopme.tokens.model.UserContext;
-import com.intive.shopme.tokens.model.UserCredentialsView;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -49,10 +49,10 @@ class TokenController {
     })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(value = LOGIN, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public JwtView login(@Valid @RequestBody UserCredentialsView credentials) {
+    public Token login(@Valid @RequestBody UserCredentials credentials) {
 
         final DbUser user = userService.findOneByEmail(credentials.getEmail());
-        final Boolean isAuthenticated = tokensService.isUserAuthenticated(user, credentials.getPassword());
+        final boolean isAuthenticated = tokensService.isUserAuthenticated(user, credentials.getPassword());
         if (!isAuthenticated) {
             throw new BadCredentialsException("Incorrect email or password");
         }
@@ -60,13 +60,13 @@ class TokenController {
         final String token = tokensService.getToken(user);
         jwtParser.parse(token);
 
-        return JwtView.builder()
+        return Token.builder()
                 .userId(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .surname(user.getSurname())
                 .roles(user.getRoles())
-                .expirationDateSeconds(jwtParser.getTokenExpirationDate().toInstant().getEpochSecond())
+                .expirationDate(jwtParser.getTokenExpirationDate().toInstant().getEpochSecond())
                 .jwt(token)
                 .build();
     }

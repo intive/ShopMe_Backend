@@ -1,4 +1,4 @@
-package com.intive.shopme.tokens.authentication;
+package com.intive.shopme.token.authentication;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -28,7 +28,7 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException, ServletException {
+            throws AuthenticationException {
 
         final String header = request.getHeader(AUTHORIZATION_HEADER);
 

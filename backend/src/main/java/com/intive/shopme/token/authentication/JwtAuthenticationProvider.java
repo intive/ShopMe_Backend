@@ -1,8 +1,8 @@
-package com.intive.shopme.tokens.authentication;
+package com.intive.shopme.token.authentication;
 
 import com.intive.shopme.model.rest.Role;
-import com.intive.shopme.tokens.JwtParser;
-import com.intive.shopme.tokens.model.UserContext;
+import com.intive.shopme.model.rest.UserContext;
+import com.intive.shopme.token.JwtParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;

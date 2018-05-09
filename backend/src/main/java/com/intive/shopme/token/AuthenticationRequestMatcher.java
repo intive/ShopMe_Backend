@@ -1,4 +1,4 @@
-package com.intive.shopme.tokens;
+package com.intive.shopme.token;
 
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
@@ -13,7 +13,7 @@ public class AuthenticationRequestMatcher implements RequestMatcher {
     private final OrRequestMatcher skipMatcher;
 
     public AuthenticationRequestMatcher(List<String> pathsToSkip) {
-       final List<RequestMatcher> matcher = pathsToSkip.stream()
+        final List<RequestMatcher> matcher = pathsToSkip.stream()
                 .map(AntPathRequestMatcher::new)
                 .collect(Collectors.toList());
 
