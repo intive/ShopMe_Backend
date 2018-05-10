@@ -20,8 +20,8 @@ class UserTest {
     @ValueSource(strings = {
             "foobarbazfoobarbazfoobarbaz",
             "fo",
-            "       ", // white space
-            "   ", // tabulator
+            "       ",
+            "\t",
             "@#!@",
             "123456789",
     })
@@ -37,8 +37,8 @@ class UserTest {
     @ValueSource(strings = {
             "foobar",
             "foo@",
-            "fo bar", // white space
-            "fo     bar", // tabulator
+            "fo bar",
+            "fo\tbar",
     })
     void correct_name_violations_should_be_empty(String name) {
         final var user = createUser();
@@ -52,8 +52,8 @@ class UserTest {
     @ValueSource(strings = {
             "foobarbazfoobarbazfoobarbazfoobarbazfoobarbazfoobar",
             "f",
-            "       ", // white space
-            "   ", // tabulator
+            "       ",
+            "\t",
             "@#!@",
             "123456789"
     })
@@ -69,8 +69,8 @@ class UserTest {
     @ValueSource(strings = {
             "foobar",
             "foo@",
-            "fo bar", // white space
-            "fo     bar", // tabulator
+            "fo bar",
+            "fo\tbar",
     })
     void correct_surname_violations_should_be_empty(String name) {
         final var user = createUser();
