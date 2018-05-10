@@ -44,17 +44,17 @@ class TokenController {
 
     @ApiOperation("Log in to api")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "User info and JWT token"),
-            @ApiResponse(code = 401, message = "Incorrect user or password")
+            @ApiResponse(code = 200, message = "Successfully generated token"),
+            @ApiResponse(code = 401, message = "Incorrect user and/or password")
     })
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     @PostMapping(value = LOGIN, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Token login(@Valid @RequestBody UserCredentials credentials) {
 
         final DbUser user = userService.findOneByEmail(credentials.getEmail().toLowerCase());
         final boolean isAuthenticated = tokensService.isUserAuthenticated(user, credentials.getPassword());
         if (!isAuthenticated) {
-            throw new BadCredentialsException("Incorrect email or password");
+            throw new BadCredentialsException("Incorrect email and/or password");
         }
 
         final String token = tokensService.getToken(user);
