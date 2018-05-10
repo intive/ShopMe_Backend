@@ -4,19 +4,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "VOIVODESHIP")
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class DbVoivodeship extends DbIdentifiable {
+@EqualsAndHashCode
+@ToString
+public class DbVoivodeship {
 
-    @Column(unique = true)
+    @Id
     @NotEmpty
     private String name;
 }

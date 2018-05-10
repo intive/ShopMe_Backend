@@ -6,7 +6,6 @@ import com.intive.shopme.validation.AlreadyExistException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 class CategoryService extends Validated<DbCategory> {
@@ -27,8 +26,8 @@ class CategoryService extends Validated<DbCategory> {
         return repository.save(dbCategory);
     }
 
-    boolean getCategoryById(UUID id) {
-        return repository.existsById(id);
+    boolean exists(String categoryName) {
+        return repository.existsByName(categoryName);
     }
 
     private void checkExistence(DbCategory dbCategory) {

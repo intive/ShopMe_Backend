@@ -24,9 +24,9 @@ public class CategoryValidator implements Validator {
         if (target != null) {
             var category = ((Offer) target).getCategory();
             if (category != null) {
-                var id = category.getId();
-                if (id != null && !categoryService.getCategoryById(id)) {
-                    errors.rejectValue("category.id", "id.invalid", "Category id not known: " + id);
+                var name = category.getName();
+                if (!categoryService.exists(name)) {
+                    errors.rejectValue("category.name", "name.invalid", "Category name not known: " + name);
                 }
             }
         }
