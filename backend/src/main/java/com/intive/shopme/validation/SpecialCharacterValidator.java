@@ -3,9 +3,9 @@ package com.intive.shopme.validation;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class SpecialCharacterValidator implements ConstraintValidator<SpecialCharacterCheck, String> {
+import static com.intive.shopme.config.AppConfig.SPECIAL_CHAR_SET;
 
-    private final String SPECIAL_CHAR_SET = "[-/@#!*$%^&.'_+={}()]";
+public class SpecialCharacterValidator implements ConstraintValidator<SpecialCharacterCheck, String> {
 
     @Override
     public boolean isValid(String text, ConstraintValidatorContext context) {
