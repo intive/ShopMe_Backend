@@ -27,8 +27,8 @@ public class User {
     private UUID id;
 
     @NotEmpty
-    @Size(min = USER_NAME_MIN_LENGTH, message = "User's name contains not enough characters, minimum is 3.")
-    @Size(max = USER_NAME_MAX_LENGTH)
+    @Size(min = USER_NAME_MIN_LENGTH, message = "User's name contains not enough characters, minimum is " + USER_NAME_MIN_LENGTH + ".")
+    @Size(max = USER_NAME_MAX_LENGTH, message = "User's name contains too much characters, maximum is " + USER_NAME_MAX_LENGTH + ".")
     @SpecialCharacterCheck
     @WhiteSpaceTabulatorCheck
     @Pattern(regexp = ".*[^0-9].*")
@@ -36,8 +36,8 @@ public class User {
     private String name;
 
     @NotEmpty
-    @Size(min = USER_SURNAME_MIN_LENGTH, message = "User's name contains not enough characters, minimum is 2.")
-    @Size(max = USER_SURNAME_MAX_LENGTH)
+    @Size(min = USER_SURNAME_MIN_LENGTH, message = "User's surname contains not enough characters, minimum is " + USER_SURNAME_MIN_LENGTH + ".")
+    @Size(max = USER_SURNAME_MAX_LENGTH, message = "User's surname contains too much characters, maximum is " + USER_SURNAME_MAX_LENGTH + ".")
     @SpecialCharacterCheck
     @WhiteSpaceTabulatorCheck
     @Pattern(regexp = ".*[^0-9].*")
