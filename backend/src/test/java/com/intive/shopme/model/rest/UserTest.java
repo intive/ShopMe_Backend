@@ -85,6 +85,7 @@ class UserTest {
         user.setName("foobar");
         user.setSurname("foobar");
         user.setPassword("foo");
+        user.setInvoiceRequest(true);
 
         return user;
     }
