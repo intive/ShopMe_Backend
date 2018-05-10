@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.UUID;
 
-import static com.intive.shopme.config.AppConfig.ACCEPTABLE_ONLY_DIGITS;
+import static com.intive.shopme.config.AppConfig.DIGITS_NOT_ACCEPTABLE;
 import static com.intive.shopme.config.AppConfig.USER_NAME_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_NAME_MIN_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_SURNAME_MAX_LENGTH;
@@ -31,7 +31,7 @@ public class User {
     @Size(max = USER_NAME_MAX_LENGTH, message = "User's name contains too much characters, maximum is " + USER_NAME_MAX_LENGTH + ".")
     @SpecialCharacterCheck
     @WhiteSpaceTabulatorCheck
-    @Pattern(regexp = ACCEPTABLE_ONLY_DIGITS)
+    @Pattern(regexp = DIGITS_NOT_ACCEPTABLE)
     @ApiModelProperty(value = "Represents user's name", required = true, position = 2, example = "Jan")
     private String name;
 
@@ -40,7 +40,7 @@ public class User {
     @Size(max = USER_SURNAME_MAX_LENGTH, message = "User's surname contains too much characters, maximum is " + USER_SURNAME_MAX_LENGTH + ".")
     @SpecialCharacterCheck
     @WhiteSpaceTabulatorCheck
-    @Pattern(regexp = ACCEPTABLE_ONLY_DIGITS)
+    @Pattern(regexp = DIGITS_NOT_ACCEPTABLE)
     @ApiModelProperty(value = "Represents user's surname", required = true, position = 3, example = "Kowalski")
     private String surname;
 

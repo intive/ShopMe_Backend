@@ -24,6 +24,7 @@ class UserTest {
             "\t",
             "@#!@",
             "123456789",
+            "foo9"
     })
     void not_correct_name_should_be_violations(String name) {
         final var user = createUser();
@@ -55,7 +56,8 @@ class UserTest {
             "       ",
             "\t",
             "@#!@",
-            "123456789"
+            "123456789",
+            "foo9"
     })
     void not_correct_surname_should_be_violations(String surname) {
         final var user = createUser();
