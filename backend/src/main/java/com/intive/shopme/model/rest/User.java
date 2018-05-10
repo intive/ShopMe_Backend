@@ -1,5 +1,6 @@
 package com.intive.shopme.model.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.intive.shopme.validation.SpecialCharacterCheck;
 import com.intive.shopme.validation.WhiteSpaceTabulatorCheck;
 import io.swagger.annotations.ApiModel;
@@ -96,6 +97,6 @@ public class User {
     @ApiModelProperty(value = "Represents invoice data for user`s", position = 11)
     private Invoice invoice;
 
-    @ApiModelProperty
+    @JsonIgnore
     private Set<Role> roles = new HashSet<>();
 }

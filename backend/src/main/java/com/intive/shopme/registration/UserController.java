@@ -7,6 +7,7 @@ import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.Address;
 import com.intive.shopme.model.rest.Invoice;
+import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.User;
 import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
@@ -72,7 +73,7 @@ class UserController extends ConvertibleController<DbUser, User> {
 
         final var dbUser = convertToDbModel(user);
         dbUser.setId(UUID.randomUUID());
-
+        dbUser.addRole(Role.USER);
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
     }
 

@@ -51,7 +51,7 @@ class TokenController {
     @PostMapping(value = LOGIN, consumes = MediaType.APPLICATION_JSON_VALUE)
     public Token login(@Valid @RequestBody UserCredentials credentials) {
 
-        final DbUser user = userService.findOneByEmail(credentials.getEmail());
+        final DbUser user = userService.findOneByEmail(credentials.getEmail().toLowerCase());
         final boolean isAuthenticated = tokensService.isUserAuthenticated(user, credentials.getPassword());
         if (!isAuthenticated) {
             throw new BadCredentialsException("Incorrect email or password");
