@@ -1,5 +1,7 @@
 package com.intive.shopme.validation;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -9,6 +11,6 @@ public class SpecialCharacterValidator implements ConstraintValidator<SpecialCha
 
     @Override
     public boolean isValid(String text, ConstraintValidatorContext context) {
-        return !text.replaceAll(SPECIAL_CHAR_SET,"").isEmpty();
+        return !StringUtils.isWhitespace(text.replaceAll(SPECIAL_CHAR_SET,""));
     }
 }
