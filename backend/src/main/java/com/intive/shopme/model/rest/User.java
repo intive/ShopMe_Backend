@@ -18,7 +18,6 @@ import static com.intive.shopme.config.AppConfig.USER_NAME_MIN_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_SURNAME_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_SURNAME_MIN_LENGTH;
 
-
 @Data
 @ApiModel(value = "User", description = "Represents the user")
 public class User {
