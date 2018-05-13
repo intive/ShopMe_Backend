@@ -1,20 +1,24 @@
 package com.intive.shopme.registration;
 
-import com.intive.shopme.common.Validated;
 import com.intive.shopme.model.rest.Address;
 import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.User;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolationException;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-class ValidInvoiceIfInvoiceRequestedValidatorTest extends Validated<User> {
+class ValidInvoiceIfInvoiceRequestedValidatorTest {
 
     private final ValidInvoiceIfInvoiceRequestedValidator validator = new ValidInvoiceIfInvoiceRequestedValidator();
+    private final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+    private final Validator validatorAllFields = validatorFactory.getValidator();
 
     @Test
     void invoiceRequest_is_false_should_be_valid() {
@@ -23,9 +27,11 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest extends Validated<User> {
     }
 
     @Test
-    void invoiceRequest_is_null_expected_exception() {
+    void invoiceRequest_is_null_should_throw_violation() {
         final var user = createUser(null);
-        assertThrows(ConstraintViolationException.class, () -> validate(user));
+        Set<ConstraintViolation<User>> violations = validatorAllFields.validate(user);
+        final var result = violations.isEmpty();
+        assertThat(result).isFalse();
     }
 
     @Test
@@ -59,6 +65,8 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest extends Validated<User> {
 
         final var user = new User();
         user.setId(UUID.randomUUID());
+        user.setName("foo");
+        user.setSurname("foo");
         user.setInvoice(invoice);
         user.setAddress(address);
         user.setPassword("foo");
