@@ -5,11 +5,9 @@ import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.User;
 import org.junit.jupiter.api.Test;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,10 +25,9 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest {
     }
 
     @Test
-    void invoiceRequest_is_null_should_throw_violation() {
+    void when_invoiceRequest_isNull_constraintViolations_is_expected() {
         final var user = createUser(null);
-        Set<ConstraintViolation<User>> violations = validatorAllFields.validate(user);
-        final var result = violations.isEmpty();
+        final var result = validatorAllFields.validate(user).isEmpty();
         assertThat(result).isFalse();
     }
 
