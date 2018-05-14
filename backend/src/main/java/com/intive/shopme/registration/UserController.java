@@ -41,7 +41,7 @@ import java.util.stream.Collectors;
 import static com.intive.shopme.config.ApiUrl.USERS;
 import static com.intive.shopme.config.ApiUrl.USERS_CURRENT;
 import static com.intive.shopme.config.ApiUrl.USERS_LOGIN;
-import static com.intive.shopme.config.ErrorHandlingConfig.CONSTRAINTS_JSON_KEY;
+import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;

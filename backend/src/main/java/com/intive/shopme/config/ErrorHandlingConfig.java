@@ -6,6 +6,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,18 +19,17 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import static com.intive.shopme.config.AppConfig.ACCESS_DENIED;
+import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
+import static com.intive.shopme.config.AppConfig.ERROR_ID_JSON_KEY;
+import static com.intive.shopme.config.AppConfig.VALIDATION_DESCRIPTION_JSON_KEY;
 import static java.util.stream.Collectors.toMap;
 
 @ControllerAdvice
 public class ErrorHandlingConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ErrorHandlingConfig.class);
-
-    public static final String CONSTRAINTS_JSON_KEY = "errors";
-
-    private static final String VALIDATION_DESCRIPTION_JSON_KEY = "message";
-    private static final String ERROR_ID_JSON_KEY = "id";
-
+    
     @ExceptionHandler(value = {ConstraintViolationException.class})
     @ResponseBody
     public ResponseEntity handleConstraintViolationException(ConstraintViolationException exception) {
@@ -65,6 +66,22 @@ public class ErrorHandlingConfig {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(createResponseBody(exception.getRootCause().getMessage()));
+    }
+
+    @ExceptionHandler(value = {AccessDeniedException.class})
+    @ResponseBody
+    public ResponseEntity handleAccessDeniedException(AccessDeniedException exception) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(createResponseBody(ACCESS_DENIED));
+    }
+
+    @ExceptionHandler(value = {BadCredentialsException.class})
+    @ResponseBody
+    public ResponseEntity handleBadCredentialsException(BadCredentialsException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(createResponseBody(exception.getMessage()));
     }
 
     @ExceptionHandler(value = {RuntimeException.class})

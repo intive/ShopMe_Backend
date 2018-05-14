@@ -43,7 +43,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.intive.shopme.config.ApiUrl.OFFERS;
-import static com.intive.shopme.config.ErrorHandlingConfig.CONSTRAINTS_JSON_KEY;
+import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.BAD_REQUEST;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
