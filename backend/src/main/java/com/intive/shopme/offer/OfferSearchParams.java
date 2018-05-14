@@ -28,7 +28,7 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.PAGE_SIZE_MAX;
 
 @Data
-class OffersSearchParams {
+class OfferSearchParams {
 
     @ApiParam(value = "requested page number (optional, counting from " + FIRST_PAGE + ", default " + FIRST_PAGE + ")",
             allowableValues = "range[0, infinity]",

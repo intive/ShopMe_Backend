@@ -18,8 +18,8 @@ class OfferService {
         this.repository = repository;
     }
 
-    Page<DbOffer> getAll(OffersSearchParams offersSearchParams) {
-        return repository.findAll(offersSearchParams.filter(), offersSearchParams.pageable());
+    Page<DbOffer> getAll(OfferSearchParams offerSearchParams) {
+        return repository.findAll(offerSearchParams.filter(), offerSearchParams.pageable());
     }
 
     DbOffer get(UUID id) {

@@ -92,9 +92,9 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
             @ApiResponse(code = 400, message = BAD_REQUEST)
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    Page<Offer> search(@Valid OffersSearchParams offersSearchParams) {
-        final var offers = service.getAll(offersSearchParams);
-        return new PageImpl<>(convertToView(offers.getContent()), offersSearchParams.pageable(), offers.getTotalElements());
+    Page<Offer> search(@Valid OfferSearchParams offerSearchParams) {
+        final var offers = service.getAll(offerSearchParams);
+        return new PageImpl<>(convertToView(offers.getContent()), offerSearchParams.pageable(), offers.getTotalElements());
     }
 
     @GetMapping(value = "{id}")
