@@ -65,7 +65,7 @@ class OfferSearchParams {
             defaultValue = DEFAULT_SORT_FIELD)
     @ApiModelProperty(position = 5)
     @Pattern(regexp = "date|basePrice|title", flags = { Pattern.Flag.CASE_INSENSITIVE },
-            message = "acceptable sort properties are: date, basePrice and title")
+            message = "Acceptable sort properties are: date, basePrice and title")
     private String sort = DEFAULT_SORT_FIELD;
 
     @ApiParam(value = "sorting order (optional, acceptable values: ASC | DESC, default " + DEFAULT_SORT_DIRECTION + ")",
@@ -73,7 +73,7 @@ class OfferSearchParams {
             defaultValue = DEFAULT_SORT_DIRECTION)
     @ApiModelProperty(position = 6)
     @Pattern(regexp = "ASC|DESC", flags = { Pattern.Flag.CASE_INSENSITIVE },
-            message = "acceptable sort order values are ASC and DESC")
+            message = "Acceptable sort order values are ASC and DESC")
     private String order = DEFAULT_SORT_DIRECTION;
 
     @ApiModelProperty(value = "minimum price (optional)", position = 7, allowableValues = "range[0, infinity]")
