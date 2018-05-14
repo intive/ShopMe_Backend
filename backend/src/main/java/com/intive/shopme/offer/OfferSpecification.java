@@ -21,8 +21,8 @@ class OfferSpecification implements Specification<DbOffer> {
 
         Predicate result = null;
 
-        var key = criteria.getKey();
-        var operation = criteria.getOperation();
+        final var key = criteria.getKey();
+        final var operation = criteria.getOperation();
         if (key.equals("date")) {
             Path<Date> datePath = root.get(key);
             Date dateValue = (Date)criteria.getValue();
@@ -36,7 +36,7 @@ class OfferSpecification implements Specification<DbOffer> {
             }
         } else {
             Path path = root.get(key);
-            var value = criteria.getValue();
+            final var value = criteria.getValue();
             switch (operation) {
                 case "≥":
                     result = builder.greaterThanOrEqualTo(path, value.toString());
