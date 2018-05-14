@@ -11,16 +11,11 @@ import com.intive.shopme.model.rest.Offer;
 import com.intive.shopme.model.rest.Owner;
 import com.intive.shopme.model.rest.Voivodeship;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -33,26 +28,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.intive.shopme.config.ApiUrl.OFFERS;
-import static com.intive.shopme.config.AppConfig.ACCEPTABLE_TITLE_SEARCH_CHARS;
-import static com.intive.shopme.config.AppConfig.DEFAULT_PAGE_SIZE;
-import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_DIRECTION;
-import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_FIELD;
-import static com.intive.shopme.config.AppConfig.FIRST_PAGE;
-import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
-import static com.intive.shopme.config.AppConfig.PAGE_SIZE_MAX;
 import static com.intive.shopme.config.ErrorHandlingConfig.CONSTRAINTS_JSON_KEY;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.BAD_REQUEST;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
@@ -100,71 +87,14 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     }
 
     @GetMapping
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "page", value = "requested page number (optional, counting from " + FIRST_PAGE +
-                    ", default = " + FIRST_PAGE + ")", defaultValue = FIRST_PAGE,
-                    dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "pageSize", value = "number of offers per page (optional, default = " +
-                    DEFAULT_PAGE_SIZE + ", max " + PAGE_SIZE_MAX + ")",
-                    allowableValues = "range[1, " + PAGE_SIZE_MAX + "]", defaultValue = DEFAULT_PAGE_SIZE,
-                    dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "sort", value = "the properties to sort by (optional, date | basePrice | title, default = " +
-                    DEFAULT_SORT_FIELD + ")",
-                    allowableValues = "date, basePrice, title", defaultValue = DEFAULT_SORT_FIELD,
-                    dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "order", value = "sorting order (optional, ASC | DESC, default = " +
-                    DEFAULT_SORT_DIRECTION + ")",
-                    allowableValues = "ASC, DESC", defaultValue = DEFAULT_SORT_DIRECTION,
-                    dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "title", value = "filter query for offers titles (optional, at least two characters)",
-                    dataType = "String", paramType = "query"),
-            @ApiImplicitParam(name = "priceMin", value = "minimum price (optional)",
-                    dataType = "Float", paramType = "query"),
-            @ApiImplicitParam(name = "priceMax", value = "maximum price (optional)",
-                    dataType = "Float", paramType = "query"),
-            @ApiImplicitParam(name = "dateMin", value = "offer not older than (optional)",
-                    dataType = "Long", paramType = "query"),
-            @ApiImplicitParam(name = "dateMax", value = "offer not newer than (optional)",
-                    dataType = "Long", paramType = "query")
-    })
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SUCCESS),
+            @ApiResponse(code = 400, message = BAD_REQUEST)
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    Page<Offer> searchOffers(
-            @RequestParam(name = "page", required = false, defaultValue = FIRST_PAGE) int page,
-            @RequestParam(name = "pageSize", required = false, defaultValue = DEFAULT_PAGE_SIZE) int pageSize,
-            @RequestParam(name = "sort", required = false, defaultValue = DEFAULT_SORT_FIELD) String sortField,
-            @RequestParam(name = "order", required = false, defaultValue = DEFAULT_SORT_DIRECTION) String sortDirection,
-            @RequestParam(name = "title", required = false, defaultValue = "") String title,
-            @RequestParam(name = "priceMin", required = false, defaultValue = "0") float priceMin,
-            @RequestParam(name = "priceMax", required = false, defaultValue = "0") float priceMax,
-            @RequestParam(name = "dateMin", required = false, defaultValue = "0") long dateMin,
-            @RequestParam(name = "dateMax", required = false, defaultValue = "0") long dateMax) {
-
-        page = Math.max(page, Integer.valueOf(FIRST_PAGE));
-        pageSize = Math.min(pageSize, PAGE_SIZE_MAX);
-
-        final var pageable = PageRequest.of(page - Integer.valueOf(FIRST_PAGE), pageSize,
-                Direction.fromString(sortDirection), sortField);
-
-        final var builder = new OfferSpecificationsBuilder();
-        if (StringUtils.isNotEmpty(title) && (title.length() > 1) && !StringUtils.isNumeric(title)) {
-            var titleKeywords = StringUtils.left(title, OFFER_TITLE_MAX_LENGTH)
-                    .replaceAll("[^" + ACCEPTABLE_TITLE_SEARCH_CHARS + "]", "")
-                    .replaceAll("  ", " ")
-                    .toLowerCase().split(" ");
-            Arrays.stream(titleKeywords).forEach(titleKeyword -> builder.with("title", ":", titleKeyword));
-        }
-        final var filter = builder.build();
-
-        if (dateMin != 0) builder.with("date", "≥", dateMin);
-        if (dateMax != 0) builder.with("date", "≤", dateMax);
-        if (priceMin != 0) builder.with("basePrice", "≥", priceMin);
-        if (priceMax != 0) builder.with("basePrice", "≤", priceMax);
-
-        final var offers = service.getAll(pageable, filter);
-        return new PageImpl<>(convertToView(offers.getContent()), pageable, offers.getTotalElements());
+    Page<Offer> search(@Valid OffersSearchParams offersSearchParams) {
+        final var offers = service.getAll(offersSearchParams);
+        return new PageImpl<>(convertToView(offers.getContent()), offersSearchParams.pageable(), offers.getTotalElements());
     }
 
     @GetMapping(value = "{id}")

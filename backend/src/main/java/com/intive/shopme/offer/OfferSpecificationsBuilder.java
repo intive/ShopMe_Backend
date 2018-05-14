@@ -26,8 +26,8 @@ class OfferSpecificationsBuilder {
         }
 
         Specification<DbOffer> result = specs.get(0);
-        for (int i = 1; i < specs.size(); i++) {
-            result = Specification.where(result).and(specs.get(i));
+        for (Specification<DbOffer> spec : specs) {
+            result = Specification.where(result).and(spec);
         }
 
         return result;

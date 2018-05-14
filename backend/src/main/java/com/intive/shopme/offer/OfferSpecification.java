@@ -6,8 +6,10 @@ import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.Date;
 
 @AllArgsConstructor
 class OfferSpecification implements Specification<DbOffer> {
@@ -18,21 +20,38 @@ class OfferSpecification implements Specification<DbOffer> {
     public Predicate toPredicate(Root<DbOffer> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 
         Predicate result = null;
-        switch (criteria.getOperation()) {
-            case "≥":
-                result = builder.greaterThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
-                break;
-            case "≤":
-                result = builder.lessThanOrEqualTo(root.get(criteria.getKey()), criteria.getValue().toString());
-                break;
-            case ":":
-                if (root.get(criteria.getKey()).getJavaType() == String.class) {
-                    result = builder.like(builder.lower(root.get(criteria.getKey())),
-                            "%" + criteria.getValue() + "%");
-                } else {
-                    result = builder.equal(root.get(criteria.getKey()), criteria.getValue());
-                }
-                break;
+
+        var key = criteria.getKey();
+        var operation = criteria.getOperation();
+        if (key.equals("date")) {
+            Path<Date> datePath = root.get(key);
+            Date dateValue = (Date)criteria.getValue();
+            switch (operation) {
+                case "≥":
+                    result = builder.greaterThanOrEqualTo(datePath, dateValue);
+                    break;
+                case "≤":
+                    result = builder.lessThanOrEqualTo(datePath, dateValue);
+                    break;
+            }
+        } else {
+            Path path = root.get(key);
+            var value = criteria.getValue();
+            switch (operation) {
+                case "≥":
+                    result = builder.greaterThanOrEqualTo(path, value.toString());
+                    break;
+                case "≤":
+                    result = builder.lessThanOrEqualTo(path, value.toString());
+                    break;
+                case ":":
+                    if (path.getJavaType() == String.class) {
+                        result = builder.like(builder.lower(path),"%" + value + "%");
+                    } else {
+                        result = builder.equal(path, value);
+                    }
+                    break;
+            }
         }
 
         return result;
