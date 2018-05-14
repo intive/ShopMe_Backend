@@ -20,7 +20,7 @@ public class UserCredentials {
     @Email
     private final String email;
 
-    @ApiModelProperty(example = "password", position = 2, required = true)
+    @ApiModelProperty(example = "Password9", position = 2, required = true)
     @NotNull
     private final String password;
 
