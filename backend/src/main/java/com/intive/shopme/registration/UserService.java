@@ -9,7 +9,8 @@ import java.util.UUID;
 
 @Service
 @Transactional
-class UserService {
+public class UserService {
+
 
     private final UserRepository repository;
 
@@ -32,5 +33,9 @@ class UserService {
 
     boolean findIfUserExist(String email) {
         return !repository.findUserByEmail(email).isEmpty();
+    }
+
+    public DbUser findOneByEmail(String email) {
+        return repository.findOneByEmail(email);
     }
 }

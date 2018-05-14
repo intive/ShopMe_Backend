@@ -8,12 +8,14 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiKey;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.servlet.ServletContext;
+import java.util.Collections;
 
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.createApiInfo;
 
@@ -42,7 +44,12 @@ class SwaggerConfig {
                         .apis(RequestHandlerSelectors.any())
                         .paths(Predicates.not(PathSelectors.regex("/error|/actuator.*")))
                         .build()
-                        .apiInfo(createApiInfo()));
+                        .apiInfo(createApiInfo())
+                        .securitySchemes(Collections.singletonList(apiKey())));
+    }
+
+    private ApiKey apiKey() {
+        return new ApiKey("Authorization", "Authorization", "header");
     }
 
     @Bean

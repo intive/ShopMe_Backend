@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
@@ -68,6 +69,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new offer", response = Offer.class)
+    @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors) {
         categoryValidator.validate(offer, errors);
         if (errors.hasErrors()) {

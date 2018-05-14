@@ -31,5 +31,34 @@ java -jar -Dspring.profiles.active={dev,stage,production} target/be.jar
 * http://localhost:8080/swagger-ui.html
 * http://localhost:8080/v2/api-docs
 
+## Authorization
+* To configure secret for JWT add ```SHOPME_SECRET``` environment variable otherwise default secret will be used
+
+To get token ```POST``` user credentials to ```/users/login```
+
+Curl:
+```
+ curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' -d '{
+       "email": "unknown@gmail.com",
+       "password": "password"
+     }' 'http://localhost:8080/users/login'
+```
+
+To authorize send JWT token in Authorization header with Bearer prefix in request.
+
+Curl:
+```
+curl -X GET --header 'Accept: application/json'
+--header 'Authorization: Bearer eyJhbGciOiJIUzUxMiJ9...
+' 'http://localhost:8080/categories'
+```
+
+#### Swagger Authorization
+
+To get token ```POST``` user credentials to ```/users/login```
+
+Then go to ```Authorization``` by pressing ```Authorize``` button.
+
+In value text box type ```Bearer ``` and paste token.
 ## More information:
 * [CodeStyle](https://github.com/blstream/ShopMe_Backend/blob/master/backend/doc/CodeStyle.md)

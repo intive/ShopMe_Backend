@@ -1,36 +1,78 @@
 package com.intive.shopme.config;
 
+import com.intive.shopme.token.AuthenticationRequestMatcher;
+import com.intive.shopme.token.UnauthorizedEntryPoint;
+import com.intive.shopme.token.authentication.JwtAuthenticationProvider;
+import com.intive.shopme.token.authentication.TokenAuthenticationFailureHandler;
+import com.intive.shopme.token.authentication.TokenAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Arrays;
+
+import static com.intive.shopme.config.ApiUrl.LOGIN;
+import static com.intive.shopme.config.AppConfig.REST_ENTRY_POINT;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Bcrypt log rounds to use, between 4 and 31
      */
     private static final int HASHING_STRENGTH = 11;
+    private final JwtAuthenticationProvider jwtAuthenticationProvider;
+
+    @Autowired
+    public SpringSecurityConfig(JwtAuthenticationProvider jwtAuthenticationProvider) {
+        this.jwtAuthenticationProvider = jwtAuthenticationProvider;
+    }
+
+    private TokenAuthenticationFilter getAuthenticationFilter() throws Exception {
+        final var pathsToSkip = Arrays.asList(LOGIN);
+        final var matcher = new AuthenticationRequestMatcher(pathsToSkip);
+        final var filter =
+                new TokenAuthenticationFilter(new TokenAuthenticationFailureHandler(), matcher);
+        filter.setAuthenticationManager(authenticationManager());
+
+        return filter;
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(jwtAuthenticationProvider);
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        // TODO to remove when final security solution implemented
-        // this is temporary workaround to disable Spring Security
-        // because implementing user authentication and token management
-        // was out of scope of this task (password hashing only)
-        // but enabling Spring Security (required to have BCrypt crypto library)
-        // turns on default security policies (which means blocking access to our endpoints)
-        http.csrf().disable().authorizeRequests().antMatchers("/").permitAll();
+        http.csrf().disable()
+                .exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint())
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().authorizeRequests().antMatchers(LOGIN).permitAll()
+                .and().authorizeRequests().antMatchers(REST_ENTRY_POINT).authenticated()
+                .and().headers().frameOptions().disable()
+                .and().addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     public PasswordEncoder encoder() {
         return new BCryptPasswordEncoder(HASHING_STRENGTH);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

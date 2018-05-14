@@ -7,6 +7,7 @@ import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.Address;
 import com.intive.shopme.model.rest.Invoice;
+import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.User;
 import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
@@ -72,7 +73,7 @@ class UserController extends ConvertibleController<DbUser, User> {
 
         final var dbUser = convertToDbModel(user);
         dbUser.setId(UUID.randomUUID());
-
+        dbUser.addRole(Role.USER);
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
     }
 
@@ -111,6 +112,7 @@ class UserController extends ConvertibleController<DbUser, User> {
         result.setEmail(dbUser.getEmail());
         result.setPhoneNumber(dbUser.getPhoneNumber());
         result.setBankAccount(dbUser.getBankAccount());
+        result.setRoles(dbUser.getRoles());
         if (dbUser.getAddress() != null) {
             result.setAddress(genericConvert(dbUser.getAddress(), Address.class));
         }
@@ -134,6 +136,7 @@ class UserController extends ConvertibleController<DbUser, User> {
         result.setPassword(passwordEncoder.encode(user.getPassword()));
         result.setPhoneNumber(user.getPhoneNumber());
         result.setBankAccount(user.getBankAccount());
+        result.setRoles(user.getRoles());
         if (user.getAddress() != null) {
             result.setAddress(genericConvert(user.getAddress(), DbAddress.class));
         }
