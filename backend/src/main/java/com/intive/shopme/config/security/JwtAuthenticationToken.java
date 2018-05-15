@@ -1,12 +1,15 @@
-package com.intive.shopme.token.authentication;
+package com.intive.shopme.config.security;
 
+import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.UserContext;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.Collections;
 
-public class JwtAuthenticationToken extends AbstractAuthenticationToken {
+class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     private final UserContext userContext;
     private String token;
@@ -18,6 +21,10 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
 
     JwtAuthenticationToken(String token) {
         this(null, null, token, false);
+    }
+
+    static Authentication anonymous() {
+        return new JwtAuthenticationToken(null, Collections.<GrantedAuthority>singletonList(Role.ANONYMOUS));
     }
 
     private JwtAuthenticationToken(Collection<? extends GrantedAuthority> authorities,

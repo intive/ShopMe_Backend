@@ -25,6 +25,7 @@ public class ErrorHandlingConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(ErrorHandlingConfig.class);
 
     public static final String CONSTRAINTS_JSON_KEY = "errors";
+
     private static final String VALIDATION_DESCRIPTION_JSON_KEY = "message";
     private static final String ERROR_ID_JSON_KEY = "id";
 

@@ -8,7 +8,10 @@ import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.Address;
 import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.Role;
+import com.intive.shopme.model.rest.Token;
 import com.intive.shopme.model.rest.User;
+import com.intive.shopme.model.rest.UserContext;
+import com.intive.shopme.model.rest.UserCredentials;
 import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
 import io.swagger.annotations.Api;
@@ -17,6 +20,8 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
@@ -24,9 +29,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.Map;
@@ -34,31 +39,34 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.intive.shopme.config.ApiUrl.USERS;
+import static com.intive.shopme.config.ApiUrl.USERS_CURRENT;
+import static com.intive.shopme.config.ApiUrl.USERS_LOGIN;
 import static com.intive.shopme.config.ErrorHandlingConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 
 @RestController
-@RequestMapping(value = USERS)
-@Api(value = "user", description = "REST API for users operations", tags = "Users")
+@Api(value = "user", description = "REST API for users operations", tags = {"Users"})
 class UserController extends ConvertibleController<DbUser, User> {
 
     private final UserService service;
     private final ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator;
     private final VoivodeshipValidator voivodeshipValidator;
     private final PasswordEncoder passwordEncoder;
+    private final TokenService tokensService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder) {
+                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService) {
         super(DbUser.class, User.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
         this.voivodeshipValidator = voivodeshipValidator;
         this.passwordEncoder = passwordEncoder;
+        this.tokensService = tokensService;
     }
 
-    @PostMapping
+    @PostMapping(value = USERS)
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = CREATED),
@@ -77,7 +85,7 @@ class UserController extends ConvertibleController<DbUser, User> {
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
     }
 
-    @GetMapping(value = "{id}")
+    @GetMapping(value = USERS + "/{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SUCCESS),
             @ApiResponse(code = 404, message = NOT_FOUND)
@@ -87,7 +95,7 @@ class UserController extends ConvertibleController<DbUser, User> {
         return convertToView(service.get(id));
     }
 
-    @GetMapping(value = "/email={email}")
+    @GetMapping(value = USERS + "/email={email}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SUCCESS),
             @ApiResponse(code = 404, message = NOT_FOUND)
@@ -95,6 +103,37 @@ class UserController extends ConvertibleController<DbUser, User> {
     @ApiOperation(value = "Search if user with specified email exist in database")
     boolean getByEmail(@PathVariable String email) {
         return service.findIfUserExist(email.toLowerCase());
+    }
+
+    @PostMapping(value = USERS_LOGIN)
+    @ApiOperation("Log in to api")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully generated token"),
+            @ApiResponse(code = 400, message = "Incorrect email and/or password")
+    })
+    @ResponseStatus(HttpStatus.OK)
+    Token login(@Valid @RequestBody UserCredentials credentials) {
+
+        final var user = service.findOneByEmail(credentials.getEmail().toLowerCase());
+        final String token = tokensService.exchangePasswordForToken(user, credentials.getPassword());
+
+        return Token.builder()
+                .userId(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .roles(user.getRoles())
+                .expirationDate(tokensService.getExpirationDate())
+                .jwt(token)
+                .build();
+    }
+
+    @GetMapping(value = USERS_CURRENT)
+    @ApiOperation(value = "Show current user")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public UserContext whoAmI(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
+        return userContext;
     }
 
     private static String createErrorString(Errors errors) {

@@ -18,7 +18,7 @@ class UserControllerTest {
     private static final String PASSWORD = "bar";
     private static final String PASSWORD_ENCODED = "baz";
 
-    private final UserController controller = new UserController(null, null, null, PASSWORD_ENCODER);
+    private final UserController controller = new UserController(null, null, null, PASSWORD_ENCODER, null);
 
     @Test
     void convertToView_should_map_basic_values_successfully() {

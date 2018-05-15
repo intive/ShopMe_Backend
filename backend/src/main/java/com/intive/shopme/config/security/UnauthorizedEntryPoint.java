@@ -1,4 +1,4 @@
-package com.intive.shopme.token;
+package com.intive.shopme.config.security;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -10,7 +10,8 @@ import java.io.IOException;
 public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
 
     @Override
-    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
+    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+                         AuthenticationException e) throws IOException {
         httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
     }
 }

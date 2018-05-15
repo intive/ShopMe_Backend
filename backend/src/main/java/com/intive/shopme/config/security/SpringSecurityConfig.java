@@ -1,10 +1,5 @@
-package com.intive.shopme.config;
+package com.intive.shopme.config.security;
 
-import com.intive.shopme.token.AuthenticationRequestMatcher;
-import com.intive.shopme.token.UnauthorizedEntryPoint;
-import com.intive.shopme.token.authentication.JwtAuthenticationProvider;
-import com.intive.shopme.token.authentication.TokenAuthenticationFailureHandler;
-import com.intive.shopme.token.authentication.TokenAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,9 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.Arrays;
-
-import static com.intive.shopme.config.ApiUrl.LOGIN;
+import static com.intive.shopme.config.ApiUrl.ALLOW_UNAUTHENTICATED_ACCESS;
+import static com.intive.shopme.config.ApiUrl.USERS_LOGIN;
 import static com.intive.shopme.config.AppConfig.REST_ENTRY_POINT;
 
 @Configuration
@@ -41,13 +35,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private TokenAuthenticationFilter getAuthenticationFilter() throws Exception {
-        final var pathsToSkip = Arrays.asList(LOGIN);
-        final var matcher = new AuthenticationRequestMatcher(pathsToSkip);
-        final var filter =
-                new TokenAuthenticationFilter(new TokenAuthenticationFailureHandler(), matcher);
-        filter.setAuthenticationManager(authenticationManager());
-
-        return filter;
+        return new TokenAuthenticationFilter(new TokenAuthenticationFailureHandler(), authenticationManager(),
+                ALLOW_UNAUTHENTICATED_ACCESS);
     }
 
     @Override
@@ -60,7 +49,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(new UnauthorizedEntryPoint())
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().authorizeRequests().antMatchers(LOGIN).permitAll()
+                .and().authorizeRequests().antMatchers(USERS_LOGIN).permitAll()
                 .and().authorizeRequests().antMatchers(REST_ENTRY_POINT).authenticated()
                 .and().headers().frameOptions().disable()
                 .and().addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

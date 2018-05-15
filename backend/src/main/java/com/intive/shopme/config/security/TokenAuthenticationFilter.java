@@ -1,8 +1,8 @@
-package com.intive.shopme.token.authentication;
+package com.intive.shopme.config.security;
 
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -21,35 +21,25 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
     private final AuthenticationFailureHandler failureHandler;
 
-    public TokenAuthenticationFilter(AuthenticationFailureHandler failureHandler, RequestMatcher requestMatcher) {
+    TokenAuthenticationFilter(AuthenticationFailureHandler failureHandler, AuthenticationManager authenticationManager,
+                              RequestMatcher requestMatcher) {
         super(requestMatcher);
+        this.setAuthenticationManager(authenticationManager);
         this.failureHandler = failureHandler;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
             throws AuthenticationException {
-
-        final String header = request.getHeader(AUTHORIZATION_HEADER);
-
-        if (header == null) {
-            return getAuthenticationManager().authenticate(new JwtAuthenticationToken(null));
-        }
-
-        if (!header.startsWith(TOKEN_PREFIX)) {
-            throw new JwtAuthenticationException("Incorrect header");
-        }
-
-        final String token = header.substring(TOKEN_PREFIX.length(), header.length());
-        return getAuthenticationManager().authenticate(new JwtAuthenticationToken(token));
+        return getAuthenticationManager().authenticate(
+                getJwtAuthenticationToken(request.getHeader(AUTHORIZATION_HEADER)));
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult)
             throws IOException, ServletException {
-
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        final var context = SecurityContextHolder.createEmptyContext();
         context.setAuthentication(authResult);
         SecurityContextHolder.setContext(context);
         chain.doFilter(request, response);
@@ -62,5 +52,17 @@ public class TokenAuthenticationFilter extends AbstractAuthenticationProcessingF
 
         SecurityContextHolder.clearContext();
         failureHandler.onAuthenticationFailure(request, response, failed);
+    }
+
+    private JwtAuthenticationToken getJwtAuthenticationToken(String header) {
+        if (header == null) {
+            return new JwtAuthenticationToken(null);
+        }
+        if (!header.startsWith(TOKEN_PREFIX)) {
+            throw new JwtAuthenticationException("Incorrect header");
+        }
+
+        final var token = header.substring(TOKEN_PREFIX.length(), header.length());
+        return new JwtAuthenticationToken(token);
     }
 }

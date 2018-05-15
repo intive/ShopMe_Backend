@@ -1,8 +1,8 @@
-package com.intive.shopme.token.authentication;
+package com.intive.shopme.config.security;
 
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.UserContext;
-import com.intive.shopme.token.JwtParser;
+import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
@@ -10,14 +10,11 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
-public class JwtAuthenticationProvider implements AuthenticationProvider {
+class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final JwtParser jwtParser;
 
@@ -29,23 +26,23 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         final String token = (String) authentication.getCredentials();
-
         if (token == null) {
-            List<GrantedAuthority> authorities = Collections.singletonList(Role.ANONYMOUS);
-            return new JwtAuthenticationToken(null, authorities);
+            return JwtAuthenticationToken.anonymous();
         }
 
-        jwtParser.parse(token);
-        final UUID userID = jwtParser.getUserId();
-        final String email = jwtParser.getEmail();
-        final List<String> scopes = jwtParser.getScopes();
+        final var claims = jwtParser.parse(token);
+        final var grantedAuthorities = convertToGrantedAuthorities(claims);
+        final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities);
 
-        final Set<GrantedAuthority> authorities = scopes.stream()
-                .map(Role::valueOf)
-                .collect(Collectors.toSet());
+        return new JwtAuthenticationToken(userContext, grantedAuthorities);
+    }
 
-        final var userContext = new UserContext(userID, email, authorities);
-        return new JwtAuthenticationToken(userContext, authorities);
+    private Set<GrantedAuthority> convertToGrantedAuthorities(Claims claims) {
+        Set<GrantedAuthority> set = new HashSet<>();
+        for (Object scope : JwtParser.getScopes(claims)) {
+            set.add(Role.valueOf("" + scope));
+        }
+        return set;
     }
 
     @Override
