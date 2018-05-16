@@ -2,6 +2,7 @@ package com.intive.shopme.model.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intive.shopme.validation.LinkInTextCheck;
+import com.intive.shopme.validation.ProgressiveOfferLevels;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -16,6 +17,7 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 
 @Data
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
+@ProgressiveOfferLevels
 public class Offer {
 
     @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")

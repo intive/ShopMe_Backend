@@ -73,7 +73,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors) {
         categoryValidator.validate(offer, errors);
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final var dbOffer = convertToDbModel(offer);
