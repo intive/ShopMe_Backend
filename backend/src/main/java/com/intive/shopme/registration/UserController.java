@@ -96,12 +96,9 @@ class UserController extends ConvertibleController<DbUser, User> {
     }
 
     @GetMapping(value = USERS + "/email={email}")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = SUCCESS),
-            @ApiResponse(code = 404, message = NOT_FOUND)
-    })
+    @ApiResponse(code = 200, message = SUCCESS)
     @ApiOperation(value = "Search if user with specified email exist in database")
-    boolean getByEmail(@PathVariable String email) {
+    boolean existsByEmail(@PathVariable String email) {
         return service.findIfUserExist(email.toLowerCase());
     }
 
