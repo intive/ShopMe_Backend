@@ -4,13 +4,12 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import com.intive.shopme.model.rest.Offer;
-import org.apache.commons.lang3.StringUtils;
 
 public class ProgressiveOfferLevelsValidator
-        implements ConstraintValidator<ProgressiveOfferLevels, Offer> {
+        implements ConstraintValidator<ProgressiveOfferLevelsCheck, Offer> {
 
     @Override
-    public void initialize(ProgressiveOfferLevels constraintAnnotation) {
+    public void initialize(ProgressiveOfferLevelsCheck constraintAnnotation) {
     }
 
     @Override
@@ -19,11 +18,6 @@ public class ProgressiveOfferLevelsValidator
             return true;
         }
 
-        var extraIsPresent = StringUtils.isNotEmpty(offer.getExtraDescription()) ||
-                offer.getExtraPrice() != null;
-        var extendedIsComplete = StringUtils.isNotEmpty(offer.getExtendedDescription()) &&
-                offer.getExtendedPrice() != null;
-
-        return !(extraIsPresent && !extendedIsComplete);
+        return !(offer.isExtraPresent() && !offer.isExtendedComplete());
     }
 }

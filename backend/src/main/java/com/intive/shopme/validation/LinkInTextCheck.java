@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = {LinkInTextValidator.class})
+@Constraint(validatedBy = LinkInTextValidator.class)
 public @interface LinkInTextCheck {
 
     String message() default "description can't contain any urls/links.";

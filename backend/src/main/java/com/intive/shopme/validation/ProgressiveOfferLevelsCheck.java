@@ -11,9 +11,9 @@ import javax.validation.Payload;
 
 @Target({ TYPE, ANNOTATION_TYPE })
 @Retention(RUNTIME)
-@Constraint(validatedBy = { ProgressiveOfferLevelsValidator.class })
+@Constraint(validatedBy = ProgressiveOfferLevelsValidator.class)
 @Documented
-public @interface ProgressiveOfferLevels {
+public @interface ProgressiveOfferLevelsCheck {
     String message() default "If EXTRA service level is offered you have to complete EXTENDED service level details as well!";
 
     Class<?>[] groups() default { };

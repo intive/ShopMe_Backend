@@ -2,10 +2,11 @@ package com.intive.shopme.model.rest;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intive.shopme.validation.LinkInTextCheck;
-import com.intive.shopme.validation.ProgressiveOfferLevels;
+import com.intive.shopme.validation.ProgressiveOfferLevelsCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -17,7 +18,7 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 
 @Data
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
-@ProgressiveOfferLevels
+@ProgressiveOfferLevelsCheck
 public class Offer {
 
     @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
@@ -77,4 +78,14 @@ public class Offer {
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
     @JsonProperty("user")
     private Owner owner;
+
+    public boolean isExtraPresent() {
+        return StringUtils.isNotEmpty(extraDescription) ||
+                extraPrice != null;
+    }
+
+    public boolean isExtendedComplete() {
+        return StringUtils.isNotEmpty(extendedDescription) &&
+                extendedPrice != null;
+    }
 }

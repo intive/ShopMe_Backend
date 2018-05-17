@@ -11,7 +11,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = {SpecialCharacterValidator.class})
+@Constraint(validatedBy = SpecialCharacterValidator.class)
 public @interface SpecialCharacterCheck {
 
     String message() default "Field cannot contain only special characters.";
