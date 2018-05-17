@@ -138,13 +138,10 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     })
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('USER')")
-    public void logout(@RequestBody @AuthenticationPrincipal String token) {
+    public ExpiredToken logout(@RequestBody @AuthenticationPrincipal String token) {
 
-        Claims claims = JwtParser.parse(token);
-        claims.getId();
-        claims.getExpiration();
-
-
+    ExpiredToken expiredToken = tokensService.logout(token);
+return expiredToken;
 
     }
     @GetMapping(value = USERS_CURRENT)

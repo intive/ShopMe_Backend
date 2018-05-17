@@ -1,6 +1,7 @@
 package com.intive.shopme.registration;
 
 import com.intive.shopme.model.db.DbUser;
+import com.intive.shopme.model.rest.ExpiredToken;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.impl.TextCodec;
@@ -53,5 +54,21 @@ class TokenService {
 
     private boolean passwordMatches(final DbUser user, final String password) {
         return passwordEncoder.matches(password, user.getPassword());
+    }
+
+    ExpiredToken logout (String token) {
+
+            String userId = Jwts.parser()
+                        .setSigningKey(TextCodec.BASE64.decode(secret))
+                        .parseClaimsJws(token)
+                        .getBody().getId();
+            Date expirationDate = Jwts.parser()
+                        .setSigningKey(TextCodec.BASE64.decode(secret))
+                        .parseClaimsJws(token)
+                        .getBody().getExpiration();
+            ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();
+            return expiredToken;
+
+
     }
 }

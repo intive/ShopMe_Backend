@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -18,9 +19,9 @@ public class DbExpiredToken {
 
     @Id
     @NotEmpty
-    private UUID userId;
+    private String userId;
 
     @NotEmpty
-    private Long expirationDate;
+    private Date expirationDate;
 
 }
