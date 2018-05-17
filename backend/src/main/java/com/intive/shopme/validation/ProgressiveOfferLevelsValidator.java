@@ -17,6 +17,6 @@ public class ProgressiveOfferLevelsValidator
             return true;
         }
 
-        return !(offer.isExtraPresent() && !offer.isExtendedComplete());
+        return !offer.isExtraPresent() || offer.isExtendedComplete();
     }
 }
