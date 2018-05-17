@@ -3,6 +3,8 @@ package com.intive.shopme.validation;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+
+import static com.intive.shopme.validation.ProgressiveOfferLevelsValidator.MESSAGE;
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -14,7 +16,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = ProgressiveOfferLevelsValidator.class)
 @Documented
 public @interface ProgressiveOfferLevelsCheck {
-    String message() default "If EXTRA service level is offered you have to complete EXTENDED service level details as well!";
+    String message() default MESSAGE;
 
     Class<?>[] groups() default { };
 

@@ -8,9 +8,8 @@ import com.intive.shopme.model.rest.Offer;
 public class ProgressiveOfferLevelsValidator
         implements ConstraintValidator<ProgressiveOfferLevelsCheck, Offer> {
 
-    @Override
-    public void initialize(ProgressiveOfferLevelsCheck constraintAnnotation) {
-    }
+    static final String MESSAGE =
+            "If EXTRA service level is offered you have to complete EXTENDED service level details as well!";
 
     @Override
     public boolean isValid(Offer offer, ConstraintValidatorContext context) {
