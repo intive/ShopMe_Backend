@@ -15,6 +15,8 @@ import com.intive.shopme.model.rest.UserCredentials;
 import com.intive.shopme.model.rest.UserWrite;
 import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,6 +44,7 @@ import java.util.stream.Collectors;
 import static com.intive.shopme.config.ApiUrl.USERS;
 import static com.intive.shopme.config.ApiUrl.USERS_CURRENT;
 import static com.intive.shopme.config.ApiUrl.USERS_LOGIN;
+import static com.intive.shopme.config.ApiUrl.USERS_LOGOUT;
 import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
@@ -127,6 +130,23 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
                 .build();
     }
 
+    @PostMapping(value = USERS_LOGOUT)
+    @ApiOperation("Log out from api")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully logged out"),
+            @ApiResponse(code = 400, message = "No user data received or invalid token")
+    })
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public void logout(@RequestBody @AuthenticationPrincipal String token) {
+
+        Claims claims = JwtParser.parse(token);
+        claims.getId();
+        claims.getExpiration();
+
+
+
+    }
     @GetMapping(value = USERS_CURRENT)
     @ApiOperation(value = "Show current user")
     @ResponseStatus(HttpStatus.OK)

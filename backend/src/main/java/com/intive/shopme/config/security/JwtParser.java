@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -53,5 +54,9 @@ class JwtParser {
 
     static List getScopes(final Claims claims) {
         return claims.get("scopes", List.class);
+    }
+
+    static Date getExpirationDate(final Claims claims) {
+        return claims.get("exp", Date.class);
     }
 }
