@@ -66,6 +66,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = CREATED),
+            @ApiResponse(code = 400, message = BAD_REQUEST),
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new offer", response = Offer.class)
@@ -73,7 +74,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors) {
         categoryValidator.validate(offer, errors);
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final var dbOffer = convertToDbModel(offer);

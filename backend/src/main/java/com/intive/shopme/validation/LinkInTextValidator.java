@@ -22,6 +22,8 @@ public class LinkInTextValidator implements ConstraintValidator<LinkInTextCheck,
             Pattern.compile(URL_RE, CASE_INSENSITIVE),
             Pattern.compile(CUSTOM_WWW_RE, CASE_INSENSITIVE)};
 
+    static final String MESSAGE = "Description can't contain any urls/links.";
+
     @Override
     public boolean isValid(String text, ConstraintValidatorContext context) {
         return text == null

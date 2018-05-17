@@ -1,11 +1,15 @@
 package com.intive.shopme.model.rest;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.intive.shopme.validation.LinkInTextCheck;
+import com.intive.shopme.validation.ProgressiveOfferLevelsCheck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
@@ -16,6 +20,7 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 
 @Data
 @ApiModel(value = "Offer", description = "Represents the offer created by user")
+@ProgressiveOfferLevelsCheck
 public class Offer {
 
     @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
@@ -27,7 +32,7 @@ public class Offer {
 
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
-    @NotNull(message = "Offer's title cannot be empty.")
+    @NotEmpty(message = "Offer's title cannot be empty.")
     @Size(max = OFFER_TITLE_MAX_LENGTH, message = "Offer's title has too many characters.")
     private String title;
 
@@ -35,7 +40,7 @@ public class Offer {
     @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)
     private Category category;
 
-    @NotNull(message = "Base description cannot be empty.")
+    @NotEmpty(message = "Base description cannot be empty.")
     @Size(max = OFFER_DESCRIPTION_MAX_LENGTH,
             message = "Offer's base description has too many characters (max " + OFFER_DESCRIPTION_MAX_LENGTH + ").")
     @LinkInTextCheck(message = "Offer's base description can't contain any urls/links.")
@@ -75,4 +80,16 @@ public class Offer {
     @ApiModelProperty(value = "Represents the user who submitted this offer", required = true, position = 11)
     @JsonProperty("user")
     private Owner owner;
+
+    @JsonIgnore
+    public boolean isExtraPresent() {
+        return StringUtils.isNotEmpty(extraDescription) ||
+                extraPrice != null;
+    }
+
+    @JsonIgnore
+    public boolean isExtendedComplete() {
+        return StringUtils.isNotEmpty(extendedDescription) &&
+                extendedPrice != null;
+    }
 }

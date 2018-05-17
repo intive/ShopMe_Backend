@@ -8,13 +8,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static com.intive.shopme.validation.LinkInTextValidator.MESSAGE;
+
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = {LinkInTextValidator.class})
+@Constraint(validatedBy = LinkInTextValidator.class)
 public @interface LinkInTextCheck {
 
-    String message() default "description can't contain any urls/links.";
+    String message() default MESSAGE;
 
     Class<?>[] groups() default {};
 
