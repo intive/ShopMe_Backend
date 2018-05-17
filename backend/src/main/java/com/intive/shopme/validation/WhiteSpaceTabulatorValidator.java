@@ -7,8 +7,7 @@ import javax.validation.ConstraintValidatorContext;
 
 public class WhiteSpaceTabulatorValidator implements ConstraintValidator<WhiteSpaceTabulatorCheck, String> {
 
-    static final String MESSAGE =
-            "Field cannot contain only whitespace or tabulator.";
+    static final String MESSAGE = "Field cannot contain only whitespace or tabulator.";
 
     @Override
     public boolean isValid(String text, ConstraintValidatorContext context) {
