@@ -8,13 +8,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static com.intive.shopme.validation.SpecialCharacterValidator.MESSAGE;
+
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = SpecialCharacterValidator.class)
 public @interface SpecialCharacterCheck {
 
-    String message() default "Field cannot contain only special characters.";
+    String message() default MESSAGE;
 
     Class<?>[] groups() default {};
 

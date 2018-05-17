@@ -8,13 +8,15 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import static com.intive.shopme.validation.WhiteSpaceTabulatorValidator.MESSAGE;
+
 @Target({ElementType.METHOD, ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = WhiteSpaceTabulatorValidator.class)
 public @interface WhiteSpaceTabulatorCheck {
 
-    String message() default "Field cannot contain only whitespace or tabulator.";
+    String message() default MESSAGE;
 
     Class<?>[] groups() default {};
 
