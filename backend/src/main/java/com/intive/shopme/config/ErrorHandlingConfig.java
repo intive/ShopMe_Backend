@@ -29,7 +29,7 @@ import static java.util.stream.Collectors.toMap;
 public class ErrorHandlingConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ErrorHandlingConfig.class);
-    
+
     @ExceptionHandler(value = {ConstraintViolationException.class})
     @ResponseBody
     public ResponseEntity handleConstraintViolationException(ConstraintViolationException exception) {
@@ -80,7 +80,7 @@ public class ErrorHandlingConfig {
     @ResponseBody
     public ResponseEntity handleBadCredentialsException(BadCredentialsException exception) {
         return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(createResponseBody(exception.getMessage()));
     }
 
