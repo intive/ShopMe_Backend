@@ -1,6 +1,6 @@
 
 create table EXPIRED_TOKENS
 (
-	ID UUID not null,
+	USER_ID VARCHAR(255) not null,
 	EXPIRATION_DATE DATE not null
 );
