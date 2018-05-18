@@ -9,7 +9,9 @@ import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.Category;
 import com.intive.shopme.model.rest.Offer;
 import com.intive.shopme.model.rest.Owner;
+import com.intive.shopme.model.rest.UserContext;
 import com.intive.shopme.model.rest.Voivodeship;
+import com.intive.shopme.registration.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.Validator;
@@ -31,6 +34,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -54,11 +58,13 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALID
 public class OfferController extends ConvertibleController<DbOffer, Offer> {
 
     private final OfferService service;
+    private final UserService userService;
     private final Validator categoryValidator;
 
-    OfferController(OfferService service, CategoryValidator validator) {
+    OfferController(OfferService service, UserService userService, CategoryValidator validator) {
         super(DbOffer.class, Offer.class);
         this.service = service;
+        this.userService = userService;
         this.categoryValidator = validator;
     }
 
@@ -71,7 +77,12 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     })
     @ApiOperation(value = "Saves new offer", response = Offer.class)
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors) {
+    public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors,
+                                 @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
+        final var authenticatedUser = userService.get(userContext.getUserId());
+        final var additionalInfo = offer.getOwner().getAdditionalInfo();
+        offer.setOwner(new Owner(authenticatedUser, additionalInfo));
+
         categoryValidator.validate(offer, errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);

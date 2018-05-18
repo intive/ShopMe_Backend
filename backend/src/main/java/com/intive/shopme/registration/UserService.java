@@ -11,7 +11,6 @@ import java.util.UUID;
 @Transactional
 public class UserService {
 
-
     private final UserRepository repository;
 
     UserService(UserRepository repository) {
@@ -25,7 +24,7 @@ public class UserService {
         return repository.save(dbUser);
     }
 
-    DbUser get(UUID id) {
+    public DbUser get(UUID id) {
         repository.getOne(id);
         return repository.findById(id)
                 .orElseThrow(() -> new DataRetrievalFailureException("User with id: " + id + " not found"));

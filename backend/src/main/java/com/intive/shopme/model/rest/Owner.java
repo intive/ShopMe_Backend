@@ -1,11 +1,14 @@
 package com.intive.shopme.model.rest;
 
+import com.intive.shopme.model.db.DbUser;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.hibernate.validator.constraints.Length;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -17,13 +20,15 @@ import static com.intive.shopme.config.AppConfig.USER_NAME_MIN_LENGTH;
 
 @Data
 @ApiModel(value = "Offer's user", description = "Represents offer's owner")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Owner {
 
     @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
     private UUID id;
 
-    @NotNull(message = "User's name cannot be empty.")
-    @Length(min = USER_NAME_MIN_LENGTH, max = USER_NAME_MAX_LENGTH)
+    @NotEmpty(message = "User's name cannot be empty.")
+    @Size(min = USER_NAME_MIN_LENGTH, max = USER_NAME_MAX_LENGTH)
     @Pattern(regexp = "[a-zA-ZąĄćĆęĘłŁńŃóÓśŚżŻźŹ ]*", message = "Name has invalid characters.")
     @ApiModelProperty(value = "Represents user's name", required = true, position = 2, example = "Jan Kowalski")
     private String name;
@@ -37,14 +42,26 @@ public class Owner {
     @ApiModelProperty(value = "Represents user's phone number", required = true, position = 4, example = "0234567890")
     private String phoneNumber;
 
+    @NotEmpty(message = "User's city cannot be empty.")
     @ApiModelProperty(value = "Represents user's city", required = true, position = 5, example = "Szczecin")
     private String city;
 
+    @NotNull(message = "User's voivodeship cannot be empty.")
     @ApiModelProperty(value = "Represents user's voivodeship", required = true, position = 6)
     private Voivodeship voivodeship;
 
     @Size(max = USER_DESCRIPTION_MAX_LENGTH, message = "The additional user's information has too many characters.")
     @ApiModelProperty(value = "Represents additional information typed by user", position = 7,
             example = "Dodatkowe info")
-    private String additionalInfo;
+    private String additionalInfo = "";
+
+    public Owner(DbUser user, String additionalInfo) {
+        this.id = user.getId();
+        this.name = user.getName() + " " + user.getSurname();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.city = user.getAddress().getCity();
+        this.voivodeship = new Voivodeship(user.getVoivodeship().getName());
+        this.additionalInfo = additionalInfo;
+    }
 }
