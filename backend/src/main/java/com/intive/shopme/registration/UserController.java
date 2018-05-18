@@ -140,13 +140,12 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     })
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('USER')")
-    public DbExpiredToken logout(@RequestBody @AuthenticationPrincipal UserContext userContext) {
+    public DbExpiredToken logout(@AuthenticationPrincipal UserContext userContext) {
 
         UUID userId = userContext.getUserId();
         Date expirationDate = userContext.getExpirationDate();
         ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();
         final var dbExpiredToken = convertToDbModel(expiredToken);
-
 
     expiredTokenService.logout(dbExpiredToken);
     return dbExpiredToken;
