@@ -79,9 +79,9 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors,
                                  @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
-        final var loggedUser = userService.get(userContext.getUserId());
+        final var authenticatedUser = userService.get(userContext.getUserId());
         final var additionalInfo = offer.getOwner().getAdditionalInfo();
-        offer.setOwner(new Owner(loggedUser, additionalInfo));
+        offer.setOwner(new Owner(authenticatedUser, additionalInfo));
 
         categoryValidator.validate(offer, errors);
         if (errors.hasErrors()) {

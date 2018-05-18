@@ -56,12 +56,12 @@ public class Owner {
     private String additionalInfo = "";
 
     public Owner(DbUser user, String additionalInfo) {
-        id = user.getId();
-        name = user.getName() + " " + user.getSurname();
-        email = user.getEmail();
-        phoneNumber = user.getPhoneNumber();
-        city = user.getAddress().getCity();
-        voivodeship = new Voivodeship(user.getVoivodeship().getName());
+        this.id = user.getId();
+        this.name = user.getName() + " " + user.getSurname();
+        this.email = user.getEmail();
+        this.phoneNumber = user.getPhoneNumber();
+        this.city = user.getAddress().getCity();
+        this.voivodeship = new Voivodeship(user.getVoivodeship().getName());
         this.additionalInfo = additionalInfo;
     }
 }
