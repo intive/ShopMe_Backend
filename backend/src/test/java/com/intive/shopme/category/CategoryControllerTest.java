@@ -13,10 +13,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,18 +35,6 @@ class CategoryControllerTest extends WebTierTest {
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$", hasSize(greaterThan(0))))
                 .andExpect(jsonPath("$[0].name", notNullValue()));
-    }
-
-    @Test
-    void post_should_validate_successfully_valid_category() throws Exception {
-        when(service.create(any(DbCategory.class))).thenReturn(buildSampleCategory());
-
-        mockMvc.perform(
-                post(ApiUrl.CATEGORIES)
-                        .contentType(MediaType.APPLICATION_JSON_UTF8)
-                        .content(convertToJsonString(buildSampleCategory())))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.name", notNullValue()));
     }
 
     private static List<DbCategory> buildSampleCategories() {
