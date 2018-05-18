@@ -32,9 +32,9 @@ class ExpiredTokenService {
         this.repository = repository;
     }
 
-   // DbExpiredToken findOneByUserIdAndExpirationDate(Date expirationDate, UUID userId) {
-   //     return repository.findOneByUserIdAndExpirationDate(expirationDate, userId);
-   // }
+    DbExpiredToken findOneByUserIdAndExpirationDate(String userId, Long expirationDate) {
+      return repository.findOneByUserIdAndExpirationDate(userId, expirationDate);
+   }
 
     DbExpiredToken logout(DbExpiredToken dbExpiredToken) {
         return repository.save(dbExpiredToken);

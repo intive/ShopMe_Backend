@@ -10,7 +10,12 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-interface ExpiredTokenRepository extends JpaRepository<DbExpiredToken, UUID> {
+interface ExpiredTokenRepository extends JpaRepository<DbExpiredToken, String> {
+
+    DbExpiredToken findOneByUserIdAndExpirationDate(String userId, Long expirationDate);
+    DbExpiredToken logout(DbExpiredToken dbExpiredToken);
+
+
 
 
 }

@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.Date;
 import java.util.UUID;
 
 
@@ -22,6 +21,6 @@ public class ExpiredToken {
 
     @NotEmpty
     @ApiModelProperty(example = "1520031600000", position = 2)
-    private final Date expirationDate;
+    private final Long expirationDate;
 }
 

@@ -6,7 +6,6 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -17,6 +16,6 @@ public class DbExpiredToken {
 
     @Id
     private UUID userId;
-    private Date expirationDate;
+    private Long expirationDate;
 
 }

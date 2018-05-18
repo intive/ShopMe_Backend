@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -21,5 +20,5 @@ public class UserContext {
     private final Set<GrantedAuthority> authorities;
 
     @ApiModelProperty(value = "Represents user's token expiration date", position = 4)
-    private final Date expirationDate;
+    private final Long expirationDate;
 }

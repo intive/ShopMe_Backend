@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -143,7 +142,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     public DbExpiredToken logout(@AuthenticationPrincipal UserContext userContext) {
 
         UUID userId = userContext.getUserId();
-        Date expirationDate = userContext.getExpirationDate();
+        Long expirationDate = userContext.getExpirationDate();
         ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();
         final var dbExpiredToken = convertToDbModel(expiredToken);
 

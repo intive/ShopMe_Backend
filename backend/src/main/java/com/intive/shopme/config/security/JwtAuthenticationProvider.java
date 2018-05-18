@@ -32,7 +32,7 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
 
         final var claims = jwtParser.parse(token);
         final var grantedAuthorities = convertToGrantedAuthorities(claims);
-        final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities, JwtParser.getExpirationDate(claims));
+        final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities, JwtParser.getExpirationDate(claims).getTime());
 
         return new JwtAuthenticationToken(userContext, grantedAuthorities);
     }
