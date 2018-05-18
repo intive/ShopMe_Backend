@@ -6,7 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
+import java.util.UUID;
 
 
 @Data
@@ -14,11 +16,11 @@ import java.util.Date;
 @ApiModel(value = "User ID and JWT token expiration time")
 @Builder
 public class ExpiredToken {
-
+    @NotEmpty
     @ApiModelProperty(example = "c5296892-347f-4b2e-b1c6-6faff971f767", position = 1)
-    private final String userId;
+    private final UUID userId;
 
-
+    @NotEmpty
     @ApiModelProperty(example = "1520031600000", position = 2)
     private final Date expirationDate;
 }

@@ -2,6 +2,7 @@ package com.intive.shopme.registration;
 
 import com.intive.shopme.common.ConvertibleController;
 import com.intive.shopme.model.db.DbAddress;
+import com.intive.shopme.model.db.DbExpiredToken;
 import com.intive.shopme.model.db.DbInvoice;
 import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.db.DbVoivodeship;
@@ -15,8 +16,6 @@ import com.intive.shopme.model.rest.UserCredentials;
 import com.intive.shopme.model.rest.UserWrite;
 import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtParser;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -37,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -60,6 +60,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final VoivodeshipValidator voivodeshipValidator;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokensService;
+    private final ExpiredTokenService expiredTokenService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
                    VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService) {
@@ -69,6 +70,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         this.voivodeshipValidator = voivodeshipValidator;
         this.passwordEncoder = passwordEncoder;
         this.tokensService = tokensService;
+        this.expiredTokenService = expiredTokenService;
     }
 
     @PostMapping(value = USERS)
@@ -138,10 +140,16 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     })
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ExpiredToken logout(@RequestBody @AuthenticationPrincipal String token) {
+    public DbExpiredToken logout(@RequestBody @AuthenticationPrincipal UserContext userContext) {
 
-    ExpiredToken expiredToken = tokensService.logout(token);
-return expiredToken;
+        UUID userId = userContext.getUserId();
+        Date expirationDate = userContext.getExpirationDate();
+        ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();
+        final var dbExpiredToken = convertToDbModel(expiredToken);
+
+
+    expiredTokenService.logout(dbExpiredToken);
+    return dbExpiredToken;
 
     }
     @GetMapping(value = USERS_CURRENT)
@@ -217,6 +225,15 @@ return expiredToken;
         if (user.getInvoiceRequest() && user.getInvoice() != null) {
             result.setInvoice(genericConvert(user.getInvoice(), DbInvoice.class));
         }
+        return result;
+    }
+
+    protected DbExpiredToken convertToDbModel(ExpiredToken expiredToken) {
+        final var result = new DbExpiredToken();
+        result.setUserId(expiredToken.getUserId());
+        result.setExpirationDate(expiredToken.getExpirationDate());
+
+
 
         result.setAdditionalInfo(user.getAdditionalInfo());
 
