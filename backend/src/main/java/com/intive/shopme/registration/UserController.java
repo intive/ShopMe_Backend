@@ -61,6 +61,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final TokenService tokensService;
     private final ExpiredTokenService expiredTokenService;
 
+
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
                    VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService) {
         super(DbUser.class, UserView.class, UserWrite.class);
@@ -141,13 +142,13 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @PreAuthorize("hasAnyAuthority('USER')")
     public DbExpiredToken logout(@AuthenticationPrincipal UserContext userContext) {
 
-        UUID userId = userContext.getUserId();
-        Long expirationDate = userContext.getExpirationDate();
-        ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();
-        final var dbExpiredToken = convertToDbModel(expiredToken);
 
-    expiredTokenService.logout(dbExpiredToken);
-    return dbExpiredToken;
+            UUID userId = userContext.getUserId();
+            Long expirationDate = userContext.getExpirationDate();
+            ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();
+            final var dbExpiredToken = convertToDbModel(expiredToken);
+            expiredTokenService.logout(dbExpiredToken);
+            return dbExpiredToken;
 
     }
     @GetMapping(value = USERS_CURRENT)

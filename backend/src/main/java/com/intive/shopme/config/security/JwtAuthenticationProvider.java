@@ -2,6 +2,8 @@ package com.intive.shopme.config.security;
 
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.UserContext;
+import com.intive.shopme.registration.ExpiredTokenService;
+import com.intive.shopme.validation.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -17,10 +19,12 @@ import java.util.Set;
 class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final JwtParser jwtParser;
+    private final ExpiredTokenService expiredTokenService;
 
     @Autowired
-    public JwtAuthenticationProvider(JwtParser jwtParser) {
+    public JwtAuthenticationProvider(JwtParser jwtParser, ExpiredTokenService expiredTokenService) {
         this.jwtParser = jwtParser;
+        this.expiredTokenService = expiredTokenService;
     }
 
     @Override
@@ -34,7 +38,11 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
         final var grantedAuthorities = convertToGrantedAuthorities(claims);
         final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities, JwtParser.getExpirationDate(claims).getTime());
 
-        return new JwtAuthenticationToken(userContext, grantedAuthorities);
+        if (expiredTokenService.isTokenExpired(userContext) == false) {
+            return new JwtAuthenticationToken(userContext, grantedAuthorities);
+        }
+        else
+            throw new TokenExpiredException("Token has been expired");
     }
 
     private Set<GrantedAuthority> convertToGrantedAuthorities(Claims claims) {

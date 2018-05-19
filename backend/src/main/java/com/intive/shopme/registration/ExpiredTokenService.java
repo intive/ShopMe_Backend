@@ -23,23 +23,40 @@ import static com.intive.shopme.config.AppConfig.SCOPES_CLAIM_NAME;
 
 @Service
 @Transactional
-class ExpiredTokenService {
+public class ExpiredTokenService {
 
     private final ExpiredTokenRepository repository;
 
     @Autowired
-    ExpiredTokenService(ExpiredTokenRepository repository) {
+    public ExpiredTokenService(ExpiredTokenRepository repository) {
         this.repository = repository;
     }
 
-    DbExpiredToken findOneByUserIdAndExpirationDate(String userId, Long expirationDate) {
-      return repository.findOneByUserIdAndExpirationDate(userId, expirationDate);
+    boolean findOneByUserIdAndExpirationDate(UUID userId, Long expirationDate) {
+      if (repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null) {
+          return true;
+      }
+          else
+              return false;
+
    }
 
     DbExpiredToken logout(DbExpiredToken dbExpiredToken) {
         return repository.save(dbExpiredToken);
     }
 
+    public boolean isTokenExpired(UserContext userContext) {
 
+        UUID userId = userContext.getUserId();
+        Long expirationDate = userContext.getExpirationDate();
+        if (repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null) {
+
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
 
 }
