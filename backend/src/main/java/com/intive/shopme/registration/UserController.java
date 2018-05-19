@@ -141,8 +141,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('USER')")
     public DbExpiredToken logout(@AuthenticationPrincipal UserContext userContext) {
-
-
+        
             UUID userId = userContext.getUserId();
             Long expirationDate = userContext.getExpirationDate();
             ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();

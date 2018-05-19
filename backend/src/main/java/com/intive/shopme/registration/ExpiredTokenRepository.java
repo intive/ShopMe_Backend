@@ -10,7 +10,5 @@ import java.util.UUID;
 interface ExpiredTokenRepository extends JpaRepository<DbExpiredToken, String> {
 
     DbExpiredToken findOneByUserIdAndExpirationDate(UUID userId, Long expirationDate);
-
-
 }
 
