@@ -33,13 +33,12 @@ public class ExpiredTokenService {
     }
 
     boolean findOneByUserIdAndExpirationDate(UUID userId, Long expirationDate) {
-      if (repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null) {
-          return true;
-      }
-          else
-              return false;
+        if (repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null) {
+            return true;
+        } else
+            return false;
 
-   }
+    }
 
     DbExpiredToken logout(DbExpiredToken dbExpiredToken) {
         return repository.save(dbExpiredToken);
@@ -52,8 +51,7 @@ public class ExpiredTokenService {
         if (repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null) {
 
             return true;
-        }
-        else {
+        } else {
             return false;
         }
 
