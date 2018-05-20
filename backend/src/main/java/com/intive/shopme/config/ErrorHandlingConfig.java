@@ -68,18 +68,10 @@ public class ErrorHandlingConfig {
                 .body(createResponseBody(exception.getRootCause().getMessage()));
     }
 
-    @ExceptionHandler(value = {AccessDeniedException.class})
+    @ExceptionHandler(value = {AccessDeniedException.class, BadCredentialsException.class})
     @ResponseBody
-    public ResponseEntity handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
-        LOGGER.warn("URL: {}", request.getRequestURL(), exception.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
-                .body(createResponseBody(exception.getMessage()));
-    }
-
-    @ExceptionHandler(value = {BadCredentialsException.class})
-    @ResponseBody
-    public ResponseEntity handleBadCredentialsException(BadCredentialsException exception) {
+    public ResponseEntity handleAuthenticationException(RuntimeException exception, HttpServletRequest request) {
+        LOGGER.warn("{} URL: {}", exception.getMessage(), request.getRequestURL());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createResponseBody(exception.getMessage()));

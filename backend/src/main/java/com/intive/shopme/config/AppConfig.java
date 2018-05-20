@@ -51,6 +51,6 @@ public final class AppConfig {
     public static final String VALIDATION_DESCRIPTION_JSON_KEY = "message";
     public static final String ERROR_ID_JSON_KEY = "id";
 
-    public AppConfig() {
+    private AppConfig() {
     }
 }
