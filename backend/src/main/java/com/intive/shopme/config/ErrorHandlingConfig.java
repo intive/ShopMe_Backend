@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.util.Map;
@@ -69,7 +70,8 @@ public class ErrorHandlingConfig {
 
     @ExceptionHandler(value = {AccessDeniedException.class})
     @ResponseBody
-    public ResponseEntity handleAccessDeniedException(AccessDeniedException exception) {
+    public ResponseEntity handleAccessDeniedException(AccessDeniedException exception, HttpServletRequest request) {
+        LOGGER.warn("URL: {}", request.getRequestURL(), exception.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createResponseBody(exception.getMessage()));
