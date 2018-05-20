@@ -50,7 +50,6 @@ public final class AppConfig {
     public static final String CONSTRAINTS_JSON_KEY = "errors";
     public static final String VALIDATION_DESCRIPTION_JSON_KEY = "message";
     public static final String ERROR_ID_JSON_KEY = "id";
-    public static final String ACCESS_DENIED = "Access denied";
 
     public AppConfig() {
     }

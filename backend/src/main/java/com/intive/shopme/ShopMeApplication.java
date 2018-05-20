@@ -11,10 +11,13 @@ import org.springframework.jdbc.datasource.AbstractDataSource;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Retryable;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Locale;
 
 @SpringBootApplication
 @EnableRetry
@@ -45,6 +48,13 @@ public class ShopMeApplication {
     @Bean
     public BeanPostProcessor dataSouceWrapper() {
         return new RetryableDataSourceBeanPostProcessor();
+    }
+
+    @Bean
+    public LocaleResolver localeResolver() {
+        SessionLocaleResolver localeResolver = new SessionLocaleResolver();
+        localeResolver.setDefaultLocale(Locale.ENGLISH);
+        return localeResolver;
     }
 
     class RetryableDataSource extends AbstractDataSource {

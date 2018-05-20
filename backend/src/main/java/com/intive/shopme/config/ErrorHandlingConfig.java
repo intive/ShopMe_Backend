@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import static com.intive.shopme.config.AppConfig.ACCESS_DENIED;
 import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.AppConfig.ERROR_ID_JSON_KEY;
 import static com.intive.shopme.config.AppConfig.VALIDATION_DESCRIPTION_JSON_KEY;
@@ -73,7 +72,7 @@ public class ErrorHandlingConfig {
     public ResponseEntity handleAccessDeniedException(AccessDeniedException exception) {
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(createResponseBody(ACCESS_DENIED));
+                .body(createResponseBody(exception.getMessage()));
     }
 
     @ExceptionHandler(value = {BadCredentialsException.class})
