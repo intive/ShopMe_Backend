@@ -30,23 +30,18 @@ public class RevokedTokenService {
         UUID userId = userContext.getUserId();
         Date expirationDate = userContext.getExpirationDate();
         return repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null;
-
     }
 
     public void removeOutdatedEntries() {
         Date currentTime = new Date();
         List<DbRevokedToken> revokedTokenList = repository.findAll();
-        System.out.println(revokedTokenList); // for test purposes only
 
         for (DbRevokedToken dbRevokedToken:revokedTokenList) {
 if (dbRevokedToken.getExpirationDate().before(currentTime)){
    repository.delete(dbRevokedToken);
-   System.out.println("1 entry deleted"); // for test purposes only
 }
         }
-
     }
-
 }
 
 
