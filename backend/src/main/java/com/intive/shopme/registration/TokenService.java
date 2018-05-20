@@ -23,8 +23,6 @@ class TokenService {
     private final long expirationTime;
     private final String secret;
 
-
-
     @Autowired
     TokenService(PasswordEncoder passwordEncoder,
                  @Value("${jwt.expiration-time}") long expirationTime,
@@ -56,6 +54,4 @@ class TokenService {
     private boolean passwordMatches(final DbUser user, final String password) {
         return passwordEncoder.matches(password, user.getPassword());
     }
-
-
 }

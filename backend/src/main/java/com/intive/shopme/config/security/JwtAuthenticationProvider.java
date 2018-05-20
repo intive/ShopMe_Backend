@@ -2,7 +2,7 @@ package com.intive.shopme.config.security;
 
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.UserContext;
-import com.intive.shopme.registration.ExpiredTokenService;
+import com.intive.shopme.registration.RevokedTokenService;
 import com.intive.shopme.validation.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ import java.util.Set;
 class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final JwtParser jwtParser;
-    private final ExpiredTokenService expiredTokenService;
+    private final RevokedTokenService revokedTokenService;
 
     @Autowired
-    public JwtAuthenticationProvider(JwtParser jwtParser, ExpiredTokenService expiredTokenService) {
+    public JwtAuthenticationProvider(JwtParser jwtParser, RevokedTokenService revokedTokenService) {
         this.jwtParser = jwtParser;
-        this.expiredTokenService = expiredTokenService;
+        this.revokedTokenService = revokedTokenService;
     }
 
     @Override
@@ -36,9 +36,9 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
 
         final var claims = jwtParser.parse(token);
         final var grantedAuthorities = convertToGrantedAuthorities(claims);
-        final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities, JwtParser.getExpirationDate(claims).getTime());
+        final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities, JwtParser.getExpirationDate(claims));
 
-        if (expiredTokenService.isTokenExpired(userContext) == false) {
+        if (revokedTokenService.isTokenRevoked(userContext) == false) {
             return new JwtAuthenticationToken(userContext, grantedAuthorities);
         }
         else

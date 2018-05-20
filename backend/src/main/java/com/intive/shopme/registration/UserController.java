@@ -2,11 +2,12 @@ package com.intive.shopme.registration;
 
 import com.intive.shopme.common.ConvertibleController;
 import com.intive.shopme.model.db.DbAddress;
-import com.intive.shopme.model.db.DbExpiredToken;
+import com.intive.shopme.model.db.DbRevokedToken;
 import com.intive.shopme.model.db.DbInvoice;
 import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.Address;
+import com.intive.shopme.model.rest.RevokedToken;
 import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.Token;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -59,8 +61,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final VoivodeshipValidator voivodeshipValidator;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokensService;
-    private final ExpiredTokenService expiredTokenService;
-
+    private final RevokedTokenService revokedTokenService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
                    VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService) {
@@ -70,7 +71,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         this.voivodeshipValidator = voivodeshipValidator;
         this.passwordEncoder = passwordEncoder;
         this.tokensService = tokensService;
-        this.expiredTokenService = expiredTokenService;
+        this.revokedTokenService = revokedTokenService;
     }
 
     @PostMapping(value = USERS)
@@ -140,16 +141,15 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     })
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('USER')")
-    public DbExpiredToken logout(@AuthenticationPrincipal UserContext userContext) {
-        
-            UUID userId = userContext.getUserId();
-            Long expirationDate = userContext.getExpirationDate();
-            ExpiredToken expiredToken = ExpiredToken.builder().userId(userId).expirationDate(expirationDate).build();
-            final var dbExpiredToken = convertToDbModel(expiredToken);
-            expiredTokenService.logout(dbExpiredToken);
-            return dbExpiredToken;
+    public void logout(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
 
+        UUID userId = userContext.getUserId();
+        Date expirationDate = userContext.getExpirationDate();
+        RevokedToken revokedToken = new RevokedToken(userId, expirationDate);
+        final var dbRevokedToken = convertToDbModel(revokedToken);
+        revokedTokenService.logout(dbRevokedToken);
     }
+
     @GetMapping(value = USERS_CURRENT)
     @ApiOperation(value = "Show current user")
     @ResponseStatus(HttpStatus.OK)
