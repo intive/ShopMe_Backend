@@ -42,13 +42,13 @@ class TokenService {
                 .claim(EMAIL_CLAIM_NAME, user.getEmail())
                 .claim(SCOPES_CLAIM_NAME, user.getRoles())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(getExpirationDate()))
+                .setExpiration(getExpirationDate())
                 .signWith(SignatureAlgorithm.HS512, TextCodec.BASE64.decode(secret))
                 .compact();
     }
 
-    long getExpirationDate() {
-        return Instant.now().plusMillis(expirationTime).toEpochMilli();
+    Date getExpirationDate() {
+        return new Date(Instant.now().plusMillis(expirationTime).toEpochMilli());
     }
 
     private boolean passwordMatches(final DbUser user, final String password) {

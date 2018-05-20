@@ -22,4 +22,5 @@ public class UserContext {
 
     @ApiModelProperty(value = "Represents user's token expiration date", position = 4)
     private final Date expirationDate;
+
 }

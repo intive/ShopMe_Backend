@@ -143,9 +143,10 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @PreAuthorize("hasAnyAuthority('USER')")
     public void logout(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
 
-        UUID userId = userContext.getUserId();
+        revokedTokenService.removeOutdatedEntries();
         Date expirationDate = userContext.getExpirationDate();
-        RevokedToken revokedToken = new RevokedToken(userId, expirationDate);
+        UUID userId = userContext.getUserId();
+        RevokedToken revokedToken = new RevokedToken(UUID.randomUUID(), userId, expirationDate);
         final var dbRevokedToken = convertToDbModel(revokedToken);
         revokedTokenService.logout(dbRevokedToken);
     }

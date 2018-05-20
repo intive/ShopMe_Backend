@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,5 +32,21 @@ public class RevokedTokenService {
         return repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null;
 
     }
+
+    public void removeOutdatedEntries() {
+        Date currentTime = new Date();
+        List<DbRevokedToken> revokedTokenList = repository.findAll();
+        System.out.println(revokedTokenList); // for test purposes only
+
+        for (DbRevokedToken dbRevokedToken:revokedTokenList) {
+if (dbRevokedToken.getExpirationDate().before(currentTime)){
+   repository.delete(dbRevokedToken);
+   System.out.println("1 entry deleted"); // for test purposes only
 }
+        }
+
+    }
+
+}
+
 

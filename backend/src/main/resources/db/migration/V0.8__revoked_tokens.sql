@@ -1,6 +1,7 @@
 
 create table REVOKED_TOKEN
 (
-	USER_ID UUID not null,
-	EXPIRATION_DATE Date not null
+	ID UUID not null primary key,
+	USER_ID UUID,
+	EXPIRATION_DATE TIMESTAMP not null
 );
