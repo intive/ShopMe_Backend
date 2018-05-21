@@ -12,9 +12,6 @@ import java.util.UUID;
 interface RevokedTokenRepository extends JpaRepository<DbRevokedToken, UUID> {
 
     DbRevokedToken findOneByUserIdAndExpirationDate(UUID userId, Date expirationDate);
-    List<DbRevokedToken>findAll();
-
-    @Override
+    List<DbRevokedToken> findAll();
     void delete(DbRevokedToken dbRevokedToken);
 }
-

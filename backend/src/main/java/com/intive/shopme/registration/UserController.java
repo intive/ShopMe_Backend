@@ -7,7 +7,6 @@ import com.intive.shopme.model.db.DbInvoice;
 import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.Address;
-import com.intive.shopme.model.rest.RevokedToken;
 import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.Token;
@@ -37,7 +36,6 @@ import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -137,17 +135,14 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @ApiOperation("Log out from api")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Successfully logged out"),
-            @ApiResponse(code = 400, message = "No user data received or invalid token")
+            @ApiResponse(code = 401, message = "Using token that has been revoked")
     })
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('USER')")
     public void logout(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
-
-        revokedTokenService.removeOutdatedEntries();
-        Date expirationDate = userContext.getExpirationDate();
-        UUID userId = userContext.getUserId();
-        RevokedToken revokedToken = new RevokedToken(UUID.randomUUID(), userId, expirationDate);
-        final var dbRevokedToken = convertToDbModel(revokedToken);
+        final var expirationDate = userContext.getExpirationDate();
+        final var userId = userContext.getUserId();
+        final var dbRevokedToken = new DbRevokedToken(userId, expirationDate);
         revokedTokenService.logout(dbRevokedToken);
     }
 

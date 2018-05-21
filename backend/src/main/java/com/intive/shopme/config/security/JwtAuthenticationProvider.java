@@ -3,7 +3,7 @@ package com.intive.shopme.config.security;
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.UserContext;
 import com.intive.shopme.registration.RevokedTokenService;
-import com.intive.shopme.validation.TokenExpiredException;
+import com.intive.shopme.validation.RevokedTokenUseAttemptException;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -38,11 +38,11 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
         final var grantedAuthorities = convertToGrantedAuthorities(claims);
         final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities, JwtParser.getExpirationDate(claims));
 
-        if (revokedTokenService.isTokenRevoked(userContext) == false) {
+        if (!revokedTokenService.isTokenRevoked(userContext)) {
             return new JwtAuthenticationToken(userContext, grantedAuthorities);
         }
         else
-            throw new TokenExpiredException("Token has been expired");
+            throw new RevokedTokenUseAttemptException("Token has been revoked");
     }
 
     private Set<GrantedAuthority> convertToGrantedAuthorities(Claims claims) {
