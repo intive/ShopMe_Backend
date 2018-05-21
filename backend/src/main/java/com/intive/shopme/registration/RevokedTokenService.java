@@ -31,7 +31,7 @@ public class RevokedTokenService {
         repository.save(dbRevokedToken);
     }
 
-    public boolean isTokenRevoked(UserContext userContext) {
+    public boolean isRevoked(UserContext userContext) {
         UUID userId = userContext.getUserId();
         Date expirationDate = userContext.getExpirationDate();
         return repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null;

@@ -38,7 +38,7 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
         final var grantedAuthorities = convertToGrantedAuthorities(claims);
         final var userContext = new UserContext(JwtParser.getUserId(claims), JwtParser.getEmail(claims), grantedAuthorities, JwtParser.getExpirationDate(claims));
 
-        if (!revokedTokenService.isTokenRevoked(userContext)) {
+        if (!revokedTokenService.isRevoked(userContext)) {
             return new JwtAuthenticationToken(userContext, grantedAuthorities);
         }
         else
