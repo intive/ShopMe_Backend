@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
-import java.util.UUID;
 
 @Service
 @Transactional
@@ -18,8 +16,8 @@ public class RevokedTokenService {
     private final RevokedTokenRepository repository;
 
     @Value("${jwt.minimum-revoked-tokens-remove-interval}")
-    private long revokedTokenInterval;
-    long lastTokenRemoval = 0L;
+    private static long revokedTokenInterval;
+    private static long lastTokenRemoval = 0L;
 
     @Autowired
     public RevokedTokenService(RevokedTokenRepository repository) {
@@ -32,21 +30,22 @@ public class RevokedTokenService {
     }
 
     public boolean isRevoked(UserContext userContext) {
-        UUID userId = userContext.getUserId();
-        Date expirationDate = userContext.getExpirationDate();
+        final var userId = userContext.getUserId();
+        final var expirationDate = userContext.getExpirationDate();
         return repository.findOneByUserIdAndExpirationDate(userId, expirationDate) != null;
     }
 
-    void removeExpiredTokens() {
-        Date currentTime = new Date();
-        if (lastTokenRemoval + revokedTokenInterval < currentTime.toInstant().toEpochMilli()) {
-            List<DbRevokedToken> revokedTokenList = repository.findAll();
-            for (DbRevokedToken dbRevokedToken : revokedTokenList) {
-                if (dbRevokedToken.getExpirationDate().before(currentTime)) {
-                    repository.delete(dbRevokedToken);
-                }
+    private void removeExpiredTokens() {
+        final var currentTime = new Date().toInstant().toEpochMilli();
+
+        if (lastTokenRemoval + revokedTokenInterval < currentTime) {
+
+            try {
+                lastTokenRemoval = System.currentTimeMillis();
+                repository.removeExpiredTokens();
+            } catch (Exception e) {
+                System.out.println(e);
             }
-            lastTokenRemoval = System.currentTimeMillis();
         }
     }
 }
