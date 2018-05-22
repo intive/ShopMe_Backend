@@ -17,9 +17,9 @@ import java.util.UUID;
 @Component
 class JwtParser {
 
-    private static final String INVALID_TOKEN = "Provided JWT token is invalid.";
-    private static final String INVALID_TOKEN_SIGNATURE = "Provided JWT token has invalid signature.";
-    private static final String TOKEN_EXPIRED = "Provided JWT token already expired.";
+    private static final String INVALID_TOKEN = "Invalid token";
+    private static final String INVALID_TOKEN_SIGNATURE = "Invalid token signature";
+    private static final String TOKEN_EXPIRED = "Expired token";
 
     private final String secret;
 
