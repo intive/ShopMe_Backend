@@ -9,8 +9,6 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.impl.TextCodec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -19,14 +17,15 @@ import java.util.UUID;
 @Component
 class JwtParser {
 
-    private final MessageSource messageSource;
+    private static final String INVALID_TOKEN = "Provided JWT token is invalid.";
+    private static final String INVALID_TOKEN_SIGNATURE = "Provided JWT token has invalid signature.";
+    private static final String TOKEN_EXPIRED = "Provided JWT token already expired.";
+
     private final String secret;
 
-
     @Autowired
-    public JwtParser(MessageSource messageSource, @Value("${jwt.secret}") String secret) {
+    public JwtParser(@Value("${jwt.secret}") String secret) {
         this.secret = secret;
-        this.messageSource = messageSource;
     }
 
     Claims parse(final String token) {
@@ -36,17 +35,11 @@ class JwtParser {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (UnsupportedJwtException | MalformedJwtException | IllegalArgumentException e) {
-            String message = messageSource.getMessage("invalidToken",
-                    null, LocaleContextHolder.getLocale());
-            throw new JwtAuthenticationException(message);
+            throw new JwtAuthenticationException(INVALID_TOKEN);
         } catch (SignatureException e) {
-            String message = messageSource.getMessage("invalidSignature",
-                    null, LocaleContextHolder.getLocale());
-            throw new JwtAuthenticationException(message);
+            throw new JwtAuthenticationException(INVALID_TOKEN_SIGNATURE);
         } catch (ExpiredJwtException e) {
-            String message = messageSource.getMessage("tokenExpired",
-                    null, LocaleContextHolder.getLocale());
-            throw new JwtAuthenticationException(message);
+            throw new JwtAuthenticationException(TOKEN_EXPIRED);
         }
     }
 
