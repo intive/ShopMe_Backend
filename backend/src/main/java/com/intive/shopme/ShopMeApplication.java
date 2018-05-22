@@ -46,7 +46,7 @@ public class ShopMeApplication {
     }
 
     @Bean
-    public BeanPostProcessor dataSouceWrapper() {
+    public BeanPostProcessor dataSourceWrapper() {
         return new RetryableDataSourceBeanPostProcessor();
     }
 

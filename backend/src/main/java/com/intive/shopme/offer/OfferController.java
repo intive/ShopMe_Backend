@@ -127,6 +127,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
+    @PreAuthorize("hasAnyAuthority('USER')")
     Offer update(Offer offer) {
         final var dbOffer = convertToDbModel(offer);
         return convertToView(service.createOrUpdate(dbOffer));
@@ -138,6 +139,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
+    @PreAuthorize("hasAnyAuthority('USER')")
     void delete(@PathVariable UUID id) {
         service.delete(id);
     }

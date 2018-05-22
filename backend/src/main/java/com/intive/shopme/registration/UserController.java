@@ -90,7 +90,7 @@ class UserController extends ConvertibleController<DbUser, User> {
             @ApiResponse(code = 200, message = SUCCESS),
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
-    @ApiOperation(value = "Returns user by id (temporary endpoint, please confirm in next REST API specification before production use)")
+    @ApiOperation(value = "Returns user by id")
     User get(@PathVariable UUID id) {
         return convertToView(service.get(id));
     }
