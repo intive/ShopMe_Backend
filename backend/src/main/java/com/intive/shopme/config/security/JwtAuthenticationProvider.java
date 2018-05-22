@@ -40,8 +40,7 @@ class JwtAuthenticationProvider implements AuthenticationProvider {
 
         if (!revokedTokenService.isRevoked(userContext)) {
             return new JwtAuthenticationToken(userContext, grantedAuthorities);
-        }
-        else
+        } else
             throw new RevokedTokenUseAttemptException("Token has been revoked");
     }
 
