@@ -2,6 +2,7 @@ package com.intive.shopme.registration;
 
 import com.intive.shopme.common.ConvertibleController;
 import com.intive.shopme.model.db.DbAddress;
+import com.intive.shopme.model.db.DbRevokedToken;
 import com.intive.shopme.model.db.DbInvoice;
 import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.db.DbVoivodeship;
@@ -42,6 +43,7 @@ import java.util.stream.Collectors;
 import static com.intive.shopme.config.ApiUrl.USERS;
 import static com.intive.shopme.config.ApiUrl.USERS_CURRENT;
 import static com.intive.shopme.config.ApiUrl.USERS_LOGIN;
+import static com.intive.shopme.config.ApiUrl.USERS_LOGOUT;
 import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
@@ -57,15 +59,17 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final VoivodeshipValidator voivodeshipValidator;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokensService;
+    private final RevokedTokenService revokedTokenService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService) {
+                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService, RevokedTokenService revokedTokenService) {
         super(DbUser.class, UserView.class, UserWrite.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
         this.voivodeshipValidator = voivodeshipValidator;
         this.passwordEncoder = passwordEncoder;
         this.tokensService = tokensService;
+        this.revokedTokenService = revokedTokenService;
     }
 
     @PostMapping(value = USERS)
@@ -125,6 +129,21 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
                 .expirationDate(tokensService.getExpirationDate())
                 .jwt(token)
                 .build();
+    }
+
+    @PostMapping(value = USERS_LOGOUT)
+    @ApiOperation("Log out from api")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Successfully logged out"),
+            @ApiResponse(code = 401, message = "Using token that has been revoked")
+    })
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasAnyAuthority('USER')")
+    public void logout(@ApiIgnore @AuthenticationPrincipal UserContext userContext) {
+        final var expirationDate = userContext.getExpirationDate();
+        final var userId = userContext.getUserId();
+        final var dbRevokedToken = new DbRevokedToken(userId, expirationDate);
+        revokedTokenService.logout(dbRevokedToken);
     }
 
     @GetMapping(value = USERS_CURRENT)
@@ -200,9 +219,6 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         if (user.getInvoiceRequest() && user.getInvoice() != null) {
             result.setInvoice(genericConvert(user.getInvoice(), DbInvoice.class));
         }
-
-        result.setAdditionalInfo(user.getAdditionalInfo());
-
         return result;
     }
 }

@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class Token {
     private final Set<Role> roles;
 
     @ApiModelProperty(example = "1520031600000", position = 6)
-    private final Long expirationDate;
+    private final Date expirationDate;
 
     @ApiModelProperty(position = 7)
     private final String jwt;
