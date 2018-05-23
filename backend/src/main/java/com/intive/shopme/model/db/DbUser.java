@@ -24,18 +24,30 @@ import java.util.stream.Collectors;
 public class DbUser extends DbIdentifiable {
 
     private String name;
+
     private String surname;
+
     private String email;
+
     private String password;
+
     private String phoneNumber;
+
     private String bankAccount;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DbAddress address;
+
     @ManyToOne
     private DbVoivodeship voivodeship;
+
     private Boolean invoiceRequest;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private DbInvoice invoice;
+
+    private String additionalInfo;
+
     @OneToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name = "users_role",
             joinColumns = @JoinColumn(name = "users_id"),

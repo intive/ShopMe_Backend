@@ -2,12 +2,10 @@ package com.intive.shopme.model.db;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,6 +28,25 @@ public class DbOffer extends DbIdentifiable {
     private Double extendedPrice;
     private String extraDescription;
     private Double extraPrice;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private DbOwner owner;
+    @ManyToOne
+    private DbUser user;
+    @ManyToOne
+    private DbVoivodeship voivodeship;
+    private String city;
+
+    public boolean isExtendedPresent() {
+        return StringUtils.isNotEmpty(extendedDescription) || extendedPrice != null;
+    }
+
+    public boolean isExtraPresent() {
+        return StringUtils.isNotEmpty(extraDescription) || extraPrice != null;
+    }
+
+    public boolean isExtendedComplete() {
+        return StringUtils.isNotEmpty(extendedDescription) && extendedPrice != null;
+    }
+
+    public boolean isExtraComplete() {
+        return StringUtils.isNotEmpty(extraDescription) && extraPrice != null;
+    }
 }

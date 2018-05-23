@@ -4,13 +4,10 @@ import com.intive.shopme.category.CategoryValidator;
 import com.intive.shopme.common.ConvertibleController;
 import com.intive.shopme.model.db.DbCategory;
 import com.intive.shopme.model.db.DbOffer;
-import com.intive.shopme.model.db.DbOwner;
 import com.intive.shopme.model.db.DbVoivodeship;
-import com.intive.shopme.model.rest.Category;
-import com.intive.shopme.model.rest.Offer;
-import com.intive.shopme.model.rest.Owner;
+import com.intive.shopme.model.rest.OfferView;
+import com.intive.shopme.model.rest.OfferWrite;
 import com.intive.shopme.model.rest.UserContext;
-import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.registration.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,20 +46,21 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREAT
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UNAUTHORIZED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UPDATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
 
 @RestController
 @RequestMapping(value = OFFERS)
 @Api(value = "offer", description = "REST API for offers operations", tags = "Offers")
-public class OfferController extends ConvertibleController<DbOffer, Offer> {
+public class OfferController extends ConvertibleController<DbOffer, OfferView, OfferWrite> {
 
     private final OfferService service;
     private final UserService userService;
     private final Validator categoryValidator;
 
     OfferController(OfferService service, UserService userService, CategoryValidator validator) {
-        super(DbOffer.class, Offer.class);
+        super(DbOffer.class, OfferView.class, OfferWrite.class);
         this.service = service;
         this.userService = userService;
         this.categoryValidator = validator;
@@ -73,24 +71,23 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = CREATED),
             @ApiResponse(code = 400, message = BAD_REQUEST),
+            @ApiResponse(code = 401, message = UNAUTHORIZED),
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
-    @ApiOperation(value = "Saves new offer", response = Offer.class)
+    @ApiOperation(value = "Saves new offer", response = OfferView.class)
     @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<?> add(@Valid @RequestBody Offer offer, Errors errors,
+    public ResponseEntity<?> add(@Valid @RequestBody OfferWrite offer, Errors errors,
                                  @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
-        final var authenticatedUser = userService.get(userContext.getUserId());
-        final var additionalInfo = offer.getOwner().getAdditionalInfo();
-        offer.setOwner(new Owner(authenticatedUser, additionalInfo));
-
         categoryValidator.validate(offer, errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final var dbOffer = convertToDbModel(offer);
+        final var authenticatedUser = userService.get(userContext.getUserId());
         dbOffer.setId(UUID.randomUUID());
         dbOffer.setDate(new Date());
+        dbOffer.setUser(authenticatedUser);
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbOffer)));
     }
 
@@ -106,7 +103,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
             @ApiResponse(code = 400, message = BAD_REQUEST)
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
-    Page<Offer> search(@Valid OfferSearchParams offerSearchParams) {
+    Page<OfferView> search(@Valid OfferSearchParams offerSearchParams) {
         final var offers = service.getAll(offerSearchParams);
         return new PageImpl<>(convertToView(offers.getContent()), offerSearchParams.pageable(), offers.getTotalElements());
     }
@@ -117,18 +114,19 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Returns offer by id")
-    Offer get(@PathVariable UUID id) {
+    OfferView get(@PathVariable UUID id) {
         return convertToView(service.get(id));
     }
 
     @PutMapping(value = "{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = UPDATED),
+            @ApiResponse(code = 401, message = UNAUTHORIZED),
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Updates offer by id")
     @PreAuthorize("hasAnyAuthority('USER')")
-    Offer update(Offer offer) {
+    OfferView update(OfferWrite offer) {
         final var dbOffer = convertToDbModel(offer);
         return convertToView(service.createOrUpdate(dbOffer));
     }
@@ -136,6 +134,7 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     @DeleteMapping(value = "{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = DELETED),
+            @ApiResponse(code = 401, message = UNAUTHORIZED),
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Removes offer by id")
@@ -145,50 +144,62 @@ public class OfferController extends ConvertibleController<DbOffer, Offer> {
     }
 
     @Override
-    protected Offer convertToView(DbOffer dbOffer) {
-        final var result = new Offer();
+    protected OfferView convertToView(DbOffer dbOffer) {
+        final var result = new OfferView();
+
         result.setId(dbOffer.getId());
         result.setDate(dbOffer.getDate());
         result.setTitle(dbOffer.getTitle());
+        result.setCategory(dbOffer.getCategory().getName());
         result.setBasePrice(dbOffer.getBasePrice());
         result.setBaseDescription(dbOffer.getBaseDescription());
-        result.setExtendedPrice(dbOffer.getExtendedPrice());
-        result.setExtendedDescription(dbOffer.getExtendedDescription());
-        result.setExtraPrice(dbOffer.getExtraPrice());
-        result.setExtraDescription(dbOffer.getExtraDescription());
-        if (dbOffer.getOwner() != null) {
-            result.setOwner(genericConvert(dbOffer.getOwner(), Owner.class));
-            if (dbOffer.getOwner().getVoivodeship() != null) {
-                result.getOwner().setVoivodeship(genericConvert(dbOffer.getOwner().getVoivodeship(), Voivodeship.class));
-            }
+        if (dbOffer.isExtendedComplete()) {
+            result.setExtendedPrice(dbOffer.getExtendedPrice());
+            result.setExtendedDescription(dbOffer.getExtendedDescription());
         }
-        if (dbOffer.getCategory() != null) {
-            result.setCategory(genericConvert(dbOffer.getCategory(), Category.class));
+
+        if (dbOffer.isExtraComplete()) {
+            result.setExtraPrice(dbOffer.getExtraPrice());
+            result.setExtraDescription(dbOffer.getExtraDescription());
         }
+
+        final var user = dbOffer.getUser();
+
+        result.setUser(user.getId());
+        result.setName(user.getName());
+        result.setSurname(user.getSurname());
+        result.setEmail(user.getEmail());
+        result.setPhoneNumber(user.getPhoneNumber());
+        result.setAdditionalInfo(user.getAdditionalInfo());
+
+        result.setVoivodeship(dbOffer.getVoivodeship().getName());
+        result.setCity(dbOffer.getCity());
+
         return result;
     }
 
     @Override
-    protected DbOffer convertToDbModel(Offer offerView) {
+    protected DbOffer convertToDbModel(OfferWrite offer) {
         final var result = new DbOffer();
-        result.setId(offerView.getId());
-        result.setDate(offerView.getDate());
-        result.setTitle(offerView.getTitle());
-        result.setBasePrice(offerView.getBasePrice());
-        result.setBaseDescription(offerView.getBaseDescription());
-        result.setExtendedPrice(offerView.getExtendedPrice());
-        result.setExtendedDescription(offerView.getExtendedDescription());
-        result.setExtraPrice(offerView.getExtraPrice());
-        result.setExtraDescription(offerView.getExtraDescription());
-        if (offerView.getOwner() != null) {
-            result.setOwner(genericConvert(offerView.getOwner(), DbOwner.class));
-            if (offerView.getOwner().getVoivodeship() != null) {
-                result.getOwner().setVoivodeship(genericConvert(offerView.getOwner().getVoivodeship(), DbVoivodeship.class));
-            }
+
+        result.setTitle(offer.getTitle());
+        result.setCategory(new DbCategory(offer.getCategory()));
+        result.setBasePrice(offer.getBasePrice());
+        result.setBaseDescription(offer.getBaseDescription());
+
+        if (offer.isExtendedComplete()) {
+            result.setExtendedPrice(offer.getExtendedPrice());
+            result.setExtendedDescription(offer.getExtendedDescription());
         }
-        if (offerView.getCategory() != null) {
-            result.setCategory(genericConvert(offerView.getCategory(), DbCategory.class));
+
+        if (offer.isExtraComplete()) {
+            result.setExtraPrice(offer.getExtraPrice());
+            result.setExtraDescription(offer.getExtraDescription());
         }
+
+        result.setVoivodeship(new DbVoivodeship(offer.getVoivodeship()));
+        result.setCity(offer.getCity());
+
         return result;
     }
 }

@@ -2,7 +2,7 @@ package com.intive.shopme.registration;
 
 import com.intive.shopme.model.rest.Address;
 import com.intive.shopme.model.rest.Invoice;
-import com.intive.shopme.model.rest.User;
+import com.intive.shopme.model.rest.UserWrite;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.Validation;
@@ -39,13 +39,13 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest {
 
     @Test
     void invoiceRequest_is_true_user_not_filled_negative_validation() {
-        final var user = new User();
+        final var user = new UserWrite();
         user.setInvoiceRequest(true);
         final var result = validator.isValid(user);
         assertThat(result).isFalse();
     }
 
-    private User createUser(Boolean isInvoiceRequest) {
+    private UserWrite createUser(Boolean isInvoiceRequest) {
         final var address = new Address();
         address.setId(UUID.randomUUID());
         address.setCity("foo");
@@ -60,8 +60,7 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest {
         invoice.setCompanyName("foo");
         invoice.setNip("foo");
 
-        final var user = new User();
-        user.setId(UUID.randomUUID());
+        final var user = new UserWrite();
         user.setName("foo");
         user.setSurname("foo");
         user.setInvoice(invoice);
