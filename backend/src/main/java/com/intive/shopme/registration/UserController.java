@@ -62,7 +62,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final RevokedTokenService revokedTokenService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService) {
+                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService, RevokedTokenService revokedTokenService) {
         super(DbUser.class, UserView.class, UserWrite.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
@@ -219,18 +219,6 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         if (user.getInvoiceRequest() && user.getInvoice() != null) {
             result.setInvoice(genericConvert(user.getInvoice(), DbInvoice.class));
         }
-        return result;
-    }
-
-    protected DbExpiredToken convertToDbModel(ExpiredToken expiredToken) {
-        final var result = new DbExpiredToken();
-        result.setUserId(expiredToken.getUserId());
-        result.setExpirationDate(expiredToken.getExpirationDate());
-
-
-
-        result.setAdditionalInfo(user.getAdditionalInfo());
-
         return result;
     }
 }
