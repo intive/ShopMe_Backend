@@ -21,11 +21,9 @@ public class CategoryValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        if (target != null) {
-            var categoryName = ((OfferWrite) target).getCategory();
-                if (!categoryService.exists(categoryName)) {
-                    errors.rejectValue("category.name", "name.invalid", "Category name not known: " + categoryName);
-                }
+        var categoryName = ((OfferWrite) target).getCategory();
+        if (!categoryService.exists(categoryName)) {
+            errors.rejectValue("category.name", "name.invalid", "Category name not known: " + categoryName);
         }
     }
 }
