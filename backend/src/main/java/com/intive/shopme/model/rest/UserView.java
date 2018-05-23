@@ -1,12 +1,9 @@
 package com.intive.shopme.model.rest;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Data
