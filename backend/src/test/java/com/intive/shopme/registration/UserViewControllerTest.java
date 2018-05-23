@@ -16,6 +16,7 @@ class UserViewControllerTest {
     private static final UUID ID = UUID.randomUUID();
     private static final String EMAIL = "foo";
     private static final String PASSWORD = "bar";
+    private static final boolean INVOICE_REQUEST = true;
     private static final String PASSWORD_ENCODED = "baz";
 
     private final UserController controller = new UserController(null, null, null, PASSWORD_ENCODER, null);
@@ -25,6 +26,7 @@ class UserViewControllerTest {
         final var user = new DbUser();
         user.setId(ID);
         user.setEmail(EMAIL);
+        user.setInvoiceRequest(INVOICE_REQUEST);
         user.setInvoice(new DbInvoice());
         user.setPassword(PASSWORD_ENCODED);
 
@@ -42,6 +44,7 @@ class UserViewControllerTest {
         user.setId(ID);
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
+        user.setInvoiceRequest(INVOICE_REQUEST);
         user.setInvoice(new Invoice());
 
         final var result = controller.convertToDbModel(user);

@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 // TODO remove duplication of user object building - use @MethodSource?
 // TODO add test for valid/invalid cases of proerties: email, password, bank account, phone number
-class UserViewTest {
+class UserWriteTest {
 
     private static final String VALID_NAME = "OneWord";
     private static final String VALID_EMAIL = "foo@bar.baz";
@@ -79,16 +79,16 @@ class UserViewTest {
         assertThat(validator.validate(user)).isEmpty();
     }
 
-    private static UserView createValidUserWithName(String name) {
+    private static UserWrite createValidUserWithName(String name) {
         return createUser(VALID_SURNAME, name);
     }
 
-    private static UserView createValidUserWithSurname(String surname) {
+    private static UserWrite createValidUserWithSurname(String surname) {
         return createUser(surname, VALID_NAME);
     }
 
-    private static UserView createUser(String surname, String name) {
-        final var user = new UserView();
+    private static UserWrite createUser(String surname, String name) {
+        final var user = new UserWrite();
         user.setName(name);
         user.setSurname(surname);
         user.setPassword(VALID_PASSWORD);
