@@ -82,25 +82,21 @@ public class OfferWrite {
 
     @JsonIgnore
     public boolean isExtendedPresent() {
-        return StringUtils.isNotEmpty(extendedDescription) ||
-                extendedPrice != null;
+        return StringUtils.isNotEmpty(extendedDescription) || extendedPrice != null;
     }
 
     @JsonIgnore
     public boolean isExtraPresent() {
-        return StringUtils.isNotEmpty(extraDescription) ||
-                extraPrice != null;
+        return StringUtils.isNotEmpty(extraDescription) || extraPrice != null;
     }
 
     @JsonIgnore
     public boolean isExtendedComplete() {
-        return StringUtils.isNotEmpty(extendedDescription) &&
-                extendedPrice != null;
+        return StringUtils.isNotEmpty(extendedDescription) && extendedPrice != null;
     }
 
     @JsonIgnore
     public boolean isExtraComplete() {
-        return StringUtils.isNotEmpty(extraDescription) &&
-                extraPrice != null;
+        return StringUtils.isNotEmpty(extraDescription) && extraPrice != null;
     }
 }
