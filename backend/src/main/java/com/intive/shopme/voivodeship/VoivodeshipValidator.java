@@ -1,6 +1,7 @@
 package com.intive.shopme.voivodeship;
 
-import com.intive.shopme.model.rest.User;
+import com.intive.shopme.model.rest.UserView;
+import com.intive.shopme.model.rest.UserWrite;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -16,13 +17,13 @@ public class VoivodeshipValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> type) {
-        return type == User.class;
+        return type == UserView.class;
     }
 
     @Override
     public void validate(Object target, Errors errors) {
         if (target != null) {
-            var voivodeship = ((User) target).getVoivodeship();
+            var voivodeship = ((UserWrite) target).getVoivodeship();
             if (voivodeship != null) {
                 var name = voivodeship.getName();
                 if (!voivodeshipService.exists(name)) {

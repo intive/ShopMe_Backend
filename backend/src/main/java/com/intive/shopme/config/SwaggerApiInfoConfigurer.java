@@ -7,7 +7,7 @@ public final class SwaggerApiInfoConfigurer {
 
     private static final String TITLE = "ShopMe by Intive Patronage `18 team";
     private static final String DESC = "ShopMe is a Web Application created during Intive Patronage `18 Project";
-    private static final String VERSION = "1.4";
+    private static final String VERSION = "1.5";
 
     private SwaggerApiInfoConfigurer() {
     }
@@ -26,6 +26,7 @@ public final class SwaggerApiInfoConfigurer {
         public static final String EXISTS = "Resource already exists";
         public static final String VALIDATION_ERROR = "Data validation error";
         public static final String BAD_REQUEST = "Incorrect request parameters";
+        public static final String UNAUTHORIZED = "Authentication is required";
 
         private Operations() {
         }

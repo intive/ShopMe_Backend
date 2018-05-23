@@ -1,6 +1,6 @@
 package com.intive.shopme.model.db;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -16,9 +16,13 @@ import javax.persistence.Table;
 @EqualsAndHashCode
 @ToString
 @NoArgsConstructor
-@AllArgsConstructor
 public class DbCategory {
 
     @Id
     private String name;
+
+    @JsonCreator
+    public DbCategory(String name) {
+        this.name = name;
+    }
 }

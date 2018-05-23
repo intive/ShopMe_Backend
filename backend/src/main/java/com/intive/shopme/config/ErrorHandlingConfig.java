@@ -30,7 +30,7 @@ public class ErrorHandlingConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ErrorHandlingConfig.class);
 
-    @ExceptionHandler(value = ConstraintViolationException.class)
+    @ExceptionHandler(value = {ConstraintViolationException.class})
     @ResponseBody
     public ResponseEntity handleConstraintViolationException(ConstraintViolationException exception) {
         return ResponseEntity
@@ -44,7 +44,7 @@ public class ErrorHandlingConfig {
                 .collect(toMap(violation -> violation.getPropertyPath().toString(), ConstraintViolation::getMessage));
     }
 
-    @ExceptionHandler(value = DataRetrievalFailureException.class)
+    @ExceptionHandler(value = {DataRetrievalFailureException.class})
     @ResponseBody
     public ResponseEntity handleDataRetrievalFailureException(DataRetrievalFailureException exception) {
         return ResponseEntity
@@ -52,7 +52,7 @@ public class ErrorHandlingConfig {
                 .body(createResponseBody(exception.getMessage()));
     }
 
-    @ExceptionHandler(value = AlreadyExistException.class)
+    @ExceptionHandler(value = {AlreadyExistException.class})
     @ResponseBody
     public ResponseEntity handleAlreadyExistException(AlreadyExistException exception) {
         return ResponseEntity
@@ -60,7 +60,7 @@ public class ErrorHandlingConfig {
                 .body(createResponseBody(exception.getMessage()));
     }
 
-    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
+    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class})
     @ResponseBody
     public ResponseEntity handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException exception) {
         return ResponseEntity
@@ -77,7 +77,7 @@ public class ErrorHandlingConfig {
                 .body(createResponseBody(exception.getMessage()));
     }
 
-    @ExceptionHandler(value = RuntimeException.class)
+    @ExceptionHandler(value = {RuntimeException.class})
     @ResponseBody
     public ResponseEntity handleRuntimeException(RuntimeException exception) {
         final var id = UUID.randomUUID();

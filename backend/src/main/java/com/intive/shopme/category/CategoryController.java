@@ -19,12 +19,12 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCE
 @RestController
 @RequestMapping(value = CATEGORIES)
 @Api(value = "category", description = "REST API for categories operations", tags = "Categories")
-class CategoryController extends ConvertibleController<DbCategory, Category> {
+class CategoryController extends ConvertibleController<DbCategory, Category, Category> {
 
     private final CategoryService service;
 
     CategoryController(CategoryService service) {
-        super(DbCategory.class, Category.class);
+        super(DbCategory.class, Category.class, Category.class);
         this.service = service;
     }
 
