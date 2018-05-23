@@ -1,8 +1,10 @@
 package com.intive.shopme.model.db;
 
 import com.intive.shopme.model.rest.Role;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,12 +17,14 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USERS") // Note: USER is SQL reserved keyword
 @Data
 @EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
 public class DbUser extends DbIdentifiable {
 
     private String name;
@@ -77,5 +81,12 @@ public class DbUser extends DbIdentifiable {
             userRoles.add(dbRole.getRole());
         }
         return userRoles;
+    }
+
+    @Builder
+    private DbUser(UUID id, String password, String email) {
+        super(id);
+        this.password = password;
+        this.email = email;
     }
 }

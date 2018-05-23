@@ -45,10 +45,9 @@ class TokenServiceTest {
     };
 
     private DbUser createUser() {
-        var user = new DbUser();
-        user.setId(ID);
-        user.setPassword(CORRECT_PASSWORD);
-        user.setEmail("foo");
-        return user;
+        return DbUser.builder()
+                .password(CORRECT_PASSWORD)
+                .email("foo")
+                .id(ID).build();
     }
 }
