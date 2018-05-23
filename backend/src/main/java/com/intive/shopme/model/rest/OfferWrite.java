@@ -19,7 +19,7 @@ import static com.intive.shopme.config.AppConfig.OFFER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 
 @Data
-@ApiModel(value = "Offer", description = "Represents the offer created by user")
+@ApiModel
 @ProgressiveOfferLevelsCheck
 public class OfferWrite {
 
