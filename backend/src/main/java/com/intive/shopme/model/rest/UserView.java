@@ -50,7 +50,4 @@ public class UserView {
     @ApiModelProperty(value = "Represents additional information typed by user", position = 12,
             example = "Dodatkowe info")
     private String additionalInfo;
-
-    @JsonIgnore
-    private Set<Role> roles = new HashSet<>();
 }

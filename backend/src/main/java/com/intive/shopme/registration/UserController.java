@@ -155,7 +155,6 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         result.setEmail(dbUser.getEmail());
         result.setPhoneNumber(dbUser.getPhoneNumber());
         result.setBankAccount(dbUser.getBankAccount());
-        result.setRoles(dbUser.getRoles());
 
         if (dbUser.getAddress() != null) {
             result.setAddress(genericConvert(dbUser.getAddress(), Address.class));
