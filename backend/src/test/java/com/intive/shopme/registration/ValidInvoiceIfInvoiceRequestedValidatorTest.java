@@ -61,7 +61,6 @@ class ValidInvoiceIfInvoiceRequestedValidatorTest {
         invoice.setNip("foo");
 
         final var user = new UserWrite();
-        user.setId(UUID.randomUUID());
         user.setName("foo");
         user.setSurname("foo");
         user.setInvoice(invoice);

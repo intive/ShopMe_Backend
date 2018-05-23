@@ -33,11 +33,8 @@ import static com.intive.shopme.config.AppConfig.USER_SURNAME_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_SURNAME_MIN_LENGTH;
 
 @Data
-@ApiModel(value = "User", description = "Represents the user")
+@ApiModel
 public class UserWrite {
-
-    @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
-    private UUID id;
 
     @NotEmpty
     @Size(min = USER_NAME_MIN_LENGTH, message = "User's name contains not enough characters, minimum is " +

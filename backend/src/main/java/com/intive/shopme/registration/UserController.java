@@ -179,7 +179,6 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     protected DbUser convertToDbModel(UserWrite user) {
         final var result = new DbUser();
 
-        result.setId(user.getId());
         result.setName(user.getName());
         result.setSurname(user.getSurname());
         result.setEmail(user.getEmail().toLowerCase());

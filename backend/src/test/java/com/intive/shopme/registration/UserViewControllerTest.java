@@ -41,7 +41,6 @@ class UserViewControllerTest {
     @Test
     void convertToDbModel_should_map_basic_values_successfully() {
         final var user = new UserWrite();
-        user.setId(ID);
         user.setEmail(EMAIL);
         user.setPassword(PASSWORD);
         user.setInvoiceRequest(INVOICE_REQUEST);
@@ -49,7 +48,6 @@ class UserViewControllerTest {
 
         final var result = controller.convertToDbModel(user);
         assertThat(result)
-                .hasFieldOrPropertyWithValue("id", ID)
                 .hasFieldOrPropertyWithValue("email", EMAIL)
                 .hasFieldOrPropertyWithValue("password", PASSWORD_ENCODED)
                 .hasFieldOrProperty("invoice").isNotNull();
