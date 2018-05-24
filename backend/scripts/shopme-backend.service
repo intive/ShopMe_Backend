@@ -5,7 +5,7 @@ After=syslog.target
 
 [Service]
 User=it-29663
-ExecStart=/home/it-29663/backend/prod/be.jar
+ExecStart=/bin/bash -c "JAVA_HOME=/home/it-29663/.jre-10 PATH=$JAVA_HOME/bin:$PATH /home/it-29663/backend/prod/be.jar"
 SuccessExitStatus=143
 
 [Install]
