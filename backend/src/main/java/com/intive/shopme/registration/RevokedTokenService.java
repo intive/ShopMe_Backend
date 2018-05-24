@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-
 @Service
 @Transactional
 public class RevokedTokenService {
@@ -17,7 +15,7 @@ public class RevokedTokenService {
 
     @Value("${jwt.minimum-revoked-tokens-remove-interval}")
     private static long revokedTokenInterval;
-    private static long lastTokenRemoval = 0L;
+    private static long nextTokenRemoval = 0L;
 
     @Autowired
     public RevokedTokenService(RevokedTokenRepository repository) {
@@ -36,16 +34,9 @@ public class RevokedTokenService {
     }
 
     private void removeExpiredTokens() {
-        final var currentTime = new Date().toInstant().toEpochMilli();
-
-        if (lastTokenRemoval + revokedTokenInterval < currentTime) {
-
-            try {
-                lastTokenRemoval = System.currentTimeMillis();
-                repository.removeExpiredTokens();
-            } catch (Exception e) {
-                System.out.println(e);
-            }
+        if (System.currentTimeMillis() > nextTokenRemoval) {
+            nextTokenRemoval = System.currentTimeMillis() + revokedTokenInterval;
+            repository.removeExpiredTokens();
         }
     }
 }

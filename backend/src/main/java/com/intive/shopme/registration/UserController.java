@@ -219,6 +219,9 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         if (user.getInvoiceRequest() && user.getInvoice() != null) {
             result.setInvoice(genericConvert(user.getInvoice(), DbInvoice.class));
         }
+
+        result.setAdditionalInfo(user.getAdditionalInfo());
+
         return result;
     }
 }
