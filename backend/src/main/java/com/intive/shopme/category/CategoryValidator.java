@@ -1,6 +1,5 @@
 package com.intive.shopme.category;
 
-import com.intive.shopme.model.rest.OfferWrite;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -16,14 +15,15 @@ public class CategoryValidator implements Validator {
 
     @Override
     public boolean supports(Class<?> type) {
-        return type == OfferWrite.class;
+        return type == String.class;
     }
 
     @Override
     public void validate(Object target, Errors errors) {
-        var categoryName = ((OfferWrite) target).getCategory();
+        var categoryName = (String) target;
         if (!categoryService.exists(categoryName)) {
-            errors.rejectValue("category.name", "name.invalid", "Category name not known: " + categoryName);
+            errors.rejectValue("category","","Category name not known: " + categoryName);
         }
+
     }
 }
