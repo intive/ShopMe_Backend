@@ -62,7 +62,8 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final RevokedTokenService revokedTokenService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder, TokenService tokensService, RevokedTokenService revokedTokenService) {
+                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder,
+                   TokenService tokensService, RevokedTokenService revokedTokenService) {
         super(DbUser.class, UserView.class, UserWrite.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
@@ -80,7 +81,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @ApiOperation(value = "Saves new user", response = UserView.class)
     ResponseEntity<?> add(@Valid @RequestBody UserWrite user, Errors errors) {
         invoiceRequestedValidator.validate(user, errors);
-        voivodeshipValidator.validate(user, errors);
+        voivodeshipValidator.validate(user.getVoivodeship(), errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.BAD_REQUEST);
         }

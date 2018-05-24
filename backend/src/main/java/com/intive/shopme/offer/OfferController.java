@@ -9,6 +9,7 @@ import com.intive.shopme.model.rest.OfferView;
 import com.intive.shopme.model.rest.OfferWrite;
 import com.intive.shopme.model.rest.UserContext;
 import com.intive.shopme.registration.UserService;
+import com.intive.shopme.voivodeship.VoivodeshipValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -58,12 +59,15 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
     private final OfferService service;
     private final UserService userService;
     private final Validator categoryValidator;
+    private final Validator voivodeshipValidator;
 
-    OfferController(OfferService service, UserService userService, CategoryValidator validator) {
+    OfferController(OfferService service, UserService userService,
+                    CategoryValidator categoryValidator, VoivodeshipValidator voivodeshipValidator) {
         super(DbOffer.class, OfferView.class, OfferWrite.class);
         this.service = service;
         this.userService = userService;
-        this.categoryValidator = validator;
+        this.categoryValidator = categoryValidator;
+        this.voivodeshipValidator = voivodeshipValidator;
     }
 
     @PostMapping
@@ -78,7 +82,8 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
     @PreAuthorize("hasAnyAuthority('USER')")
     public ResponseEntity<?> add(@Valid @RequestBody OfferWrite offer, Errors errors,
                                  @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
-        categoryValidator.validate(offer, errors);
+        categoryValidator.validate(offer.getCategory(), errors);
+        voivodeshipValidator.validate(offer.getVoivodeship(), errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
         }
