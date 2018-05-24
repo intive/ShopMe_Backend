@@ -22,7 +22,7 @@ public class CategoryValidator implements Validator {
     public void validate(Object target, Errors errors) {
         var categoryName = (String) target;
         if (!categoryService.exists(categoryName)) {
-            errors.rejectValue("category","Category name not known: " + categoryName);
+            errors.rejectValue("category","","Category name not known: " + categoryName);
         }
 
     }

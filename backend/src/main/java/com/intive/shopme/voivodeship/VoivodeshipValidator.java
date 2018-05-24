@@ -22,7 +22,7 @@ public class VoivodeshipValidator implements Validator {
     public void validate(Object target, Errors errors) {
         var voivodeshipName = (String) target;
         if (!voivodeshipService.exists(voivodeshipName)) {
-            errors.rejectValue("voivodeship","Voivodeship name is not known: " + voivodeshipName);
+            errors.rejectValue("voivodeship", "","Voivodeship name is not known: " + voivodeshipName);
         }
     }
 }
