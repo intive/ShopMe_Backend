@@ -49,6 +49,7 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREAT
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UNAUTHORIZED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
 
 @RestController
 @Api(value = "user", description = "REST API for users operations", tags = {"Users"})
@@ -57,17 +58,19 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final UserService service;
     private final ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator;
     private final VoivodeshipValidator voivodeshipValidator;
+    private final EmailValidator emailValidator;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokensService;
     private final RevokedTokenService revokedTokenService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator, PasswordEncoder passwordEncoder,
-                   TokenService tokensService, RevokedTokenService revokedTokenService) {
+                   VoivodeshipValidator voivodeshipValidator, EmailValidator emailValidator,
+                   PasswordEncoder passwordEncoder, TokenService tokensService, RevokedTokenService revokedTokenService) {
         super(DbUser.class, UserView.class, UserWrite.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
         this.voivodeshipValidator = voivodeshipValidator;
+        this.emailValidator = emailValidator;
         this.passwordEncoder = passwordEncoder;
         this.tokensService = tokensService;
         this.revokedTokenService = revokedTokenService;
@@ -77,13 +80,15 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = CREATED),
+            @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new user", response = UserView.class)
     ResponseEntity<?> add(@Valid @RequestBody UserWrite user, Errors errors) {
         invoiceRequestedValidator.validate(user, errors);
         voivodeshipValidator.validate(user.getVoivodeship().getName(), errors);
+        emailValidator.validate(user.getEmail(), errors);
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final var dbUser = convertToDbModel(user);
@@ -106,7 +111,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @ApiResponse(code = 200, message = SUCCESS)
     @ApiOperation(value = "Check if user with specified email exists in database")
     boolean existsByEmail(@PathVariable String email) {
-        return service.findIfUserExist(email.toLowerCase());
+        return service.existsByEmail(email);
     }
 
     @PostMapping(value = USERS_LOGIN)
