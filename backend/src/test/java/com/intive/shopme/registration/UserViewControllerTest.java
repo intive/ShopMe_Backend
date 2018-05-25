@@ -19,7 +19,8 @@ class UserViewControllerTest {
     private static final boolean INVOICE_REQUEST = true;
     private static final String PASSWORD_ENCODED = "baz";
 
-    private final UserController controller = new UserController(null, null, null, PASSWORD_ENCODER, null, null);
+    private final UserController controller = new UserController(null, null, null,
+            null, PASSWORD_ENCODER, null, null);
 
     @Test
     void convertToView_should_map_basic_values_successfully() {
