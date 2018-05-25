@@ -81,7 +81,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @ApiOperation(value = "Saves new user", response = UserView.class)
     ResponseEntity<?> add(@Valid @RequestBody UserWrite user, Errors errors) {
         invoiceRequestedValidator.validate(user, errors);
-        voivodeshipValidator.validate(user.getVoivodeship(), errors);
+        voivodeshipValidator.validate(user.getVoivodeship().getName(), errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.BAD_REQUEST);
         }
