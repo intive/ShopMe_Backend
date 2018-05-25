@@ -45,6 +45,7 @@ import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.BAD_REQUEST;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.FORBIDDEN;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UNAUTHORIZED;
@@ -127,25 +128,52 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = UPDATED),
             @ApiResponse(code = 401, message = UNAUTHORIZED),
-            @ApiResponse(code = 404, message = NOT_FOUND)
+            @ApiResponse(code = 403, message = FORBIDDEN),
+            @ApiResponse(code = 404, message = NOT_FOUND),
+            @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
-    @ApiOperation(value = "Updates offer by id")
+    @ApiOperation(value = "Updates offer by id", response = OfferView.class)
     @PreAuthorize("hasAnyAuthority('USER')")
-    OfferView update(OfferWrite offer) {
+    ResponseEntity<?> update(@PathVariable UUID id, @Valid @RequestBody OfferWrite offer, Errors errors,
+                             @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
+        final var offerAuthor = service.get(id).getUser();
+        final var authenticatedUser = userService.get(userContext.getUserId());
+        if (!authenticatedUser.equals(offerAuthor)) {
+            return new ResponseEntity<>(Map.of("message", FORBIDDEN), HttpStatus.FORBIDDEN);
+        }
+
+        categoryValidator.validate(offer.getCategory(), errors);
+        voivodeshipValidator.validate(offer.getVoivodeship(), errors);
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
         final var dbOffer = convertToDbModel(offer);
-        return convertToView(service.createOrUpdate(dbOffer));
+        dbOffer.setId(id);
+        dbOffer.setDate(new Date());
+        dbOffer.setUser(authenticatedUser);
+        return ResponseEntity.ok(convertToView(service.createOrUpdate(dbOffer)));
     }
 
     @DeleteMapping(value = "{id}")
+    @ResponseStatus(value = HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = DELETED),
             @ApiResponse(code = 401, message = UNAUTHORIZED),
+            @ApiResponse(code = 403, message = FORBIDDEN),
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
-    @ApiOperation(value = "Removes offer by id")
+    @ApiOperation(value = "Removes offer by id", response = void.class)
     @PreAuthorize("hasAnyAuthority('USER')")
-    void delete(@PathVariable UUID id) {
+    ResponseEntity<?> delete(@PathVariable UUID id, @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
+        final var offerAuthorId = service.get(id).getUser();
+        final var authenticatedUserId = userService.get(userContext.getUserId());
+        if (!authenticatedUserId.equals(offerAuthorId)) {
+            return new ResponseEntity<>(Map.of("message", FORBIDDEN), HttpStatus.FORBIDDEN);
+        }
+
         service.delete(id);
+        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
     @Override
