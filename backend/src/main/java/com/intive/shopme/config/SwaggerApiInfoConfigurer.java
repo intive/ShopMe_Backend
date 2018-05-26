@@ -27,6 +27,7 @@ public final class SwaggerApiInfoConfigurer {
         public static final String VALIDATION_ERROR = "Data validation error";
         public static final String BAD_REQUEST = "Incorrect request parameters";
         public static final String UNAUTHORIZED = "Authentication is required";
+        public static final String FORBIDDEN = "You are not authorized to do this";
 
         private Operations() {
         }
