@@ -4,7 +4,7 @@
         <Property name="basePath" value="./logs"/>
         <Property name="file_base_name" value="backend"/>
         <Property name="archive" value="archive"/>
-        <Property name="logPattern" value="%-5level [%d{yyyy-MM-dd HH:mm:ss}, %thread] %logger{35} : %msg%n"/>
+        <Property name="logPattern" value="%-5level [%d{yyyy-MM-dd HH:mm:ss}, %thread] %logger{35} : %msg%n %throwable{suffix(\n!)}{separator()}"/>
     </Properties>
 
     <Appenders>
