@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+    <Properties>
+        <Property name="basePath" value="./logs"/>
+        <Property name="file_base_name" value="backend"/>
+        <Property name="archive" value="archive"/>
+        <Property name="logPattern" value="%-5level [%d{yyyy-MM-dd HH:mm:ss}, %thread] %logger{35} : %msg%n %throwable{suffix(\n!)}{separator()}"/>
+    </Properties>
+
+    <Appenders>
+        <RollingFile name="fileLogger" fileName="${basePath}/${file_base_name}.log"
+                     filePattern="${basePath}/${archive}/${file_base_name}_%d{yyyy-MM-dd}.%i.log">
+            <PatternLayout pattern="${logPattern}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="1 MB"/>
+            </Policies>
+        </RollingFile>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${logPattern}"/>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info" additivity="true">
+            <Appender-ref ref="console"/>
+            <Appender-ref ref="fileLogger"/>
+        </Root>
+
+        <Logger name="logging.level.org.org.springframework.retry" level="DEBUG"/>
+        <Logger name="org.springframework.web" level="INFO"/>
+        <Logger name="org.hibernate.SQL" level="DEBUG"/>
+        <Logger name="com.intive.shopme" level="DEBUG"/>
+        <Logger name="com.intive.shopme.config.security.TokenAuthenticationFilter" level="WARN"/>
+
+    </Loggers>
+</Configuration>
