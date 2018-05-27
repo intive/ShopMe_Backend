@@ -1,7 +1,7 @@
 package com.intive.shopme.offer;
 
 import com.intive.shopme.model.db.DbCategory;
-import com.intive.shopme.model.db.DbOffer;
+import com.intive.shopme.model.db.DbVoivodeship;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
@@ -9,7 +9,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -17,8 +16,10 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.UUID;
 
 import static com.intive.shopme.config.AppConfig.ACCEPTABLE_TITLE_SEARCH_CHARS;
+import static com.intive.shopme.config.AppConfig.CITY_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.DEFAULT_PAGE_SIZE;
 import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_DIRECTION;
 import static com.intive.shopme.config.AppConfig.DEFAULT_SORT_FIELD;
@@ -89,11 +90,32 @@ class OfferSearchParams {
     @ApiModelProperty(value = "offer not newer than (optional, EPOCH time in milliseconds)", position = 10)
     private long dateMax;
 
+    @ApiModelProperty(value = "offers created by specific user (optional, UUID format, " +
+            "example: 5d214c01-95c3-4ec4-8f68-51dfb80b191c)", position = 11,
+            example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
+    private UUID userId;
+
+    @ApiParam(value = "offers from specific city (optional, maximum " + CITY_MAX_LENGTH + " characters)")
+    @ApiModelProperty(position = 12, example = "Szczecin")
+    @Size(max = CITY_MAX_LENGTH, message = "Offer's city contains too much characters, maximum is " +
+            CITY_MAX_LENGTH + ".")
+    private String city;
+
+    @ApiParam(value = "offers from specific voivodeship (optional, acceptable values: " +
+            "GreaterPoland | KuyavianPomeranian | LesserPoland | Lodz | LowerSilesian | Lublin | Lubusz | Masovian  | " +
+            "Opole | Podlasie | Pomeranian | Silesian | Subcarpathian | Swietokrzyskie | WarmianMasurian | " +
+            "WesternPomeranian)",
+            allowableValues = "GreaterPoland, KuyavianPomeranian, LesserPoland, Lodz, LowerSilesian, Lublin, Lubusz, " +
+                    "Masovian, Opole, Podlasie, Pomeranian, Silesian, Subcarpathian, Swietokrzyskie, WarmianMasurian, " +
+                    "WesternPomeranian")
+    @ApiModelProperty(position = 13, example = "WestPomeranian")
+    private String voivodeship;
+
     Pageable pageable() {
         return PageRequest.of(page - FIRST_PAGE, pageSize, Sort.Direction.fromString(order), sort);
     }
 
-    Specification<DbOffer> filter() {
+    OfferSpecificationsBuilder filter() {
         final var builder = new OfferSpecificationsBuilder();
 
         var titleKeywordsIsInvalid = false;
@@ -134,6 +156,14 @@ class OfferSearchParams {
             builder.with("basePrice", "≤", priceMax);
         }
 
-        return builder.build();
+        if (StringUtils.isNotEmpty(city)) {
+            builder.with("city", ":", city);
+        }
+
+        if (StringUtils.isNotEmpty(voivodeship)) {
+            builder.with("voivodeship", ":", new DbVoivodeship(voivodeship));
+        }
+
+        return builder;
     }
 }

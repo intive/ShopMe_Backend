@@ -3,6 +3,8 @@ package com.intive.shopme.offer;
 import com.intive.shopme.model.db.DbOffer;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -18,8 +20,8 @@ class OfferService {
         this.repository = repository;
     }
 
-    Page<DbOffer> getAll(OfferSearchParams offerSearchParams) {
-        return repository.findAll(offerSearchParams.filter(), offerSearchParams.pageable());
+    Page<DbOffer> getAll(Specification<DbOffer> specification, Pageable pageable) {
+        return repository.findAll(specification, pageable);
     }
 
     DbOffer get(UUID id) {

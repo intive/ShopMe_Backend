@@ -34,6 +34,10 @@ public class UserService {
         return repository.existsByEmail(email.toLowerCase());
     }
 
+    public boolean existsById(UUID id) {
+        return repository.existsById(id);
+    }
+
     public DbUser findOneByEmail(String email) {
         return repository.findOneByEmail(email);
     }
