@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -16,7 +15,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.PositiveOrZero;
-import java.util.Arrays;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 import static com.intive.shopme.config.AppConfig.ACCEPTABLE_TITLE_SEARCH_CHARS;
@@ -46,7 +45,7 @@ class OfferSearchParams {
     private int pageSize = DEFAULT_PAGE_SIZE;
 
     @ApiModelProperty(value = "filter query for offers title (optional, at least two characters)", position = 3)
-    @Length(max = OFFER_TITLE_MAX_LENGTH,
+    @Size(max = OFFER_TITLE_MAX_LENGTH,
             message = "Title search query has too many characters (max " + OFFER_TITLE_MAX_LENGTH + ").")
     private String title;
 
@@ -64,7 +63,7 @@ class OfferSearchParams {
             allowableValues = "date, basePrice, title",
             defaultValue = DEFAULT_SORT_FIELD)
     @ApiModelProperty(position = 5)
-    @Pattern(regexp = "date|basePrice|title", flags = { Pattern.Flag.CASE_INSENSITIVE },
+    @Pattern(regexp = "date|basePrice|title", flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Acceptable sort properties are: date, basePrice and title")
     private String sort = DEFAULT_SORT_FIELD;
 
@@ -72,7 +71,7 @@ class OfferSearchParams {
             allowableValues = "ASC, DESC",
             defaultValue = DEFAULT_SORT_DIRECTION)
     @ApiModelProperty(position = 6)
-    @Pattern(regexp = "ASC|DESC", flags = { Pattern.Flag.CASE_INSENSITIVE },
+    @Pattern(regexp = "ASC|DESC", flags = Pattern.Flag.CASE_INSENSITIVE,
             message = "Acceptable sort order values are ASC and DESC")
     private String order = DEFAULT_SORT_DIRECTION;
 
@@ -97,12 +96,24 @@ class OfferSearchParams {
     Specification<DbOffer> filter() {
         final var builder = new OfferSpecificationsBuilder();
 
-        if (StringUtils.isNotEmpty(title) && (title.length() > 1) && !StringUtils.isNumeric(title)) {
-            var titleKeywords = StringUtils.left(title, OFFER_TITLE_MAX_LENGTH)
-                    .replaceAll("[^" + ACCEPTABLE_TITLE_SEARCH_CHARS + "]", "")
-                    .replaceAll("  ", " ")
-                    .toLowerCase().split(" ");
-            Arrays.stream(titleKeywords).forEach(titleKeyword -> builder.with("title", ":", titleKeyword));
+        var titleKeywordsIsInvalid = false;
+        if (StringUtils.isNotEmpty(title)) {
+            titleKeywordsIsInvalid = true;
+            if ((title.length() > 1) && !StringUtils.isNumeric(title)){
+                var titleKeywords = StringUtils.left(title, OFFER_TITLE_MAX_LENGTH)
+                        .replaceAll("[^" + ACCEPTABLE_TITLE_SEARCH_CHARS + "]", "")
+                        .replaceAll("  ", " ")
+                        .toLowerCase().split(" ");
+                for (String titleKeyword : titleKeywords) {
+                    if (StringUtils.isNotEmpty(titleKeyword)) {
+                        titleKeywordsIsInvalid = false;
+                        builder.with("title", ":", titleKeyword);
+                    }
+                }
+            }
+        }
+        if (titleKeywordsIsInvalid) {
+            builder.empty();
         }
 
         if (dateMin != 0) {

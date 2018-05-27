@@ -23,35 +23,41 @@ class OfferSpecification implements Specification<DbOffer> {
 
         final var key = criteria.getKey();
         final var operation = criteria.getOperation();
-        if (key.equals("date")) {
-            Path<Date> datePath = root.get(key);
-            Date dateValue = (Date)criteria.getValue();
-            switch (operation) {
-                case "≥":
-                    result = builder.greaterThanOrEqualTo(datePath, dateValue);
-                    break;
-                case "≤":
-                    result = builder.lessThanOrEqualTo(datePath, dateValue);
-                    break;
-            }
-        } else {
-            Path path = root.get(key);
-            final var value = criteria.getValue();
-            switch (operation) {
-                case "≥":
-                    result = builder.greaterThanOrEqualTo(path, value.toString());
-                    break;
-                case "≤":
-                    result = builder.lessThanOrEqualTo(path, value.toString());
-                    break;
-                case ":":
-                    if (path.getJavaType() == String.class) {
-                        result = builder.like(builder.lower(path),"%" + value + "%");
-                    } else {
-                        result = builder.equal(path, value);
-                    }
-                    break;
-            }
+
+        switch (key) {
+            case "date":
+                Path<Date> datePath = root.get(key);
+                Date dateValue = (Date) criteria.getValue();
+                switch (operation) {
+                    case "≥":
+                        result = builder.greaterThanOrEqualTo(datePath, dateValue);
+                        break;
+                    case "≤":
+                        result = builder.lessThanOrEqualTo(datePath, dateValue);
+                        break;
+                }
+                break;
+            case "empty":
+                result = builder.and().not();
+                break;
+            default:
+                Path path = root.get(key);
+                final var value = criteria.getValue();
+                switch (operation) {
+                    case "≥":
+                        result = builder.greaterThanOrEqualTo(path, value.toString());
+                        break;
+                    case "≤":
+                        result = builder.lessThanOrEqualTo(path, value.toString());
+                        break;
+                    case ":":
+                        if (path.getJavaType() == String.class) {
+                            result = builder.like(builder.lower(path), "%" + value.toString().toLowerCase() + "%");
+                        } else {
+                            result = builder.equal(path, value);
+                        }
+                        break;
+                }
         }
 
         return result;

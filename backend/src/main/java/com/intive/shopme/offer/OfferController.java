@@ -106,7 +106,8 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
     @GetMapping
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SUCCESS),
-            @ApiResponse(code = 400, message = BAD_REQUEST)
+            @ApiResponse(code = 400, message = BAD_REQUEST),
+            @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
     Page<OfferView> search(@Valid OfferSearchParams offerSearchParams) {
