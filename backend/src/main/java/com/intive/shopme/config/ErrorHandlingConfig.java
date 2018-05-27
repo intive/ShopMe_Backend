@@ -1,5 +1,6 @@
 package com.intive.shopme.config;
 
+import com.intive.shopme.config.security.RevokedTokenUseAttemptException;
 import com.intive.shopme.validation.AlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,6 +75,14 @@ public class ErrorHandlingConfig {
         LOGGER.warn("{} URL: {}", exception.getMessage(), request.getRequestURL());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
+                .body(createResponseBody(exception.getMessage()));
+    }
+
+    @ExceptionHandler(value = RevokedTokenUseAttemptException.class)
+    @ResponseBody
+    public ResponseEntity handleRevokedTokenUseAttemptException(RevokedTokenUseAttemptException exception) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
                 .body(createResponseBody(exception.getMessage()));
     }
 

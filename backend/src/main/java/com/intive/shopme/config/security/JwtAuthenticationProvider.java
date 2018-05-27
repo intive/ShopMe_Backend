@@ -3,7 +3,6 @@ package com.intive.shopme.config.security;
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.UserContext;
 import com.intive.shopme.registration.RevokedTokenService;
-import com.intive.shopme.validation.RevokedTokenUseAttemptException;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
