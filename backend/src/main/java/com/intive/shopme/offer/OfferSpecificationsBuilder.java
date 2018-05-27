@@ -15,6 +15,11 @@ class OfferSpecificationsBuilder {
         return this;
     }
 
+    OfferSpecificationsBuilder empty() {
+        params.add(new SearchCriteria("empty", null, null));
+        return this;
+    }
+
     Specification<DbOffer> build() {
         if (params.isEmpty()) {
             return null;
