@@ -1,6 +1,7 @@
 package com.intive.shopme.offer;
 
 import com.intive.shopme.model.db.DbOffer;
+import com.intive.shopme.model.db.DbUser;
 import lombok.AllArgsConstructor;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -36,6 +37,11 @@ class OfferSpecification implements Specification<DbOffer> {
                         result = builder.lessThanOrEqualTo(datePath, dateValue);
                         break;
                 }
+                break;
+            case "user":
+                Path userPath = root.get(key);
+                DbUser userValue = (DbUser) criteria.getValue();
+                result = builder.equal(userPath, userValue);
                 break;
             case "empty":
                 result = builder.and().not();

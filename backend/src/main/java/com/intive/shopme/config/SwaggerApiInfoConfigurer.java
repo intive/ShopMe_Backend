@@ -7,7 +7,7 @@ public final class SwaggerApiInfoConfigurer {
 
     private static final String TITLE = "ShopMe by Intive Patronage `18 team";
     private static final String DESC = "ShopMe is a Web Application created during Intive Patronage `18 Project";
-    private static final String VERSION = "1.5";
+    private static final String VERSION = "1.6";
 
     private SwaggerApiInfoConfigurer() {
     }

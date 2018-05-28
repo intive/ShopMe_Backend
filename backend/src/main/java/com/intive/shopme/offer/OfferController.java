@@ -86,7 +86,8 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
         categoryValidator.validate(offer.getCategory(), errors);
         voivodeshipValidator.validate(offer.getVoivodeship(), errors);
         if (errors.hasErrors()) {
-            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
+            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)),
+                    HttpStatus.UNPROCESSABLE_ENTITY);
         }
 
         final var dbOffer = convertToDbModel(offer);
@@ -111,7 +112,19 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
     })
     @ApiOperation(value = "Returns all existing offers (with optional paging, filter criteria and sort strategy)")
     Page<OfferView> search(@Valid OfferSearchParams offerSearchParams) {
-        final var offers = service.getAll(offerSearchParams);
+        final var filter = offerSearchParams.filter();
+
+        final var userId = offerSearchParams.getUserId();
+        if (userId != null) {
+            if (userService.existsById(userId)) {
+                final var user = userService.get(offerSearchParams.getUserId());
+                filter.with("user", ":", user);
+            } else {
+                filter.empty();
+            }
+        }
+
+        final var offers = service.getAll(filter.build(), offerSearchParams.pageable());
         return new PageImpl<>(convertToView(offers.getContent()), offerSearchParams.pageable(), offers.getTotalElements());
     }
 
