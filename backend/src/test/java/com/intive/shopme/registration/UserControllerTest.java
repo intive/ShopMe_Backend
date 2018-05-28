@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserViewControllerTest {
+class UserControllerTest {
 
     private static final UUID ID = UUID.randomUUID();
     private static final String EMAIL = "foo";
