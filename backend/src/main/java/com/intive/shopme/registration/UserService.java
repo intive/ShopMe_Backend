@@ -30,6 +30,10 @@ public class UserService {
                 .orElseThrow(() -> new DataRetrievalFailureException("User with id: " + id + " not found"));
     }
 
+    void delete(UUID id) {
+        repository.deleteById(id);
+    }
+
     boolean existsByEmail(String email) {
         return repository.existsByEmail(email.toLowerCase());
     }

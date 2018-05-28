@@ -1,6 +1,7 @@
 package com.intive.shopme.offer;
 
 import com.intive.shopme.model.db.DbOffer;
+import com.intive.shopme.model.db.DbUser;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @Transactional
-class OfferService {
+public class OfferService {
 
     private final OfferRepository repository;
 
@@ -35,5 +36,10 @@ class OfferService {
 
     void delete(UUID id) {
         repository.deleteById(id);
+    }
+
+    public void deleteAllByUser(DbUser user) {
+        var offers = repository.findAllByUser(user);
+        repository.deleteInBatch(offers);
     }
 }
