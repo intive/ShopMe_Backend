@@ -52,25 +52,27 @@ import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UNAUT
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
 
 @RestController
-@Api(value = "user", description = "REST API for users operations", tags = {"Users"})
+@Api(value = "user", description = "REST API for users operations", tags = "Users")
 class UserController extends ConvertibleController<DbUser, UserView, UserWrite> {
 
     private final UserService service;
     private final ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator;
     private final VoivodeshipValidator voivodeshipValidator;
     private final EmailValidator emailValidator;
+    private final PhoneValidator phoneValidator;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokensService;
     private final RevokedTokenService revokedTokenService;
 
     UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
-                   VoivodeshipValidator voivodeshipValidator, EmailValidator emailValidator,
+                   VoivodeshipValidator voivodeshipValidator, EmailValidator emailValidator, PhoneValidator phoneValidator,
                    PasswordEncoder passwordEncoder, TokenService tokensService, RevokedTokenService revokedTokenService) {
         super(DbUser.class, UserView.class, UserWrite.class);
         this.service = service;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
         this.voivodeshipValidator = voivodeshipValidator;
         this.emailValidator = emailValidator;
+        this.phoneValidator = phoneValidator;
         this.passwordEncoder = passwordEncoder;
         this.tokensService = tokensService;
         this.revokedTokenService = revokedTokenService;
@@ -87,6 +89,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         invoiceRequestedValidator.validate(user, errors);
         voivodeshipValidator.validate(user.getVoivodeship().getName(), errors);
         emailValidator.validate(user.getEmail(), errors);
+        phoneValidator.validate(user.getPhoneNumber(), errors);
         if (errors.hasErrors()) {
             return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
         }
