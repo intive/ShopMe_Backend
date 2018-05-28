@@ -14,7 +14,7 @@ public class RevokedTokenService {
     private final RevokedTokenRepository repository;
 
     @Value("${jwt.minimum-revoked-tokens-remove-interval}")
-    private static long revokedTokenInterval;
+    private long revokedTokenInterval;
     private static long nextTokenRemoval = 0L;
 
     @Autowired
