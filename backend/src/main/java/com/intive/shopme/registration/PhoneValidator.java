@@ -25,12 +25,9 @@ public class PhoneValidator implements Validator {
 
     private static Logger logger = LogManager.getLogger(PhoneValidator.class);
 
-    private final UserService userService;
     private final static List<Integer> premiumNumbers = new ArrayList<>();
 
-    public PhoneValidator(UserService userService) {
-        this.userService = userService;
-
+    public PhoneValidator() {
         try {
             for (String line : Files.readAllLines(Paths.get("backend/src/main/resources/premium_numbers.txt"))) {
                 if (line.contains("-")) {
