@@ -15,9 +15,11 @@ import com.intive.shopme.model.rest.UserContext;
 import com.intive.shopme.model.rest.UserCredentials;
 import com.intive.shopme.model.rest.UserWrite;
 import com.intive.shopme.model.rest.Voivodeship;
+import com.intive.shopme.offer.OfferService;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.http.HttpStatus;
@@ -27,10 +29,12 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
@@ -46,16 +50,20 @@ import static com.intive.shopme.config.ApiUrl.USERS_LOGIN;
 import static com.intive.shopme.config.ApiUrl.USERS_LOGOUT;
 import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.FORBIDDEN;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UNAUTHORIZED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
 
 @RestController
+@RequestMapping(value = USERS)
 @Api(value = "user", description = "REST API for users operations", tags = "Users")
 class UserController extends ConvertibleController<DbUser, UserView, UserWrite> {
 
     private final UserService service;
+    private final OfferService offerService;
     private final ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator;
     private final VoivodeshipValidator voivodeshipValidator;
     private final EmailValidator emailValidator;
@@ -64,11 +72,13 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     private final TokenService tokensService;
     private final RevokedTokenService revokedTokenService;
 
-    UserController(UserService service, ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
+    UserController(UserService service, OfferService offerService,
+                   ValidInvoiceIfInvoiceRequestedValidator invoiceRequestedValidator,
                    VoivodeshipValidator voivodeshipValidator, EmailValidator emailValidator, PhoneValidator phoneValidator,
                    PasswordEncoder passwordEncoder, TokenService tokensService, RevokedTokenService revokedTokenService) {
         super(DbUser.class, UserView.class, UserWrite.class);
         this.service = service;
+        this.offerService = offerService;
         this.invoiceRequestedValidator = invoiceRequestedValidator;
         this.voivodeshipValidator = voivodeshipValidator;
         this.emailValidator = emailValidator;
@@ -78,7 +88,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         this.revokedTokenService = revokedTokenService;
     }
 
-    @PostMapping(value = USERS)
+    @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = CREATED),
@@ -100,7 +110,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
     }
 
-    @GetMapping(value = USERS + "/{id}")
+    @GetMapping(value = "{id}")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = SUCCESS),
             @ApiResponse(code = 404, message = NOT_FOUND)
@@ -110,7 +120,31 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         return convertToView(service.get(id));
     }
 
-    @GetMapping(value = USERS + "/email={email}")
+    @DeleteMapping(value = "{id}")
+    @ResponseStatus(value = HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = DELETED),
+            @ApiResponse(code = 401, message = UNAUTHORIZED),
+            @ApiResponse(code = 403, message = FORBIDDEN),
+            @ApiResponse(code = 404, message = NOT_FOUND)
+    })
+    @ApiOperation(value = "Removes user by id", response = void.class)
+    @PreAuthorize("hasAnyAuthority('USER')")
+    ResponseEntity<?> delete(@ApiParam(value = "User id to be deleted (for confirmation)", required = true)
+                             @PathVariable UUID id, @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
+        final var authenticatedUserId = userContext.getUserId();
+        if (!id.equals(authenticatedUserId)) {
+            return new ResponseEntity<>(Map.of("message", FORBIDDEN), HttpStatus.FORBIDDEN);
+        }
+
+        final var authenticatedUser = service.get(authenticatedUserId);
+        offerService.deleteAllByUser(authenticatedUser);
+
+        service.delete(id);
+        return new ResponseEntity<>(null, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "email={email}")
     @ApiResponse(code = 200, message = SUCCESS)
     @ApiOperation(value = "Check if user with specified email exists in database")
     boolean existsByEmail(@PathVariable String email) {
