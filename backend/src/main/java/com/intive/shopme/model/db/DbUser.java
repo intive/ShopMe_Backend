@@ -1,6 +1,7 @@
 package com.intive.shopme.model.db;
 
 import com.intive.shopme.model.rest.Role;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
+@AllArgsConstructor
 public class DbUser extends DbIdentifiable {
 
     private String name;
