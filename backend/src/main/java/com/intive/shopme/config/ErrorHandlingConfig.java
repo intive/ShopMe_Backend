@@ -1,5 +1,6 @@
 package com.intive.shopme.config;
 
+import com.intive.shopme.config.security.RevokedTokenUseAttemptException;
 import com.intive.shopme.validation.AlreadyExistException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,7 +69,7 @@ public class ErrorHandlingConfig {
                 .body(createResponseBody(exception.getRootCause().getMessage()));
     }
 
-    @ExceptionHandler(value = {AccessDeniedException.class, BadCredentialsException.class})
+    @ExceptionHandler(value = {AccessDeniedException.class, BadCredentialsException.class, RevokedTokenUseAttemptException.class})
     @ResponseBody
     public ResponseEntity handleAuthenticationException(RuntimeException exception, HttpServletRequest request) {
         LOGGER.warn("{} URL: {}", exception.getMessage(), request.getRequestURL());

@@ -1,4 +1,4 @@
-package com.intive.shopme.validation;
+package com.intive.shopme.config.security;
 
 import org.springframework.security.core.AuthenticationException;
 
