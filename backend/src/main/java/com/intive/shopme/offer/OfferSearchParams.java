@@ -127,7 +127,7 @@ class OfferSearchParams {
                         .replaceAll("  ", " ")
                         .toLowerCase().split(" ");
                 for (String titleKeyword : titleKeywords) {
-                    if (StringUtils.isNotEmpty(titleKeyword)) {
+                    if (StringUtils.length(titleKeyword) > 1) {
                         titleKeywordsIsInvalid = false;
                         builder.with("title", ":", titleKeyword);
                     }
