@@ -69,20 +69,12 @@ public class ErrorHandlingConfig {
                 .body(createResponseBody(exception.getRootCause().getMessage()));
     }
 
-    @ExceptionHandler(value = {AccessDeniedException.class, BadCredentialsException.class})
+    @ExceptionHandler(value = {AccessDeniedException.class, BadCredentialsException.class, RevokedTokenUseAttemptException.class})
     @ResponseBody
     public ResponseEntity handleAuthenticationException(RuntimeException exception, HttpServletRequest request) {
         LOGGER.warn("{} URL: {}", exception.getMessage(), request.getRequestURL());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
-                .body(createResponseBody(exception.getMessage()));
-    }
-
-    @ExceptionHandler(value = RevokedTokenUseAttemptException.class)
-    @ResponseBody
-    public ResponseEntity handleRevokedTokenUseAttemptException(RevokedTokenUseAttemptException exception) {
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
                 .body(createResponseBody(exception.getMessage()));
     }
 
