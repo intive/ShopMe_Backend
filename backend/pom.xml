@@ -125,10 +125,15 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
+        <!--
+            Remove after lombok 1.6.21 relTaken from        Taken from: https://projectlombok.org/download-edge
+            See: https://github.com/rzwitserloot/lombok/issues/1572 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.22</version>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/ext/lombok-edge.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>javax.xml.bind</groupId>
