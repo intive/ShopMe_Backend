@@ -4,7 +4,6 @@ LABEL author="Maciej Łotysz <maciej.lotysz@intive.com>"
 WORKDIR /usr/src/app
 
 COPY pom.xml .
-COPY ext/ ext/
 # latest maven goal + ignore errors (cache deps)
 RUN mvn -B -e -C -P docker verify > /dev/null 2>&1 || true
 
