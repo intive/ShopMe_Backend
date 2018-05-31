@@ -16,25 +16,30 @@ import java.util.UUID;
 @Builder
 public class Token {
 
-    @ApiModelProperty(example = "c5296892-347f-4b2e-b1c6-6faff971f767", position = 1)
+    @ApiModelProperty(value = "Represents user's id number", required = true, position = 1,
+            example = "c5296892-347f-4b2e-b1c6-6faff971f767")
     private final UUID userId;
 
-    @ApiModelProperty(example = "unknown@gmail.com", position = 2)
+    @ApiModelProperty(value = "Represents user's email", required = true, position = 2, example = "unknown@gmail.com")
     private final String email;
 
-    @ApiModelProperty(position = 3)
+    @ApiModelProperty(value = "Represents user's name", required = true, position = 3, example = "Jan")
     private final String name;
 
-    @ApiModelProperty(position = 4)
+    @ApiModelProperty(value = "Represents user's surname", required = true, position = 4, example = "Kowalski")
     private final String surname;
 
-    @ApiModelProperty(position = 5)
+    @ApiModelProperty(value = "Represents user's roles", required = true, position = 5, example = "USER")
     private final Set<Role> roles;
 
-    @ApiModelProperty(example = "1520031600000", position = 6)
+    @ApiModelProperty(value = "Represents token expiration date (EPOCH time in milliseconds)", required = true,
+            position = 6, example = "1520031600000")
     private final Date expirationDate;
 
-    @ApiModelProperty(position = 7)
+    @ApiModelProperty(value = "Represents JWT token value", required = true, position = 7,
+            example = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkMDJlZjVkNS04MTQzLTRjZGMtODk3Yi1kOWJhYmViMzE5Y2UiLCJlbWFpbCI6I" +
+                    "nVua25vd25AZ21haWwuY29tIiwic2NvcGVzIjpbIlVTRVIiXSwiaWF0IjoxNTI3ODAwODcxLCJleHAiOjE1Mjc4MDgwNzF9." +
+                    "-TN-a8QRyPnmXdIBgNBE68pSw5UgDW7dARI8-A8xLXDNh0RAFflpY9OJ0N2Y9afksXvG_zgSdfCPEvV5rAlSrQ")
     private final String jwt;
 }
 

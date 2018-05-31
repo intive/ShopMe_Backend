@@ -8,20 +8,20 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotEmpty;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 @ApiModel(value = "User Credentials")
 public class UserCredentials {
 
-    @ApiModelProperty(example = "unknown@gmail.com", position = 1, required = true)
-    @NotNull
+    @NotEmpty
     @Email
+    @ApiModelProperty(value = "Represents user's email", example = "unknown@gmail.com", required = true, position = 1)
     private final String email;
 
-    @ApiModelProperty(example = "Password9", position = 2, required = true)
-    @NotNull
+    @NotEmpty
+    @ApiModelProperty(value = "Represents user's password", example = "Password9", required = true, position = 2)
     private final String password;
 
     @JsonCreator

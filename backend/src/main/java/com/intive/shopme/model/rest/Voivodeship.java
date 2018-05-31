@@ -9,7 +9,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-@ApiModel(value = "Address voivodeship", description = "Represents possible voivodeship to choose in address")
+@ApiModel(value = "Voivodeship", description = "Represents possible voivodeship name")
 public class Voivodeship {
 
     @NotEmpty

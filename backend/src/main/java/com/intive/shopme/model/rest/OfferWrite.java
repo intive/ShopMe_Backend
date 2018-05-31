@@ -23,10 +23,10 @@ import static com.intive.shopme.config.AppConfig.OFFER_TITLE_MAX_LENGTH;
 @ProgressiveOfferLevelsCheck
 public class OfferWrite {
 
-    @ApiModelProperty(value = "Represents offer's title", required = true, position = 1,
-            example = "Odśnieżanie Niebuszewo")
     @NotEmpty(message = "Offer's title cannot be empty.")
     @Size(max = OFFER_TITLE_MAX_LENGTH, message = "Offer's title has too many characters.")
+    @ApiModelProperty(value = "Represents offer's title", required = true, position = 1,
+            example = "Odśnieżanie Niebuszewo")
     private String title;
 
     @NotEmpty(message = "No category selected.")

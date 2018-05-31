@@ -10,7 +10,8 @@ import java.util.UUID;
 @ApiModel(value = "User", description = "Represents the user")
 public class UserView {
 
-    @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
+    @ApiModelProperty(value = "Represents unique id number", required = true, position = 1,
+            example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
     private UUID id;
 
     @ApiModelProperty(value = "Represents user's name", required = true, position = 2, example = "Jan")

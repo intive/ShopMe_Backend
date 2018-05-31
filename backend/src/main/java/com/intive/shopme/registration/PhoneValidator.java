@@ -34,7 +34,9 @@ public class PhoneValidator implements Validator {
                     var startNumber = Integer.parseInt(line.split("-")[0]);
                     var endNumber = Integer.parseInt(line.split("-")[1]);
                     for (var number = startNumber; number <= endNumber; number++) {
-                        premiumNumbers.add(number);
+                        if (!premiumNumbers.contains(number)) {
+                            premiumNumbers.add(number);
+                        }
                     }
                 } else {
                     premiumNumbers.add(Integer.parseInt(line));
