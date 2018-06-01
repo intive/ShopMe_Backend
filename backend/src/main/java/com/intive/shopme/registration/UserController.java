@@ -49,11 +49,15 @@ import static com.intive.shopme.config.ApiUrl.USERS_CURRENT;
 import static com.intive.shopme.config.ApiUrl.USERS_LOGIN;
 import static com.intive.shopme.config.ApiUrl.USERS_LOGOUT;
 import static com.intive.shopme.config.AppConfig.CONSTRAINTS_JSON_KEY;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.BAD_USER_PASS;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.CREATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.DELETED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.FORBIDDEN;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.LOGOUT;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.NOT_FOUND;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.REVOKED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.SUCCESS;
+import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.TOKEN_GENERATED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.UNAUTHORIZED;
 import static com.intive.shopme.config.SwaggerApiInfoConfigurer.Operations.VALIDATION_ERROR;
 
@@ -95,7 +99,8 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new user", response = UserView.class)
-    ResponseEntity<?> add(@Valid @RequestBody UserWrite user, Errors errors) {
+    ResponseEntity<?> add(@ApiParam(value = "New user's properties", required = true) @Valid @RequestBody UserWrite user,
+                          Errors errors) {
         invoiceRequestedValidator.validate(user, errors);
         voivodeshipValidator.validate(user.getVoivodeship().getName(), errors);
         emailValidator.validate(user.getEmail(), errors);
@@ -107,7 +112,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         final var dbUser = convertToDbModel(user);
         dbUser.setId(UUID.randomUUID());
         dbUser.addRole(Role.USER);
-        return ResponseEntity.ok(convertToView(service.createOrUpdate(dbUser)));
+        return new ResponseEntity<>(convertToView(service.createOrUpdate(dbUser)), HttpStatus.CREATED);
     }
 
     @GetMapping(value = "{id}")
@@ -116,7 +121,7 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
             @ApiResponse(code = 404, message = NOT_FOUND)
     })
     @ApiOperation(value = "Returns user by id")
-    UserView get(@PathVariable UUID id) {
+    UserView get(@ApiParam(value = "ID number of user to be retrieved", required = true) @PathVariable UUID id) {
         return convertToView(service.get(id));
     }
 
@@ -147,18 +152,20 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @GetMapping(value = "email={email}")
     @ApiResponse(code = 200, message = SUCCESS)
     @ApiOperation(value = "Check if user with specified email exists in database")
-    boolean existsByEmail(@PathVariable String email) {
+    boolean existsByEmail(@ApiParam(value = "Email value to be checked is it free or not")
+                          @PathVariable String email) {
         return service.existsByEmail(email);
     }
 
     @PostMapping(value = USERS_LOGIN)
     @ApiOperation("Log in to api")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully generated token"),
-            @ApiResponse(code = 400, message = "Incorrect email and/or password")
+            @ApiResponse(code = 200, message = TOKEN_GENERATED),
+            @ApiResponse(code = 400, message = BAD_USER_PASS)
     })
     @ResponseStatus(HttpStatus.OK)
-    Token login(@Valid @RequestBody UserCredentials credentials) {
+    Token login(@ApiParam(value = "User's login credentials", required = true)
+                @Valid @RequestBody UserCredentials credentials) {
 
         final var user = service.findOneByEmail(credentials.getEmail().toLowerCase());
         final String token = tokensService.exchangePasswordForToken(user, credentials.getPassword());
@@ -177,8 +184,8 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
     @PostMapping(value = USERS_LOGOUT)
     @ApiOperation("Log out from api")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Successfully logged out"),
-            @ApiResponse(code = 401, message = "Using token that has been revoked")
+            @ApiResponse(code = 200, message = LOGOUT),
+            @ApiResponse(code = 401, message = REVOKED)
     })
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('USER')")

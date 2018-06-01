@@ -13,18 +13,18 @@ import java.util.UUID;
 @ProgressiveOfferLevelsCheck
 public class OfferView {
 
-    @ApiModelProperty(value = "Represents unique id number", position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
+    @ApiModelProperty(value = "Represents unique id number", required = true, position = 1, example = "5d214c01-95c3-4ec4-8f68-51dfb80b191c")
     private UUID id;
 
-    @ApiModelProperty(value = "Represents offer's date of submitting (EPOCH time in milliseconds)", position = 2,
-            example = "1520031600000")
+    @ApiModelProperty(value = "Represents offer's date of submitting (EPOCH time in milliseconds)", required = true,
+            position = 2, example = "1520031600000")
     private Date date;
 
     @ApiModelProperty(value = "Represents offer's title", required = true, position = 3,
             example = "Odśnieżanie Niebuszewo")
     private String title;
 
-    @ApiModelProperty(value = "Represents offer's category", required = true, position = 4)
+    @ApiModelProperty(value = "Represents offer's category", required = true, position = 4, example = "others")
     private String category;
 
     @ApiModelProperty(value = "Represents offer's base description", required = true, position = 5,

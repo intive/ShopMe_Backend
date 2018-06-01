@@ -12,6 +12,7 @@ import com.intive.shopme.registration.UserService;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.data.domain.Page;
@@ -95,7 +96,7 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
         dbOffer.setId(UUID.randomUUID());
         dbOffer.setDate(new Date());
         dbOffer.setUser(authenticatedUser);
-        return ResponseEntity.ok(convertToView(service.createOrUpdate(dbOffer)));
+        return new ResponseEntity<>(convertToView(service.createOrUpdate(dbOffer)), HttpStatus.CREATED);
     }
 
     private static String createErrorString(Errors errors) {
@@ -148,8 +149,9 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
     })
     @ApiOperation(value = "Updates offer by id", response = OfferView.class)
     @PreAuthorize("hasAnyAuthority('USER')")
-    ResponseEntity<?> update(@PathVariable UUID id, @Valid @RequestBody OfferWrite offer, Errors errors,
-                             @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
+    ResponseEntity<?> update(@ApiParam(value = "ID number of offer to be updated", required = true) @PathVariable UUID id,
+                             @ApiParam(value = "New offer updated properties", required = true) @Valid @RequestBody OfferWrite offer,
+                             Errors errors, @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
         final var offerAuthor = service.get(id).getUser();
         final var authenticatedUser = userService.get(userContext.getUserId());
         if (!authenticatedUser.equals(offerAuthor)) {

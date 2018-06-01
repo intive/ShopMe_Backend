@@ -15,7 +15,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 import static com.intive.shopme.config.AppConfig.ACCEPTABLE_ONLY_DIGITS;
 import static com.intive.shopme.config.AppConfig.AT_LEAST_ONE_DIGIT_OCCURS;

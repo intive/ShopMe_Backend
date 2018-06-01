@@ -2,8 +2,7 @@ package com.intive.shopme.config;
 
 import com.intive.shopme.config.security.RevokedTokenUseAttemptException;
 import com.intive.shopme.validation.AlreadyExistException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +25,9 @@ import static com.intive.shopme.config.AppConfig.ERROR_ID_JSON_KEY;
 import static com.intive.shopme.config.AppConfig.VALIDATION_DESCRIPTION_JSON_KEY;
 import static java.util.stream.Collectors.toMap;
 
+@Log4j2
 @ControllerAdvice
 public class ErrorHandlingConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ErrorHandlingConfig.class);
 
     @ExceptionHandler(value = ConstraintViolationException.class)
     @ResponseBody
@@ -72,7 +70,7 @@ public class ErrorHandlingConfig {
     @ExceptionHandler(value = {AccessDeniedException.class, BadCredentialsException.class, RevokedTokenUseAttemptException.class})
     @ResponseBody
     public ResponseEntity handleAuthenticationException(RuntimeException exception, HttpServletRequest request) {
-        LOGGER.warn("{} URL: {}", exception.getMessage(), request.getRequestURL());
+        log.warn("{} URL: {}", exception.getMessage(), request.getRequestURL());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(createResponseBody(exception.getMessage()));
@@ -82,7 +80,7 @@ public class ErrorHandlingConfig {
     @ResponseBody
     public ResponseEntity handleRuntimeException(RuntimeException exception) {
         final var id = UUID.randomUUID();
-        LOGGER.error("ID: {}", id, exception);
+        log.error("ID: {}", id, exception);
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(

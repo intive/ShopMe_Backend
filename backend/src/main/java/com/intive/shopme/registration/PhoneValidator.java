@@ -1,7 +1,6 @@
 package com.intive.shopme.registration;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -20,10 +19,9 @@ https://archiwum.uke.gov.pl/tablice/xml/PRM.xml.zip
 scripts/update_premium_numbers.sh - script to download current list from UKE and update local list used by backend service
 */
 
+@Log4j2
 @Component
 public class PhoneValidator implements Validator {
-
-    private static Logger logger = LogManager.getLogger(PhoneValidator.class);
 
     private final static List<Integer> premiumNumbers = new ArrayList<>();
 
@@ -34,19 +32,21 @@ public class PhoneValidator implements Validator {
                     var startNumber = Integer.parseInt(line.split("-")[0]);
                     var endNumber = Integer.parseInt(line.split("-")[1]);
                     for (var number = startNumber; number <= endNumber; number++) {
-                        premiumNumbers.add(number);
+                        if (!premiumNumbers.contains(number)) {
+                            premiumNumbers.add(number);
+                        }
                     }
                 } else {
                     premiumNumbers.add(Integer.parseInt(line));
                 }
             }
         } catch (IOException e) {
-            logger.error("Error parsing premium rate phone numbers!");
+            log.error("Error parsing premium rate phone numbers!");
         }
         if (premiumNumbers.size() > 0) {
-            logger.info("Loaded " + premiumNumbers.size() + " blacklisted premium rate phone numbers");
+            log.info("Loaded " + premiumNumbers.size() + " blacklisted premium rate phone numbers");
         } else {
-            logger.error("Failed to load list of premium rate phone numbers!");
+            log.error("Failed to load list of premium rate phone numbers!");
         }
     }
 

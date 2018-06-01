@@ -10,14 +10,12 @@ class OfferSpecificationsBuilder {
 
     private final List<SearchCriteria> params = new ArrayList<>();
 
-    OfferSpecificationsBuilder with(String key, String operation, Object value) {
+    void with(String key, String operation, Object value) {
         params.add(new SearchCriteria(key, operation, value));
-        return this;
     }
 
-    OfferSpecificationsBuilder empty() {
+    void empty() {
         params.add(new SearchCriteria("empty", null, null));
-        return this;
     }
 
     Specification<DbOffer> build() {

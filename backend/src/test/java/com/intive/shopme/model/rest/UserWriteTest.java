@@ -9,7 +9,7 @@ import javax.validation.Validator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 // TODO remove duplication of user object building - use @MethodSource?
-// TODO add test for valid/invalid cases of proerties: email, password, bank account, phone number
+// TODO add test for valid/invalid cases of properties: email, password, bank account, phone number
 class UserWriteTest {
 
     private static final String VALID_NAME = "OneWord";
