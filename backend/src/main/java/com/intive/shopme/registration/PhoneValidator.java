@@ -1,7 +1,6 @@
 package com.intive.shopme.registration;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -20,10 +19,9 @@ https://archiwum.uke.gov.pl/tablice/xml/PRM.xml.zip
 scripts/update_premium_numbers.sh - script to download current list from UKE and update local list used by backend service
 */
 
+@Log4j2
 @Component
 public class PhoneValidator implements Validator {
-
-    private static final Logger LOGGER = LogManager.getLogger(PhoneValidator.class);
 
     private final static List<Integer> premiumNumbers = new ArrayList<>();
 
@@ -43,12 +41,12 @@ public class PhoneValidator implements Validator {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("Error parsing premium rate phone numbers!");
+            log.error("Error parsing premium rate phone numbers!");
         }
         if (premiumNumbers.size() > 0) {
-            LOGGER.info("Loaded " + premiumNumbers.size() + " blacklisted premium rate phone numbers");
+            log.info("Loaded " + premiumNumbers.size() + " blacklisted premium rate phone numbers");
         } else {
-            LOGGER.error("Failed to load list of premium rate phone numbers!");
+            log.error("Failed to load list of premium rate phone numbers!");
         }
     }
 
