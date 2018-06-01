@@ -23,7 +23,7 @@ scripts/update_premium_numbers.sh - script to download current list from UKE and
 @Component
 public class PhoneValidator implements Validator {
 
-    private static Logger logger = LogManager.getLogger(PhoneValidator.class);
+    private static final Logger LOGGER = LogManager.getLogger(PhoneValidator.class);
 
     private final static List<Integer> premiumNumbers = new ArrayList<>();
 
@@ -43,12 +43,12 @@ public class PhoneValidator implements Validator {
                 }
             }
         } catch (IOException e) {
-            logger.error("Error parsing premium rate phone numbers!");
+            LOGGER.error("Error parsing premium rate phone numbers!");
         }
         if (premiumNumbers.size() > 0) {
-            logger.info("Loaded " + premiumNumbers.size() + " blacklisted premium rate phone numbers");
+            LOGGER.info("Loaded " + premiumNumbers.size() + " blacklisted premium rate phone numbers");
         } else {
-            logger.error("Failed to load list of premium rate phone numbers!");
+            LOGGER.error("Failed to load list of premium rate phone numbers!");
         }
     }
 
