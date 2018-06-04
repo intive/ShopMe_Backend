@@ -7,6 +7,7 @@ import com.intive.shopme.model.db.DbOffer;
 import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.OfferView;
 import com.intive.shopme.model.rest.OfferWrite;
+import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.UserContext;
 import com.intive.shopme.registration.UserService;
 import com.intive.shopme.voivodeship.VoivodeshipValidator;
@@ -184,7 +185,7 @@ public class OfferController extends ConvertibleController<DbOffer, OfferView, O
     ResponseEntity<?> delete(@PathVariable UUID id, @ApiIgnore @AuthenticationPrincipal UserContext userContext) {
         final var offerAuthorId = service.get(id).getUser();
         final var authenticatedUserId = userService.get(userContext.getUserId());
-        if (!authenticatedUserId.equals(offerAuthorId)) {
+        if (!authenticatedUserId.equals(offerAuthorId) && !userContext.getAuthorities().contains(Role.ADMIN)) {
             return new ResponseEntity<>(Map.of("message", FORBIDDEN), HttpStatus.FORBIDDEN);
         }
 
