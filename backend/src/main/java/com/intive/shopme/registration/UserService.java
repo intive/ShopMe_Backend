@@ -45,4 +45,8 @@ public class UserService {
     public DbUser findOneByEmail(String email) {
         return repository.findOneByEmail(email);
     }
+
+    long count() {
+        return repository.count();
+    }
 }

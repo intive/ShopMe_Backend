@@ -17,7 +17,7 @@ public class UserContext {
     @ApiModelProperty(value = "Represents user's email", required = true, position = 2, example = "unknown@gmail.com")
     private final String email;
 
-    @ApiModelProperty(value = "Represents user's roles", required = true, position = 3, example = "USER")
+    @ApiModelProperty(value = "Represents user's roles (possible values: USER, ADMIN)", required = true, position = 3, example = "USER")
     private final Set<GrantedAuthority> authorities;
 
     @ApiModelProperty(value = "Represents user's token expiration date", required = true, position = 4)

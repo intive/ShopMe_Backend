@@ -112,6 +112,9 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
         final var dbUser = convertToDbModel(user);
         dbUser.setId(UUID.randomUUID());
         dbUser.addRole(Role.USER);
+        if (service.count() == 0) {
+            dbUser.addRole(Role.ADMIN);
+        }
         return new ResponseEntity<>(convertToView(service.createOrUpdate(dbUser)), HttpStatus.CREATED);
     }
 
