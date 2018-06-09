@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,21 +24,23 @@ scripts/update_premium_numbers.sh - script to download current list from UKE and
 @Component
 public class PhoneValidator implements Validator {
 
-    private final static List<Integer> premiumNumbers = new ArrayList<>();
+    private final static List<Long> premiumNumbers = new ArrayList<>();
 
     public PhoneValidator() {
         try {
-            for (String line : Files.readAllLines(Paths.get("backend/src/main/resources/premium_numbers.txt"))) {
+            var currentDirFile = new File("");
+            String dirPath = currentDirFile.getAbsolutePath();
+            for (String line : Files.readAllLines(Paths.get(dirPath + "/src/main/resources/premium_numbers.txt"))) {
                 if (line.contains("-")) {
-                    var startNumber = Integer.parseInt(line.split("-")[0]);
-                    var endNumber = Integer.parseInt(line.split("-")[1]);
+                    var startNumber = Long.parseLong(line.split("-")[0]);
+                    var endNumber = Long.parseLong(line.split("-")[1]);
                     for (var number = startNumber; number <= endNumber; number++) {
                         if (!premiumNumbers.contains(number)) {
                             premiumNumbers.add(number);
                         }
                     }
                 } else {
-                    premiumNumbers.add(Integer.parseInt(line));
+                    premiumNumbers.add(Long.parseLong(line));
                 }
             }
         } catch (IOException e) {
@@ -57,9 +60,9 @@ public class PhoneValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        var number = Integer.parseInt((String) target);
+        var number = Long.parseLong((String) target);
         if (premiumNumbers.contains(number)) {
-            errors.rejectValue("phoneNumber","",
+            errors.rejectValue("phoneNumber", "",
                     "Premium rate phone number " + number + " is not acceptable!");
         }
     }
