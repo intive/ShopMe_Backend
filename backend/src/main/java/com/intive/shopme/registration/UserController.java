@@ -2,17 +2,17 @@ package com.intive.shopme.registration;
 
 import com.intive.shopme.common.ConvertibleController;
 import com.intive.shopme.model.db.DbAddress;
-import com.intive.shopme.model.db.DbRevokedToken;
 import com.intive.shopme.model.db.DbInvoice;
+import com.intive.shopme.model.db.DbRevokedToken;
 import com.intive.shopme.model.db.DbUser;
 import com.intive.shopme.model.db.DbVoivodeship;
 import com.intive.shopme.model.rest.Address;
 import com.intive.shopme.model.rest.Invoice;
 import com.intive.shopme.model.rest.Role;
 import com.intive.shopme.model.rest.Token;
-import com.intive.shopme.model.rest.UserView;
 import com.intive.shopme.model.rest.UserContext;
 import com.intive.shopme.model.rest.UserCredentials;
+import com.intive.shopme.model.rest.UserView;
 import com.intive.shopme.model.rest.UserWrite;
 import com.intive.shopme.model.rest.Voivodeship;
 import com.intive.shopme.offer.OfferService;
@@ -29,6 +29,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -99,8 +100,12 @@ class UserController extends ConvertibleController<DbUser, UserView, UserWrite> 
             @ApiResponse(code = 422, message = VALIDATION_ERROR)
     })
     @ApiOperation(value = "Saves new user", response = UserView.class)
-    ResponseEntity<?> add(@ApiParam(value = "New user's properties", required = true) @Valid @RequestBody UserWrite user,
+    ResponseEntity<?> add(@ApiParam(value = "New user's properties", required = true) @Validated @RequestBody UserWrite user,
                           Errors errors) {
+        if (errors.hasErrors()) {
+            return new ResponseEntity<>(Map.of(CONSTRAINTS_JSON_KEY, createErrorString(errors)), HttpStatus.UNPROCESSABLE_ENTITY);
+        }
+
         invoiceRequestedValidator.validate(user, errors);
         voivodeshipValidator.validate(user.getVoivodeship().getName(), errors);
         emailValidator.validate(user.getEmail(), errors);

@@ -59,7 +59,7 @@ public class PhoneValidator implements Validator {
     public void validate(Object target, Errors errors) {
         var number = Integer.parseInt((String) target);
         if (premiumNumbers.contains(number)) {
-            errors.rejectValue("phoneNumber","",
+            errors.rejectValue("phoneNumber", "",
                     "Premium rate phone number " + number + " is not acceptable!");
         }
     }

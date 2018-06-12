@@ -23,8 +23,6 @@ import static com.intive.shopme.config.AppConfig.BANK_ACCOUNT_LENGTH;
 import static com.intive.shopme.config.AppConfig.DIGITS_NOT_ACCEPTABLE;
 import static com.intive.shopme.config.AppConfig.PASSWORD_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.PASSWORD_MIN_LENGTH;
-import static com.intive.shopme.config.AppConfig.PHONE_NUMBER_MAX_LENGTH;
-import static com.intive.shopme.config.AppConfig.PHONE_NUMBER_MIN_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_DESCRIPTION_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_NAME_MAX_LENGTH;
 import static com.intive.shopme.config.AppConfig.USER_NAME_MIN_LENGTH;
@@ -64,9 +62,9 @@ public class UserWrite {
 
     @NotEmpty
     @Size(min = PASSWORD_MIN_LENGTH, message = "Password contains not enough characters, minimum is " +
-            PASSWORD_MIN_LENGTH + "." )
+            PASSWORD_MIN_LENGTH + ".")
     @Size(max = PASSWORD_MAX_LENGTH, message = "Password contains too much characters, maximum is " +
-            PASSWORD_MAX_LENGTH + "." )
+            PASSWORD_MAX_LENGTH + ".")
     @Pattern(regexp = AT_LEAST_ONE_DIGIT_OCCURS, message = "Password need contain at least one digit")
     @Pattern(regexp = AT_LEAST_ONE_UPPER_CASE_LETTER_OCCURS,
             message = "Password need contain at least one upper case letter")
@@ -74,11 +72,7 @@ public class UserWrite {
     private String password;
 
     @NotEmpty
-    @Size(min = PHONE_NUMBER_MIN_LENGTH, message = "Phone number contains not enough characters, minimum is " +
-            PHONE_NUMBER_MIN_LENGTH + "." )
-    @Size(max = PHONE_NUMBER_MAX_LENGTH, message = "Phone number contains too much characters, maximum is " +
-            PHONE_NUMBER_MAX_LENGTH + "." )
-    @Pattern(regexp = ACCEPTABLE_ONLY_DIGITS, message = "The userId's phone number should contain only digits.")
+    @Pattern(regexp = "^[0]?[0-9]{9}$", message = "This phone number is invalid!")
     @ApiModelProperty(value = "Represents user's phone number", required = true, position = 6, example = "0234567890")
     private String phoneNumber;
 
