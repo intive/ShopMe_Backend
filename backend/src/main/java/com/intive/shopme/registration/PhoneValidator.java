@@ -57,12 +57,6 @@ public class PhoneValidator implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        var phoneNumber = target.toString();
-        if (phoneNumber.length() == 10 && !phoneNumber.substring(0, 1).equals("0") || phoneNumber.length() > 10) {
-            errors.rejectValue("phoneNumber", "",
-                    "This phone number is invalid!");
-            return;
-        }
         var number = Integer.parseInt((String) target);
         if (premiumNumbers.contains(number)) {
             errors.rejectValue("phoneNumber", "",

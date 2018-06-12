@@ -31,9 +31,6 @@ public final class AppConfig {
     public static final int PASSWORD_MIN_LENGTH = 8;
     public static final int PASSWORD_MAX_LENGTH = 30;
 
-    public static final int PHONE_NUMBER_MIN_LENGTH = 9;
-    public static final int PHONE_NUMBER_MAX_LENGTH = 10;
-
     public static final int BANK_ACCOUNT_LENGTH = 26;
 
     public static final int STREET_MIN_LENGTH = 3;
